@@ -6,6 +6,8 @@ const bodyparser = require("body-parser")
 const path=require("path");
 const commonRoutes = require("./routes/commonRoutes");
 const cors=require("cors")
+const multer=require("./middleware/multer")
+
 const corsoptions={
   origin:"*",
   credentials:true,
@@ -17,7 +19,9 @@ app.use(bodyparser.json());
 app.use(morgan("dev"));
 app.set("view engine","ejs")
 const staticPath=path.join(__dirname,"./public")
+
 app.use("/",commonRoutes)
+
 app.use(express.static("./public"))
 
 const server= app.listen(process.env.PORT, () => {

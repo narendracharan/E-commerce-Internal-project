@@ -10,7 +10,7 @@ const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderS
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 
 exports.userSignup = async (req, res) => {
-  const user = new userSchema(req.body);
+  const users = new userSchema(req.body);
   const { userEmail } = req.body;
   try {
     const error =  validationResult(req);
@@ -26,7 +26,7 @@ exports.userSignup = async (req, res) => {
       });
     }
     const Salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, Salt);
+    users.password = await bcrypt.hash(users.password, Salt);
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     var mailOptions = {
       from: "narendracharan25753@gmail.com",
@@ -43,7 +43,7 @@ exports.userSignup = async (req, res) => {
     await newOtpVerify.save();
     console.log(mailOptions);
     await transporter.sendMail(mailOptions);
-    const createUser = await user.save();
+    const createUser = await users.save();
     console.log(createUser);
     res.status(201).json(success(res.statusCode,"Signup Successfully",{createUser}));
   } catch (err) {
