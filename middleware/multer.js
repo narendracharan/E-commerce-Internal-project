@@ -25,11 +25,9 @@ const s3upload = multer({
     },
     key: function (req, file, cb) {
       cb(null, Date.now() + "--" + file.originalname);
-   console.log("img====>",file.originalname);
+     console.log("img====>",file.originalname);
     },
   }),
 });
-
-console.log(s3upload);
 module.exports = {s3upload}
 

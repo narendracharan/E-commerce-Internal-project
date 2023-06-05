@@ -10,7 +10,7 @@ const { success, error } = require("../../../controllers/response");
 exports.createCategory = async (req, res) => {
   try {
     const category = new cateSchema(req.body);
-    console.log(category);
+    category.categoryPic=req.file.location
     const saveCategory = await category.save();
     res.status(201).json(success(res.statusCode,"Category Create Successfully",{saveCategory}));
   } catch (err) {

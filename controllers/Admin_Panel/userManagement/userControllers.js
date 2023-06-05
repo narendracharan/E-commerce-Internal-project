@@ -89,11 +89,10 @@ exports.OtpVerify = async (req, res) => {
 
 exports.editProfile = async (req, res) => {
   try {
-    const filepath = `/${req.file.filename}`;
     const data = {
       userName: req.body.userName,
       userEmail: req.body.userEmail,
-      profile_Pic: filepath,
+      profile_Pic: req.file.location,
     };
    const profileData= await userSchema.findByIdAndUpdate(req.params.id, data, { new: true });
     res.status(200).json(success(res.statusCode,"Profile Updated",{ profileData}));

@@ -4,8 +4,7 @@ const { error, success } = require("../../response");
 exports.createBannerOne = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    const filepath = `/${req.file.filename}`;
-    banners.homeScreenOne = filepath;
+    banners.homeScreenOne =req.file.location
     const bannersData = await banners.save();
     res.status(201).json(success( "Success",res.statusCode,  {bannersData}));
   } catch (err) {
@@ -16,8 +15,7 @@ exports.createBannerOne = async (req, res) => {
 exports.createBannerTwo = async (req, res) => {
     try {
       const banners = new homeSchema(req.body);
-      const filepath = `/${req.file.filename}`;
-      banners.homeScreenTwo = filepath;
+      banners.homeScreenTwo = req.file.location;
       const bannersData = await banners.save();
       res.status(201).json(success("Success",res.statusCode,  {bannersData}));
     } catch (err) {
@@ -28,8 +26,8 @@ exports.createBannerTwo = async (req, res) => {
   exports.createBannerThree = async (req, res) => {
     try {
       const banners = new homeSchema(req.body);
-      const filepath = `/${req.file.filename}`;
-      banners.homeScreenThree = filepath;
+    
+      banners.homeScreenThree = req.file.location;
       const bannersData = await banners.save();
       res.status(201).json(success("Success",res.statusCode,  {bannersData}));
     } catch (err) {
@@ -41,8 +39,8 @@ exports.createBannerTwo = async (req, res) => {
   exports.createBannerFour = async (req, res) => {
     try {
       const banners = new homeSchema(req.body);
-      const filepath = `/${req.file.filename}`;
-      banners.homeScreenFour = filepath;
+  
+      banners.homeScreenFour = req.file.location;
       const bannersData = await banners.save();
       res.status(201).json(success( "Success",res.statusCode, {bannersData}));
     } catch (err) {
@@ -54,8 +52,8 @@ exports.createBannerTwo = async (req, res) => {
   exports.createBannerFive = async (req, res) => {
     try {
       const banners = new homeSchema(req.body);
-      const filepath = `/${req.file.filename}`;
-      banners.homeScreenFive = filepath;
+      
+      banners.homeScreenFive = req.file.location;
       const bannersData = await banners.save();
       res.status(201).json(success("Success",res.statusCode,  {bannersData}));
     } catch (err) {

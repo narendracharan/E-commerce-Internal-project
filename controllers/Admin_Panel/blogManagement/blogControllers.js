@@ -5,8 +5,7 @@ const {error, success}=require("../../response")
 exports.createBlog=async(req,res)=>{
     try{
 const blog= new blogSchema(req.body)
-const filepath = `/${req.file.originalname}`;
-blog.blog_Pic = filepath;
+blog.blog_Pic = req.file.location;
 const blogData=await blog.save()
 res.status(201).json(success(res.statusCode,"Success",{blogData}))
     }catch(err){
