@@ -76,7 +76,7 @@ exports.sendMailResetPassword = async (req, res) => {
     if (user) {
       const secret = user._id + process.env.SECRET_KEY;
       const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });
-      const link = `http://127.0.0.1:3000/api/user/reset${user._id}/${token}}`;
+      const link = `http://ec2-65-2-108-172.ap-south-1.compute.amazonaws.com:3000/api/user/reset${user._id}/${token}}`;
       let info = await transporter.sendMail({
         from: "narendracharan25753@gmail.com",
         to: userEmail,
@@ -129,7 +129,8 @@ exports.resetPassword = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
-    const filepath = `/${req.file.filename}`;
+    const filepath = `/${req.file.filedname}`;
+    console.log(filepath);
     const user = new userSchema(req.body);
     const password = await bcrypt.hash(user.password, 10);
     const data = {
@@ -151,6 +152,7 @@ exports.updateProfile = async (req, res) => {
     });
     res.status(200).json(success(res.statusCode, " Success", { profile }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
