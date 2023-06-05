@@ -72,7 +72,7 @@ exports.userLogin = async (req, res) => {
 exports.sendMailResetPassword = async (req, res) => {
   try {
     const { userEmail } = req.body;
-    const user = await userSchema.findOne({ userEmail: userEmail });
+    const user = await userSchema.findOne({userEmail:userEmail})
     if (user) {
       const secret = user._id + process.env.SECRET_KEY;
       const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });

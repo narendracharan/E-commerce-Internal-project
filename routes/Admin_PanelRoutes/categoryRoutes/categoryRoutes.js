@@ -1,6 +1,5 @@
 const express=require("express")
 const router=express.Router()
-const {uploads}=require("../../../middleware/imageStorage")
 const tokenAuthorisationUser = require("../../../middleware/userAuth")
 const { createCategory, categoryList, categorySearch, categoryUpdate, checkSubCategory, checkStatus } = require("../../../controllers/Admin_Panel/categoryManagement/categoryControllers")
 const { s3upload } = require("../../../middleware/multer")
