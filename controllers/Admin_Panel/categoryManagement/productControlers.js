@@ -1,11 +1,10 @@
-const { s3upload } = require("../../../middleware/multer");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const { success, error } = require("../../response");
 
  exports.createProduct = async (req, res) => {
   try {
     const product = new productSchema(req.body);
-    product.product_Pic=req.files
+    product.product_Pic=req.files.map((x)=>x.location)
     const saveProduct = await product.save();
     res.status(201).json(success(res.statusCode, "Success", { saveProduct }));
   } catch (err) {
@@ -16,7 +15,7 @@ const { success, error } = require("../../response");
 
 exports.productList = async (req, res) => {
   try {
-    const list = await productSchema.find({});
+    const list = await productSchema.deleteMany();
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json("Failed", res.statusCode);

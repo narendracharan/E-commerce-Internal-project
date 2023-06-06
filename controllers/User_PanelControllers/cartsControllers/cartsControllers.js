@@ -12,8 +12,6 @@ exports.addToCart = async (req, res) => {
     const { _id } = req.user;
     let products = [];
     const user = await userSchema.findById(_id);
-    const prod = await productSchema.findOne({});
-   if (prod.stockQuantity == 0) {
       for (let i = 0; i < carts.length; i++) {
         let object = {};
         object.product_Id = carts[i].product_Id;
@@ -35,9 +33,7 @@ exports.addToCart = async (req, res) => {
         user_Id: user?._id,
       }).save();
       res.status(200).json(success(res.status, "Success", { newCarts }));
-   } else {
-      res.status(200).json(error("Product Out Of Stock", res.statusCode));
-    }
+   
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -76,13 +72,12 @@ exports.cartCount = async (req, res) => {
 exports.applyCoupan = async (req, res) => {
   try {
     const coupanCode = req.body.coupanCode;
-    const validCoupan = await coupanSchema.findOne({ coupanCode: coupanCode });
-    const val = await coupanSchema.find({});
+    const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
     let carts = await cartSchema.find({});
-    let DiscountType = val.map((x) => x.DiscountType);
+    let DiscountType = validCoupan.map((x)=>x.DiscountType)
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
     let subtotal = 0;
     for (let i = 0; i < cartsTotal.length; i++) {

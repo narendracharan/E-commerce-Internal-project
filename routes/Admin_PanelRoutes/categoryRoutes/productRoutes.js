@@ -5,7 +5,7 @@ const { createProduct, productList, productSearch, updateProduct } = require("..
 const { s3upload } = require("../../../middleware/multer")
 
 router.post("/createProduct",tokenAuthorisationUser,s3upload.array("product_Pic"),createProduct)
-router.post("/productList",tokenAuthorisationUser,productList)
+router.delete("/productList",tokenAuthorisationUser,productList)
 router.post("/productSearch",tokenAuthorisationUser,productSearch)
 router.patch("/updateProduct/:id",tokenAuthorisationUser,updateProduct)
 module.exports=router

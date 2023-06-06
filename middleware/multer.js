@@ -21,11 +21,11 @@ const s3upload = multer({
     acl: "public-read",
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
-      console.log( "filedname",{ fieldName: file.fieldname });
+     
     },
     key: function (req, file, cb) {
       cb(null, Date.now() + "--" + file.originalname);
-     console.log("img====>",file.originalname);
+
     },
   }),
 });
