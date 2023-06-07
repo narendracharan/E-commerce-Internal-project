@@ -8,10 +8,13 @@ const { success, error } = require("../../response");
 
 exports.subCategory = async (req, res) => {
   try {
-    const subCategory = new cateSchema(req.body);
+    const subCategory = new cateSchema(req.body)
+    subCategory.subCategoryPic=req.file.location
+    console.log(req.file);
     const createSubCategory = await subCategory.save();
-      res.status(200).json(success(res.statusCode,"Success",{createSubCategory}));
+    res.status(200).json(success(res.statusCode,"Success",{createSubCategory}));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed",res.statusCode));
   }
 };

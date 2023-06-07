@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  subCategoryPic:{
+    type:String,
+    require:true
+  },
   shipmentService: {
     type: Boolean,
     default: true,

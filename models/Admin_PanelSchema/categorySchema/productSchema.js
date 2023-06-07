@@ -13,7 +13,7 @@ const schema=new mongoose.Schema({
         type:String,
         require:true
     },
-    shortDescription:{
+    careInstuctions:{
         type:String,
         require:true
     },
