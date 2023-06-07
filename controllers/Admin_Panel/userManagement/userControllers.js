@@ -183,7 +183,7 @@ exports.sendUserResetPassword = async (req, res) => {
       const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });
       const link = `http://localhost:3000/changePassword${user._id}/${token}}`;
       let info = await transporter.sendMail({
-        from: "narendracharan25753@gmail.com",
+        from: "s04450647@gmail.com",
         to: userEmail,
         subject: "Email Send For Reset Password",
         text: `<a href=${link}></a>`,

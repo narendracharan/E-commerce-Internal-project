@@ -17,6 +17,7 @@ const help=require("./helpRoutes/commonRoutes")
 const information=require("./informationRoutes/commonRoutes")
 const coupan=require("./coupanRoutes/commonRoutes")
 const blog=require("./blogRoutes/commonRoutes")
+const agentCommonRoutes=require("./agentRoutes/commonRoutes")
 
 router.use("/user",user)
 router.use("/category",category)
@@ -35,4 +36,5 @@ router.use("/help",help)
 router.use("/information",information)
 router.use("/coupan",coupan)
 router.use("/blog",blog)
+router.use("/agent",agentCommonRoutes)
 module.exports=router
