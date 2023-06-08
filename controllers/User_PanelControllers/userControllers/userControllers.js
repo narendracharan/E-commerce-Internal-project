@@ -126,6 +126,21 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+exports.profilePic=async(req,res)=>{
+  try{
+const id=req.params.id
+const data={
+  profile_Pic: req.file.location,
+}
+const profile = await userSchema.findByIdAndUpdate(id, data, {
+  new: true,
+});
+res.status(200).json(success(res.statusCode, " updated profile", { profile }));
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
 exports.updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
