@@ -78,11 +78,7 @@ const schema=new mongoose.Schema({
         ref:"category",
         require:true
     },
-    Subcategory_Id:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"subCategory",
-        require:true
-    }
+
 })
 schema.set("timestamps",true)
 module.exports=mongoose.model("product",schema)
