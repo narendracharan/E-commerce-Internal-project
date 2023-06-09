@@ -5,6 +5,7 @@ exports.createWish = async (req, res) => {
   try {
     const wish = new wishSchema(req.query);
     const wishs = await wish.save();
+    console.log(wishs);
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
     console.log(err);

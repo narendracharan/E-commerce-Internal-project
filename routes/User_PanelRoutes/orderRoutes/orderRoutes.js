@@ -6,5 +6,5 @@ const router=express.Router()
 router.post("/create-order",tokenAuthorisationUser,createOrder)
 router.post("/order-Details/:id",tokenAuthorisationUser,orderDetails)
 router.post("/order-list",tokenAuthorisationUser,orderList)
-router.post("/order-success-details",orderSuccessDetails)
+router.post("/order-success-details",tokenAuthorisationUser,orderSuccessDetails)
 module.exports=router

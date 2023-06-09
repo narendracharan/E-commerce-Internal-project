@@ -139,7 +139,39 @@ res.status(200).json(success(res.statusCode,"Updated Successfully",{updateData})
   }
 }
 
+exports.userDetails=async(req,res)=>{
+  try{
+    const id=req.params.id
+    const details=await orderSchema.find({deliverdBy:id}).populate("deliverdBy")
+    const userDetail=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,address:1})
+   res.status(200).json(success(res.statusCode,"Success",{userDetail,details}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+exports.deleteUser=async(req,res)=>{
+  try{
+const id=req.params.id
+const deleteUser=await agentSchema.findByIdAndDelete(id)
+res.status(200).json(success(res.statusCode,"deleted data",{deleteUser}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
 
+exports.userSerach=async(req,res)=>{
+  try{
+const name=req.body.name
+const searchData=await agentSchema.find({name:{ $regex: name, $options: "i" }})
+if(searchData.length>0){
+  res.status(200).json(success(res.statusCode,"Success",{searchData}))
+}else{
+  res.status(200).json(success(res.statusCode,"user are not found",))
+}
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
 
 exports.changePassword=async(req,res)=>{
   try{
@@ -208,6 +240,30 @@ const orderdata=await orderSchema.aggregate([
 ])
 res.status(200).json(success(req.statusCode,"success",{orderdata}))
   }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.updateUser=async(req,res)=>{
+  try{
+const id=req.params.id
+const data={
+  name:req.body.name,
+  Email:req.body.Email,
+  accountNumber:req.body.accountNumber,
+  bankName:req.body.bankName,
+  profile_Pic:req.file.location,
+  commisionType:req.body.commisionType,
+  mobileNumber:req.body.mobileNumber,
+  address:req.body.address,
+  accountName:req.body.accountName,
+  routingNumber:req.body.routingNumber
+}
+const userUpdate=await agentSchema.findByIdAndUpdate(id,data,{new:true})
+res.status(200).json(success(res.statusCode,"Success",{userUpdate}))
+
+  }catch(err){
+    console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
