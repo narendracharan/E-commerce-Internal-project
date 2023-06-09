@@ -3,11 +3,12 @@ const { error, success } = require("../../response");
 
 exports.createWish = async (req, res) => {
   try {
-    const wish = new wishSchema(req.body);
+    const wish = new wishSchema(req.query);
     const wishs = await wish.save();
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
-    req.status(400).json(error("Failed", res.statusCode));
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 

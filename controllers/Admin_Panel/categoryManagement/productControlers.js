@@ -15,7 +15,7 @@ const { success, error } = require("../../response");
 
 exports.productList = async (req, res) => {
   try {
-    const list = await productSchema.find({});
+    const list = await productSchema.find()
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json("Failed", res.statusCode);

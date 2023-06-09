@@ -7,7 +7,7 @@ const { error, success } = require("../../response");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { user_Id, address_Id, taxPrice, shippingPrice, orderStatus } =
+    const { user_Id, deliverdBy,address_Id, taxPrice, shippingPrice, orderStatus } =
       req.body;
     const { carts } = req.body;
     const val = await coupanSchema.find({});
@@ -33,6 +33,7 @@ exports.createOrder = async (req, res) => {
       cartsTotal,
       user_Id,
       address_Id,
+      deliverdBy,
       taxPrice,
       shippingPrice,
       orderStatus,

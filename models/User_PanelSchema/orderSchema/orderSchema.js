@@ -17,10 +17,21 @@ const schema = new mongoose.Schema({
     },
   ],
   cartsTotal: Number,
-  orderStatus: {
+  orderStatus: [{
     type: String,
     default: "pending",
-  },
+    enum: [
+      "Approved",
+       "packed",
+      "Shipped",
+      "Delivered",
+      "Cancelled"
+    ],
+  },],
+paymentIntent: {
+  type:String,
+  default:"Cash on Delivery"
+},
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
@@ -31,18 +42,11 @@ const schema = new mongoose.Schema({
     ref:"address",
     require:true
   },
-  deliveredStatus:[ {
-    type: String,
-    default: "pending",
-    enum: [
-      "orderProcessing",
-      "pre-Production",
-      "inProduction",
-      "Shipped",
-      "Delivered",
-    ],
+  deliverdBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"agent",
+    require:true
   },
-],
   taxPrice:{
     type:Number,
     require:true
@@ -50,8 +54,11 @@ const schema = new mongoose.Schema({
   shippingPrice:{
     type:Number,
     require:true
+  },
+  deleiverdBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"agent",
   }
-
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("userOrder", schema);
