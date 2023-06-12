@@ -17,17 +17,20 @@ const schema = new mongoose.Schema({
     },
   ],
   cartsTotal: Number,
-  orderStatus: [{
+  orderStatus: {
     type: String,
     default: "pending",
     enum: [
       "Approved",
-       "packed",
+       "Packed",
       "Shipped",
       "Delivered",
-      "Cancelled"
+      "Cancelled",
+      "pending",,
+      "Processing",
+      "NotSend"
     ],
-  },],
+  },
 paymentIntent: {
   type:String,
   default:"Cash on Delivery"

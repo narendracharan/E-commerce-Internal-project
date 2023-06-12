@@ -67,6 +67,8 @@ exports.filterPrice = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
 exports.lowPrice = async (req, res) => {
   try {
     const productlist = await productSchema.find({}).sort({ Price: 1 });

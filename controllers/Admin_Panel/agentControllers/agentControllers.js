@@ -6,6 +6,7 @@ const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema"
 const jwt = require("jsonwebtoken");
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
+const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
 exports.addUser = async (req, res) => {
   try {
     const user = new agentSchema(req.body);
@@ -231,14 +232,15 @@ res.status(200).json(success(res.statusCode,"Success",{orderDetails}))
 
 exports.orderHistory=async(req,res)=>{
   try{
-const orderdata=await orderSchema.aggregate([
+const orderdata=await orderSchema
+.aggregate([
   {
     $match: {
-      orderStatus : "pending",
+      orderStatus : "Delivered",
     },
   },
 ])
-res.status(200).json(success(req.statusCode,"success",{orderdata}))
+res.status(200).json(success(res.statusCode,"success",{orderdata}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
   }
@@ -266,4 +268,51 @@ res.status(200).json(success(res.statusCode,"Success",{userUpdate}))
     console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
+}
+
+exports.withdrawOrder=async(req,res)=>{
+  try{
+const withdrawData=await orderSchema.aggregate([
+  {
+    $match: {
+      orderStatus : "NotSend",
+    },
+  },
+])
+res.status(200).json(success(res.statusCode,"Success",{withdrawData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  } 
+}
+
+exports.userLocation=async(req,res)=>{
+  try{
+const location=new userLocationSchema(req.query)
+const locationData=await location.save()
+res.status(200).json(success(res.statusCode,"Success",{locationData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.agentDeatails=async(req,res)=>{
+ try{
+const {_id}=req.query
+const agentData=await agentSchema.findById(_id,{jobStatus:1})
+res.status(200).json(success(res.statusCode,"Success",{agentData}))
+ }catch(err){
+  console.log(err);
+  res.status(400).json(error("Failed",res.statusCode))
+ }
+}
+
+exports.updateStatus=async(req,res)=>{
+try{
+const {_id}=req.query
+const orderStatus=req.query
+const updateData=await orderSchema.findByIdAndUpdate(_id,orderStatus,{new:true})
+res.status(200).json(success(res.statusCode,"Success",updateData))
+}catch(err){
+  res.status(400).json(error("Failed",res.statusCode))
+}
 }

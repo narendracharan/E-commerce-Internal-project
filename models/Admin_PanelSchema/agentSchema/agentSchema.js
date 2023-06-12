@@ -53,6 +53,10 @@ const schema=new mongoose.Schema({
    status:{
     type:String,
     default:"Created"
+   },   
+   jobStatus:{
+    type:String,
+    default:"Available"
    }
 })
 

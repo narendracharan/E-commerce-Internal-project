@@ -181,7 +181,7 @@ exports.sendUserResetPassword = async (req, res) => {
     if (user) {
       const secret = user._id + process.env.SECRET_KEY;
       const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });
-      const link = `http://localhost:3000/changePassword${user._id}/${token}}`;
+      const link = `http://ec2-65-2-108-172.ap-south-1.compute.amazonaws.com:5000/changePassword${user._id}/${token}}`;
       let info = await transporter.sendMail({
         from: "s04450647@gmail.com",
         to: userEmail,

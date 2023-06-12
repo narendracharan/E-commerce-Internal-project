@@ -2,6 +2,7 @@ const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/
 const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
+const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 
 const { error, success } = require("../../response");
 
@@ -101,7 +102,7 @@ exports.orderSuccessDetails= async (req, res) => {
     const pending = await orderSchema.aggregate([
       {
         $match: {
-          orderStatus: "success",
+          orderStatus: "Delivered",
         },
       },
     ]);
@@ -109,7 +110,7 @@ exports.orderSuccessDetails= async (req, res) => {
       const orderList=await orderSchema.aggregate([
         {
           $match: {
-            orderStatus: "success",
+            orderStatus: "Delivered",
           },
         },
       ])
@@ -120,3 +121,43 @@ exports.orderSuccessDetails= async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.orderReview=async(req,res)=>{
+  try{
+const  review=new reviewSchema(req.body)
+const reviewData=await review.save()
+res.status(200).json(success(res.statusCode, "Success", {reviewData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.cancelledOrder= async (req, res) => {
+  try {
+    const cancelled = await orderSchema.aggregate([
+      {
+        $match: {
+          orderStatus: "Cancelled",
+        },
+      },
+    ]);
+res.status(200).json(success(res.statusCode,"Success",{cancelled}))
+  }catch(err){
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+}
+
+exports.IndeliveryOrder= async (req, res) => {
+  try {
+    const Delivery = await orderSchema.aggregate([
+      {
+        $match: {
+          orderStatus: "Processing",
+        },
+      },
+    ]);
+res.status(200).json(success(res.statusCode,"Success",{Delivery}))
+  }catch(err){
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+}
