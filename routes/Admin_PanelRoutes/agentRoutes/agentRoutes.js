@@ -23,6 +23,6 @@ router.post("/withdraw-order",tokenAuthorisationUser,withdrawOrder)
 router.post("/user-location",tokenAuthorisationUser,userLocation)
 router.post("/job-status",tokenAuthorisationUser,agentDeatails)
 router.post("/update-status",tokenAuthorisationUser,updateStatus)
-router.post("/total-revenue/:id",totalRevenue)
-router.post("/online-status/:id",updateOnline)
+router.post("/total-revenue/:id",tokenAuthorisationUser,totalRevenue)
+router.post("/online-status/:id",tokenAuthorisationUser,updateOnline)
 module.exports=router
