@@ -144,12 +144,18 @@ exports.userDetails=async(req,res)=>{
   try{
     const id=req.params.id
     const details=await orderSchema.find({deliverdBy:id}).populate("deliverdBy")
+    var totalearning=0
+   const shiping= details.map((x)=>x.shippingPrice)
+   for(let i=0;i<shiping.length;i++){
+      totalearning+=shiping[i]
+   }
     const userDetail=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,address:1})
-   res.status(200).json(success(res.statusCode,"Success",{userDetail,details}))
+   res.status(200).json(success(res.statusCode,"Success",{userDetail,details,totalearning}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
+
 exports.deleteUser=async(req,res)=>{
   try{
 const id=req.params.id
@@ -193,7 +199,6 @@ if ((oldPassword,password, confirm_Password)) {
   }
 }
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.status))
   }
 }
@@ -204,7 +209,6 @@ const feedback=new feedbackSchema(req.body)
 const feedbackdata=await feedback.save()
 res.status(200).json(success(res.statusCode,"Feedback Added Successfully",{feedbackdata}))
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
@@ -224,7 +228,6 @@ const id=req.params.id
 const orderDetails=await orderSchema.findById(id)
 res.status(200).json(success(res.statusCode,"Success",{orderDetails}))
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
@@ -265,7 +268,6 @@ const userUpdate=await agentSchema.findByIdAndUpdate(id,data,{new:true})
 res.status(200).json(success(res.statusCode,"Success",{userUpdate}))
 
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
@@ -301,7 +303,6 @@ const {_id}=req.query
 const agentData=await agentSchema.findById(_id,{jobStatus:1})
 res.status(200).json(success(res.statusCode,"Success",{agentData}))
  }catch(err){
-  console.log(err);
   res.status(400).json(error("Failed",res.statusCode))
  }
 }
@@ -315,4 +316,31 @@ res.status(200).json(success(res.statusCode,"Success",updateData))
 }catch(err){
   res.status(400).json(error("Failed",res.statusCode))
 }
+}
+
+
+exports.totalRevenue=async(req,res)=>{
+  try{
+const id=req.params.id
+const totalRevenue=await orderSchema.find({deliverdBy:id})
+const revenue=totalRevenue.map((x)=>x.shippingPrice)
+var total=0
+for(let i=0;i<revenue.length;i++){
+  total+=revenue[i]
+}
+res.status(200).json(success(res.statusCode,"Success",{total}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.updateOnline=async(req,res)=>{
+  try{
+const id=req.params.id
+const  onlineStatus=req.query
+const updateData=await agentSchema.findByIdAndUpdate(id,onlineStatus,{new:true})
+res.status(200).json(success(res.statusCode,"Success",{updateData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
 }

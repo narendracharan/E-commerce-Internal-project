@@ -27,7 +27,6 @@ exports.userSignup = async (req, res) => {
       .status(201)
       .json(success(res.statusCode, "userSignup Successfully", { createUser }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -93,7 +92,6 @@ exports.sendMailResetPassword = async (req, res) => {
       res.status(200).json(error(" userEmail are incorrect", res.statusCode));
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -121,7 +119,6 @@ exports.resetPassword = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -166,7 +163,6 @@ exports.updateProfile = async (req, res) => {
     });
     res.status(200).json(success(res.statusCode, " Success", { profile }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -220,7 +216,6 @@ if ((password, confirm_Password)) {
   }
 }
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.status))
   }
 }

@@ -1,3 +1,4 @@
+const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const { error, success } = require("../../response");
@@ -55,15 +56,11 @@ exports.relatedProduct = async (req, res) => {
 
 exports.filterPrice = async (req, res) => {
   try {
-    const { Price } = req.body;
-    const quearyObjetct = {};
-    if (Price) {
-      quearyObjetct.Price = Price;
-    }
-    const filter = await productSchema.find(quearyObjetct);
-    res.status(200).json(success(res.statusCode, "Success", { filter }));
+    const { min,max ,id} = req.body;
+    const categoryData = await productSchema.find({Subcategory_Id:id})
+   var filterData=categoryData.filter((x)=>x.Price >min || x.Price<max);
+    res.status(200).json(success(res.statusCode, "Success", { filterData }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -136,7 +133,6 @@ exports.productDiscount = async (req, res) => {
     const productData = await productSchema.find(quearyObjetct)
     res.status(200).json(success(res.statusCode, "Success", { productData }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   } 
 };
@@ -152,7 +148,6 @@ exports.ratingProduct = async (req, res) => {
     console.log(productData);
     res.status(200).json(success(res.statusCode, "Success", { productData }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -207,7 +202,6 @@ exports.rating = async (req, res) => {
         );
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
