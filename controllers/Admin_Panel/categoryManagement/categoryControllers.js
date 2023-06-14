@@ -14,7 +14,6 @@ exports.createCategory = async (req, res) => {
     const saveCategory = await category.save();
     res.status(201).json(success(res.statusCode,"Category Create Successfully",{saveCategory}));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode));
   }
 };

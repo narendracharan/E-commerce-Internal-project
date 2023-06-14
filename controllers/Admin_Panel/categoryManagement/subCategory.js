@@ -14,7 +14,6 @@ exports.subCategory = async (req, res) => {
     const createSubCategory = await subCategory.save();
     res.status(200).json(success(res.statusCode,"Success",{createSubCategory}));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode));
   }
 };

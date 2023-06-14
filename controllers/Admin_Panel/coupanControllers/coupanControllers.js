@@ -8,7 +8,6 @@ const Coupan=new coupanSchema(req.body)
 const coupanData=await Coupan.save()
 res.status(200).json(success(res.statusCode,"Success",{coupanData}))
     }catch(err){
-        console.log(err);
         res.status(400).json(error("Failed",res.statusCode))
     }
 }
@@ -77,7 +76,6 @@ exports.coupanSearch=async(req,res)=>{
           res.status(200).json(error("Data are Not Found",res.statusCode));
         }
     }catch(err){
-        console.log(err);
         res.status(400).json("Failed",res.statusCode)
     }
 }

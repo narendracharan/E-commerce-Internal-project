@@ -34,7 +34,6 @@ exports.userSignup = async (req, res) => {
       subject: "Your Signup Successfully",
       text: `This ${otp} Otp Verify To Email`,
     };
-    console.log(otp);
     transporter.sendMail(mailOptions);
     const newOtpVerify = await new userSchema({
       otp: otp,
@@ -47,7 +46,6 @@ exports.userSignup = async (req, res) => {
     console.log(createUser);
     res.status(201).json(success(res.statusCode,"Signup Successfully",{createUser}));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode));
   }
 };

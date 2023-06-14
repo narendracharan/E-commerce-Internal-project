@@ -5,10 +5,8 @@ exports.createWish = async (req, res) => {
   try {
     const wish = new wishSchema(req.query);
     const wishs = await wish.save();
-    console.log(wishs);
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -38,7 +36,6 @@ exports.deleteWishList = async (req, res) => {
     res
       .status(200)
       .json(success(res.statusCode, "Wish List Deleted", { deleteDta }));
-      console.log(deleteDta);
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

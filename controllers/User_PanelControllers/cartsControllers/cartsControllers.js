@@ -45,7 +45,6 @@ exports.deleteProduct = async (req, res) => {
     const item = await cartsSchema.findOneAndDelete(id)
     res.status(200).json(success(res.statusCode, "Success", { item }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -55,7 +54,6 @@ exports.cartsList = async (req, res) => {
     const list = await cartsSchema.find({}).populate("products.product_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -92,7 +90,6 @@ exports.applyCoupan = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

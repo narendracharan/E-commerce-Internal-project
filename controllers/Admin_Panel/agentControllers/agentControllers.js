@@ -144,13 +144,18 @@ exports.userDetails=async(req,res)=>{
   try{
     const id=req.params.id
     const details=await orderSchema.find({deliverdBy:id}).populate("deliverdBy")
+    const total=details.map((x)=>x.orderStatus=="Delivered")
+    var compltedOrder=0
+    for(let i=0;i<total.length;i++){
+      compltedOrder+=total[i]
+    }
     var totalearning=0
    const shiping= details.map((x)=>x.shippingPrice)
    for(let i=0;i<shiping.length;i++){
       totalearning+=shiping[i]
    }
     const userDetail=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,address:1})
-   res.status(200).json(success(res.statusCode,"Success",{userDetail,details,totalearning}))
+   res.status(200).json(success(res.statusCode,"Success",{userDetail,details,totalearning,compltedOrder}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
   }

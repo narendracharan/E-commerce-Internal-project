@@ -23,7 +23,6 @@ exports.blogSearch = async (req, res) => {
       res.status(400).json(error("Data are Not Found", res.statusCode));
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

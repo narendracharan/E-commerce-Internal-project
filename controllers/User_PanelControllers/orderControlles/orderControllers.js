@@ -41,7 +41,6 @@ exports.createOrder = async (req, res) => {
     }).save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -117,7 +116,6 @@ exports.orderSuccessDetails= async (req, res) => {
       res.status(200).json(success(res.statusCode, "Success", { orderList }));
     }
      } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

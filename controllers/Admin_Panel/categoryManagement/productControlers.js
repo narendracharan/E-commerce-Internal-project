@@ -8,7 +8,6 @@ const { success, error } = require("../../response");
     const saveProduct = await product.save();
     res.status(201).json(success(res.statusCode, "Success", { saveProduct }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

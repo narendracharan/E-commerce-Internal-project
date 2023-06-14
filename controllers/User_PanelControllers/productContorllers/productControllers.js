@@ -145,7 +145,6 @@ exports.ratingProduct = async (req, res) => {
       quearyObjetct.star = star;
     }
     const productData = await productSchema.find(quearyObjetct);
-    console.log(productData);
     res.status(200).json(success(res.statusCode, "Success", { productData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

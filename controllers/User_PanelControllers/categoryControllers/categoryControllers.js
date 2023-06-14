@@ -39,7 +39,6 @@ exports.checkCategoryProduct = async (req, res) => {
     const productList = await productSchema.find({ category_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { productList }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
