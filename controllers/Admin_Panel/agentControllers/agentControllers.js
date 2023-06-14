@@ -110,7 +110,6 @@ exports.ResetPassword = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -124,228 +123,265 @@ exports.userList = async (req, res) => {
   }
 };
 
-exports.editProfile=async(req,res)=>{
-  try{
-const id=req.params.id
-const data={
-  name:req.body.name,
-  Email:req.body.Email,
-  mobileNumber:req.body.mobileNumber,
-  profile_Pic:req.file.location
-}
-const updateData=await agentSchema.findByIdAndUpdate(id,data,{new:true}).populate("_id",{address:0})
-res.status(200).json(success(res.statusCode,"Updated Successfully",{updateData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.editProfile = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = {
+      name: req.body.name,
+      Email: req.body.Email,
+      mobileNumber: req.body.mobileNumber,
+      profile_Pic: req.file.location,
+    };
+    const updateData = await agentSchema
+      .findByIdAndUpdate(id, data, { new: true })
+      .populate("_id", { address: 0 });
+    res
+      .status(200)
+      .json(success(res.statusCode, "Updated Successfully", { updateData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.userDetails=async(req,res)=>{
-  try{
-    const id=req.params.id
-    const details=await orderSchema.find({deliverdBy:id}).populate("deliverdBy")
-    const total=details.map((x)=>x.orderStatus=="Delivered")
-    var compltedOrder=0
-    for(let i=0;i<total.length;i++){
-      compltedOrder+=total[i]
+exports.userDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const details = await orderSchema
+      .find({ deliverdBy: id })
+      .populate("deliverdBy");
+    const total = details.map((x) => x.orderStatus == "Delivered");
+    var compltedOrder = 0;
+    for (let i = 0; i < total.length; i++) {
+      compltedOrder += total[i];
     }
-    var totalearning=0
-   const shiping= details.map((x)=>x.shippingPrice)
-   for(let i=0;i<shiping.length;i++){
-      totalearning+=shiping[i]
-   }
-    const userDetail=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,address:1})
-   res.status(200).json(success(res.statusCode,"Success",{userDetail,details,totalearning,compltedOrder}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+    var totalearning = 0;
+    const shiping = details.map((x) => x.shippingPrice);
+    for (let i = 0; i < shiping.length; i++) {
+      totalearning += shiping[i];
+    }
+    const userDetail = await agentSchema.findById(id, {
+      name: 1,
+      Email: 1,
+      mobileNumber: 1,
+      address: 1,
+    });
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Success", {
+          userDetail,
+          details,
+          totalearning,
+          compltedOrder,
+        })
+      );
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.deleteUser=async(req,res)=>{
-  try{
-const id=req.params.id
-const deleteUser=await agentSchema.findByIdAndDelete(id)
-res.status(200).json(success(res.statusCode,"deleted data",{deleteUser}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteUser = await agentSchema.findByIdAndDelete(id);
+    res
+      .status(200)
+      .json(success(res.statusCode, "deleted data", { deleteUser }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.userSerach=async(req,res)=>{
-  try{
-const name=req.body.name
-const searchData=await agentSchema.find({name:{ $regex: name, $options: "i" }})
-if(searchData.length>0){
-  res.status(200).json(success(res.statusCode,"Success",{searchData}))
-}else{
-  res.status(200).json(success(res.statusCode,"user are not found",))
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.userSerach = async (req, res) => {
+  try {
+    const name = req.body.name;
+    const searchData = await agentSchema.find({
+      name: { $regex: name, $options: "i" },
+    });
+    if (searchData.length > 0) {
+      res.status(200).json(success(res.statusCode, "Success", { searchData }));
+    } else {
+      res.status(200).json(success(res.statusCode, "user are not found"));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.changePassword=async(req,res)=>{
-  try{
-const id=req.params.id
-const { oldPassword,password, confirm_Password } = req.body;
-const user = await User.findById(id);
-if ((oldPassword,password, confirm_Password)) {
-  if (password != confirm_Password) {
-    res.status(400).json(error("Password Not Match", res.statusCode));
-  } else {
-    const newPassword = await bcrypt.hash(password, 10);
-    const createPassword = await User.findByIdAndUpdate(user.id,{$set:{password:newPassword}},{new:true})
-    res.status(200).json(
-      success(res.statusCode, "Password Updated Successfully", {
-        createPassword,
-      })
-    );
+exports.changePassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { oldPassword, password, confirm_Password } = req.body;
+    const user = await User.findById(id);
+    if ((oldPassword, password, confirm_Password)) {
+      if (password != confirm_Password) {
+        res.status(400).json(error("Password Not Match", res.statusCode));
+      } else {
+        const newPassword = await bcrypt.hash(password, 10);
+        const createPassword = await User.findByIdAndUpdate(
+          user.id,
+          { $set: { password: newPassword } },
+          { new: true }
+        );
+        res.status(200).json(
+          success(res.statusCode, "Password Updated Successfully", {
+            createPassword,
+          })
+        );
+      }
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.status));
   }
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.status))
+};
+
+exports.feedbackAdd = async (req, res) => {
+  try {
+    const feedback = new feedbackSchema(req.body);
+    const feedbackdata = await feedback.save();
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Feedback Added Successfully", { feedbackdata })
+      );
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.feedbackAdd=async(req,res)=>{
-  try{
-const feedback=new feedbackSchema(req.body)
-const feedbackdata=await feedback.save()
-res.status(200).json(success(res.statusCode,"Feedback Added Successfully",{feedbackdata}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.orderList = async (req, res) => {
+  try {
+    const orderList = await orderSchema
+      .find({})
+      .populate("user_Id")
+      .populate("address_Id");
+    res.status(200).json(success(res.statusCode, "Success", { orderList }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.orderList=async(req,res)=>{
-  try{ 
-const orderList=await orderSchema.find({}).populate("user_Id").populate("address_Id")
-res.status(200).json(success(res.statusCode,"Success",{orderList}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.orderDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const orderDetails = await orderSchema.findById(id);
+    res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.orderDetails=async(req,res)=>{
-  try{
-const id=req.params.id
-const orderDetails=await orderSchema.findById(id)
-res.status(200).json(success(res.statusCode,"Success",{orderDetails}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.orderHistory = async (req, res) => {
+  try {
+    const orderdata = await orderSchema.aggregate([
+      {
+        $match: {
+          orderStatus: "Delivered",
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "success", { orderdata }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-
-exports.orderHistory=async(req,res)=>{
-  try{
-const orderdata=await orderSchema
-.aggregate([
-  {
-    $match: {
-      orderStatus : "Delivered",
-    },
-  },
-])
-res.status(200).json(success(res.statusCode,"success",{orderdata}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = {
+      name: req.body.name,
+      Email: req.body.Email,
+      accountNumber: req.body.accountNumber,
+      bankName: req.body.bankName,
+      profile_Pic: req.file.location,
+      commisionType: req.body.commisionType,
+      mobileNumber: req.body.mobileNumber,
+      address: req.body.address,
+      accountName: req.body.accountName,
+      routingNumber: req.body.routingNumber,
+    };
+    const userUpdate = await agentSchema.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { userUpdate }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.updateUser=async(req,res)=>{
-  try{
-const id=req.params.id
-const data={
-  name:req.body.name,
-  Email:req.body.Email,
-  accountNumber:req.body.accountNumber,
-  bankName:req.body.bankName,
-  profile_Pic:req.file.location,
-  commisionType:req.body.commisionType,
-  mobileNumber:req.body.mobileNumber,
-  address:req.body.address,
-  accountName:req.body.accountName,
-  routingNumber:req.body.routingNumber
-}
-const userUpdate=await agentSchema.findByIdAndUpdate(id,data,{new:true})
-res.status(200).json(success(res.statusCode,"Success",{userUpdate}))
-
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.withdrawOrder = async (req, res) => {
+  try {
+    const withdrawData = await orderSchema.aggregate([
+      {
+        $match: {
+          orderStatus: "NotSend",
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { withdrawData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.withdrawOrder=async(req,res)=>{
-  try{
-const withdrawData=await orderSchema.aggregate([
-  {
-    $match: {
-      orderStatus : "NotSend",
-    },
-  },
-])
-res.status(200).json(success(res.statusCode,"Success",{withdrawData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
-  } 
-}
-
-exports.userLocation=async(req,res)=>{
-  try{
-const location=new userLocationSchema(req.query)
-const locationData=await location.save()
-res.status(200).json(success(res.statusCode,"Success",{locationData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.userLocation = async (req, res) => {
+  try {
+    const location = new userLocationSchema(req.query);
+    const locationData = await location.save();
+    res.status(200).json(success(res.statusCode, "Success", { locationData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.agentDeatails=async(req,res)=>{
- try{
-const {_id}=req.query
-const agentData=await agentSchema.findById(_id,{jobStatus:1})
-res.status(200).json(success(res.statusCode,"Success",{agentData}))
- }catch(err){
-  res.status(400).json(error("Failed",res.statusCode))
- }
-}
-
-exports.updateStatus=async(req,res)=>{
-try{
-const {_id}=req.query
-const orderStatus=req.query
-const updateData=await orderSchema.findByIdAndUpdate(_id,orderStatus,{new:true})
-res.status(200).json(success(res.statusCode,"Success",updateData))
-}catch(err){
-  res.status(400).json(error("Failed",res.statusCode))
-}
-}
-
-
-exports.totalRevenue=async(req,res)=>{
-  try{
-const id=req.params.id
-const totalRevenue=await orderSchema.find({deliverdBy:id})
-const revenue=totalRevenue.map((x)=>x.shippingPrice)
-var total=0
-for(let i=0;i<revenue.length;i++){
-  total+=revenue[i]
-}
-res.status(200).json(success(res.statusCode,"Success",{total}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.agentDeatails = async (req, res) => {
+  try {
+    const { _id } = req.query;
+    const agentData = await agentSchema.findById(_id, { jobStatus: 1 });
+    res.status(200).json(success(res.statusCode, "Success", { agentData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.updateOnline=async(req,res)=>{
-  try{
-const id=req.params.id
-const  onlineStatus=req.query
-const updateData=await agentSchema.findByIdAndUpdate(id,onlineStatus,{new:true})
-res.status(200).json(success(res.statusCode,"Success",{updateData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.updateStatus = async (req, res) => {
+  try {
+    const { _id } = req.query;
+    const orderStatus = req.query;
+    const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
+      new: true,
+    });
+    res.status(200).json(success(res.statusCode, "Success", updateData));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
+
+exports.totalRevenue = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const totalRevenue = await orderSchema.find({ deliverdBy: id });
+    const revenue = totalRevenue.map((x) => x.shippingPrice);
+    var total = 0;
+    for (let i = 0; i < revenue.length; i++) {
+      total += revenue[i];
+    }
+    res.status(200).json(success(res.statusCode, "Success", { total }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.updateOnline = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const onlineStatus = req.query;
+    const updateData = await agentSchema.findByIdAndUpdate(id, onlineStatus, {
+      new: true,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { updateData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

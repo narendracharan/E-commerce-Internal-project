@@ -19,8 +19,10 @@ exports.productDetails = async (req, res) => {
     if (details.stockQuantity == 0) {
       res.status(400).json(error("Product Out of Stock", res.statusCode));
     }
-    const reviewCount=await reviewSchema.find({product_Id:id}).count()
-    res.status(200).json(success(res.statusCode, "Success", { details,reviewCount }));
+    const reviewCount = await reviewSchema.find({ product_Id: id }).count();
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { details, reviewCount }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -52,19 +54,16 @@ exports.relatedProduct = async (req, res) => {
   }
 };
 
-
-
 exports.filterPrice = async (req, res) => {
   try {
-    const { min,max ,id} = req.body;
-    const categoryData = await productSchema.find({Subcategory_Id:id})
-   var filterData=categoryData.filter((x)=>x.Price >min || x.Price<max);
+    const { min, max, id } = req.body;
+    const categoryData = await productSchema.find({ Subcategory_Id: id });
+    var filterData = categoryData.filter((x) => x.Price > min && x.Price < max);
     res.status(200).json(success(res.statusCode, "Success", { filterData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 exports.lowPrice = async (req, res) => {
   try {
@@ -91,7 +90,7 @@ exports.asendingProduct = async (req, res) => {
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-};
+};  
 
 exports.descendingProduct = async (req, res) => {
   try {
@@ -102,14 +101,14 @@ exports.descendingProduct = async (req, res) => {
   }
 };
 
-exports.highDiscount=async(req,res)=>{
-  try{
-const productList=await productSchema.find({}).sort({Discount:-1})
-res.status(200).json(success(res.statusCode,"Success",{productList}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.highDiscount = async (req, res) => {
+  try {
+    const productList = await productSchema.find({}).sort({ Discount: -1 });
+    res.status(200).json(success(res.statusCode, "Success", { productList }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
 exports.trandingProduct = async (req, res) => {
   try {
@@ -130,11 +129,11 @@ exports.productDiscount = async (req, res) => {
     if (Discount) {
       quearyObjetct.Discount = Discount;
     }
-    const productData = await productSchema.find(quearyObjetct)
+    const productData = await productSchema.find(quearyObjetct);
     res.status(200).json(success(res.statusCode, "Success", { productData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
-  } 
+  }
 };
 
 exports.ratingProduct = async (req, res) => {
@@ -150,7 +149,6 @@ exports.ratingProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 exports.rating = async (req, res) => {
   try {
@@ -194,7 +192,7 @@ exports.rating = async (req, res) => {
         totalRating,
         ralatedProduct,
       }).save();
-      res 
+      res
         .status(200)
         .json(
           success(res.statusCode, "Success", { ralatedProduct, newrating })
