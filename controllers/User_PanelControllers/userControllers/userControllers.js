@@ -128,6 +128,9 @@ exports.profilePic=async(req,res)=>{
 const id=req.params.id
 const data={
   profile_Pic: req.file.location,
+  userName: req.body.userName,
+  userEmail: req.body.userEmail,
+  mobileNumber: req.body.mobileNumber,
 }
 const profile = await userSchema.findByIdAndUpdate(id, data, {
   new: true,
