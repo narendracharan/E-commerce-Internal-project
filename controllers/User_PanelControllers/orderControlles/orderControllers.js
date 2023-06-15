@@ -8,8 +8,14 @@ const { error, success } = require("../../response");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { user_Id, deliverdBy,address_Id, taxPrice, shippingPrice, orderStatus } =
-      req.body;
+    const {
+      user_Id,
+      deliverdBy,
+      address_Id,
+      taxPrice,
+      shippingPrice,
+      orderStatus,
+    } = req.body;
     const { carts } = req.body;
     const val = await coupanSchema.find({});
     let products = [];
@@ -96,66 +102,49 @@ exports.orderList = async (req, res) => {
 //   }
 // };
 
-exports.orderSuccessDetails= async (req, res) => {
+exports.orderSuccessDetails = async (req, res) => {
   try {
-    const pending = await orderSchema.aggregate([
-      {
-        $match: {
-          orderStatus: "Delivered",
-        },
-      },
-    ]);
-    if(pending){
-      const orderList=await orderSchema.aggregate([
-        {
-          $match: {
-            orderStatus: "Delivered",
-          },
-        },
-      ])
-      res.status(200).json(success(res.statusCode, "Success", { orderList }));
-    }
-     } catch (err) {
+    const Delivered = await orderSchema
+      .find()
+      .populate("products.product_Id", { product_Pic: 1 });
+    const orderData = Delivered.filter((x) => x.orderStatus == "Delivered");
+    res.status(200).json(success(res.statusCode, "Success", { orderData }));
+  } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
-exports.orderReview=async(req,res)=>{
-  try{
-const  review=new reviewSchema(req.body)
-const reviewData=await review.save()
-res.status(200).json(success(res.statusCode, "Success", {reviewData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
-  }
-}
-
-exports.cancelledOrder= async (req, res) => {
+exports.orderReview = async (req, res) => {
   try {
-    const cancelled = await orderSchema.aggregate([
-      {
-        $match: {
-          orderStatus: "Cancelled",
-        },
-      },
-    ]);
-res.status(200).json(success(res.statusCode,"Success",{cancelled}))
-  }catch(err){
+    const review = new reviewSchema(req.body);
+    const reviewData = await review.save();
+    res.status(200).json(success(res.statusCode, "Success", { reviewData }));
+  } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.IndeliveryOrder= async (req, res) => {
+exports.cancelledOrder = async (req, res) => {
   try {
-    const Delivery = await orderSchema.aggregate([
-      {
-        $match: {
-          orderStatus: "Processing",
-        },
-      },
-    ])
-res.status(200).json(success(res.statusCode,"Success",{Delivery}))
-  }catch(err){
+    const cancelled = await orderSchema
+      .find()
+      .populate("products.product_Id", { product_Pic: 1 });
+    const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
+    res.status(200).json(success(res.statusCode, "Success", { orderData }));
+  } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
+
+exports.IndeliveryOrder = async (req, res) => {
+  try {
+    const Delivered = await orderSchema
+      .find()
+      .populate("products.product_Id", { product_Pic: 1 });
+    const orderData = Delivered.filter((x) => x.orderStatus == "Processing");
+
+    res.status(200).json(success(res.statusCode, "Success", { orderData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

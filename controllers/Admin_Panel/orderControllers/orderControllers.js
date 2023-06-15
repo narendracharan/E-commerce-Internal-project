@@ -3,7 +3,7 @@ const { success, error } = require("../../response");
 
 exports.orderList = async (req, res) => {
   try {
-    const list = await orderSchema.find({})
+    const list = await orderSchema.find({}).populate("products.product_Id", { product_Pic: 1 });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
