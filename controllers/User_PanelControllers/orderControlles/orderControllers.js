@@ -153,7 +153,7 @@ exports.IndeliveryOrder= async (req, res) => {
           orderStatus: "Processing",
         },
       },
-    ]);
+    ])
 res.status(200).json(success(res.statusCode,"Success",{Delivery}))
   }catch(err){
     res.status(400).json(error("Failed", res.statusCode));

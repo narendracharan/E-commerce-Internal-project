@@ -2,15 +2,7 @@ const mongoose=require("mongoose")
 
 
 const schema=new mongoose.Schema({
-    firstName:{
-        type:String,
-        require:true
-    },
-    lastName:{
-        type:String,
-        require:true
-    },
-    Email:{
+    title:{
         type:String,
         require:true
     },
@@ -18,11 +10,7 @@ const schema=new mongoose.Schema({
         type:String,
         require:true
     },
-    pinCode:{
-        type:String,
-        require:true
-    },
-    mobileNumber:{
+    locality:{
         type:String,
         require:true
     },

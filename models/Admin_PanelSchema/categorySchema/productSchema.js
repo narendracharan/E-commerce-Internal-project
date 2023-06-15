@@ -74,7 +74,7 @@ const schema=new mongoose.Schema({
         require:true
     },
     weight:{
-        type:Number,
+        type:String,
         require:true
     },
     brandName:{
