@@ -31,8 +31,8 @@ exports.wishlist = async (req, res) => {
 
 exports.deleteWishList = async (req, res) => {
   try {
-    const id = req.params.id;
-    const deleteDta = await wishSchema.findOneAndDelete(id)
+   // const id = req.params.id;
+    const deleteDta = await wishSchema.deleteMany()
     res
       .status(200)
       .json(success(res.statusCode, "Wish List Deleted", { deleteDta }));

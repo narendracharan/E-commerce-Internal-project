@@ -34,7 +34,7 @@ const schema=new mongoose.Schema({
             star:Number,
             postedby:{type:mongoose.Schema.Types.ObjectId,
             ref:"user",
-        require:true}
+          require:true}
         }
     ],
     SKU:{
@@ -72,6 +72,18 @@ const schema=new mongoose.Schema({
     Tags:{
         type:String,
         require:true
+    },
+    weight:{
+        type:Number,
+        require:true
+    },
+    brandName:{
+        type:String,
+        require:true
+    },
+    productColor:{
+    type:String,
+    require:true
     },
     category_Id:{
         type:mongoose.Schema.Types.ObjectId,

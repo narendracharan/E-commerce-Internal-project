@@ -1,3 +1,4 @@
+const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const UserorderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { success, error } = require("../../response");
@@ -6,18 +7,20 @@ exports.userCount = async (req, res) => {
   try {
     const userCount = await userSchema.find().count()
     const orderCount = await UserorderSchema.find().count()
+    const productCount=await productSchema.find().count()
     res.status(200).json(success(res.statusCode, "Success", {
       userCount,
       orderCount,
+      productCount
     }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
-exports.recentOrder = async (req, res) => {
+exports.recentOrderList = async (req, res) => {
   try {
-    const list = await UserorderSchema.find({}).populate("products.product_Id");
+    const list = await UserorderSchema.find({}).populate("user_Id")
     res.status(400).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -26,9 +29,9 @@ exports.recentOrder = async (req, res) => {
 
 exports.recentOrderSearch = async (req, res) => {
   try {
-    const userName = req.body.userName
+    const orderStatus = req.body.orderStatus
     const searchData = await UserorderSchema.find({
-      sellerName: { $regex: userName, $options: "i" },
+      orderStatus: { $regex: orderStatus, $options: "i" },
     }).populate("user_Id")
     res.status(200).json(success(res.statusCode, "Success", { searchData }));
   } catch (err) {

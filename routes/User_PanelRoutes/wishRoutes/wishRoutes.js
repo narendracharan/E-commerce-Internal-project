@@ -5,5 +5,5 @@ const router=express.Router()
 
 router.post("/add-wish",tokenAuthorisationUser,createWish)
 router.post("/wish-List",tokenAuthorisationUser,wishlist)
-router.delete("/wish-delete/:id",tokenAuthorisationUser,deleteWishList)
+router.delete("/wish-delete",tokenAuthorisationUser,deleteWishList)
 module.exports=router
