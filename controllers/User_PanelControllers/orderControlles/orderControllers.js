@@ -106,7 +106,7 @@ exports.orderSuccessDetails = async (req, res) => {
   try {
     const Delivered = await orderSchema
       .find()
-      .populate("products.product_Id", { product_Pic: 1 });
+      .populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Delivered");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -128,7 +128,7 @@ exports.cancelledOrder = async (req, res) => {
   try {
     const cancelled = await orderSchema
       .find()
-      .populate("products.product_Id", { product_Pic: 1 });
+      .populate("products.product_Id");
     const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -140,7 +140,7 @@ exports.IndeliveryOrder = async (req, res) => {
   try {
     const Delivered = await orderSchema
       .find()
-      .populate("products.product_Id", { product_Pic: 1 });
+      .populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Processing");
 
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
