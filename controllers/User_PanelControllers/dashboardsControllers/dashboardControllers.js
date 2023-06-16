@@ -1,3 +1,4 @@
+const homeScreenSchema = require("../../../models/Admin_PanelSchema/homeScreenSchema/homeScreenSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const wishListShema = require("../../../models/User_PanelSchema/wishListSchema/withlistSchema");
 const { error, success } = require("../../response");
@@ -49,3 +50,12 @@ exports.totalOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.bannerlist=async(req,res)=>{
+  try{
+const listBanner =await homeScreenSchema.find({})
+res.status(200).json(success(res.statusCode,"Success",{listBanner}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

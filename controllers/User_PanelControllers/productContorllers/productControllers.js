@@ -90,7 +90,7 @@ exports.asendingProduct = async (req, res) => {
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-};  
+};
 
 exports.descendingProduct = async (req, res) => {
   try {
@@ -184,7 +184,7 @@ exports.rating = async (req, res) => {
           },
         },
         { new: true }
-      )
+      );
       for (let i = 0; i < ralatedProduct.ratings.length; i++) {
         totalRating = totalRating + ralatedProduct.ratings[i].star;
       }
@@ -195,9 +195,29 @@ exports.rating = async (req, res) => {
       res
         .status(200)
         .json(
-          success(res.statusCode, "Success", { ralatedProduct,newrating })
+          success(res.statusCode, "Success", { ralatedProduct, newrating })
         );
     }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.Brandlist = async (req, res) => {
+  try {
+    const brandlist = await productSchema.find();
+    const brand = brandlist.map((x) => x.brandName);
+    res.status(200).json(success(res.statusCode, "Success", { brand }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.brandProduct = async (req, res) => {
+  try {
+    const brandname = req.query.brandname;
+    const product = await productSchema.find({ brandName: brandname });
+    res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

@@ -26,9 +26,9 @@ const schema = new mongoose.Schema({
       "Shipped",
       "Delivered",
       "Cancelled",
-      "pending",,
-      "Processing",
-      "NotSend"
+       "pending",,
+       "Processing",
+       "NotSend"
     ],
   },
 paymentIntent: {
