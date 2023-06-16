@@ -1,4 +1,5 @@
 const homeScreenSchema = require("../../../models/Admin_PanelSchema/homeScreenSchema/homeScreenSchema");
+const notificationSchema = require("../../../models/Admin_PanelSchema/notificationSchema/notificationSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const wishListShema = require("../../../models/User_PanelSchema/wishListSchema/withlistSchema");
 const { error, success } = require("../../response");
@@ -57,5 +58,14 @@ const listBanner =await homeScreenSchema.find({})
 res.status(200).json(success(res.statusCode,"Success",{listBanner}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.notificationList=async(req,res)=>{
+  try{
+const listData=await notificationSchema.find({})
+res.status(200).json(success(res.statusCode,"Success",{listData}))
+  }catch(err){
+    res.status(500).json(error("Failed",res.statusCode))
   }
 }
