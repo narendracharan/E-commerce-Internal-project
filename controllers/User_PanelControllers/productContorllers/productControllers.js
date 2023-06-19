@@ -56,8 +56,8 @@ exports.relatedProduct = async (req, res) => {
 
 exports.filterPrice = async (req, res) => {
   try {
-    const { min, max, id } = req.body;
-    const categoryData = await productSchema.find({ Subcategory_Id: id });
+    const { min, max } = req.body;
+    const categoryData = await productSchema.find({});
     var filterData = categoryData.filter((x) => x.Price > min && x.Price < max);
     res.status(200).json(success(res.statusCode, "Success", { filterData }));
   } catch (err) {
@@ -207,7 +207,8 @@ exports.Brandlist = async (req, res) => {
   try {
     const brandlist = await productSchema.find();
     const brand = brandlist.map((x) => x.brandName);
-    res.status(200).json(success(res.statusCode, "Success", { brand }));
+    const brandPic=brandlist.map((x)=>x.brandPic)
+    res.status(200).json(success(res.statusCode, "Success", { brand,brandPic }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -222,3 +223,14 @@ exports.brandProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.popularProduct=async(req,res)=>{
+  try{
+const id=req.body.id
+const popularProduct=await productSchema.find({Subcategory_Id:id}).limit(8)
+res.status(200).json(success(res.statusCode,"Success",{popularProduct}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

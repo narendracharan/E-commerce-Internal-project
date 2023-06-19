@@ -9,7 +9,8 @@ const { validationResult } = require("express-validator");
 exports.userSignup = async (req, res) => {
   try {
     const user = new userSchema(req.body);
-    const { userEmail } = req.body;
+    const { userEmail,userName } = req.body;
+    
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -22,7 +23,7 @@ exports.userSignup = async (req, res) => {
       });
     }
     user.password = await bcrypt.hash(user.password, 10);
-    const createUser = await user.save();
+    const createUser = await user.save(userName);
     res
       .status(201)
       .json(success(res.statusCode, "userSignup Successfully", { createUser }));

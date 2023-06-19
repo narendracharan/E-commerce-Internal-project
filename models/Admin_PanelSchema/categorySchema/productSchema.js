@@ -81,6 +81,10 @@ const schema=new mongoose.Schema({
         type:String,
         require:true
     },
+    brandPic:{
+        type:String,
+        require:true
+    },
     productColor:{
     type:String,
     require:true

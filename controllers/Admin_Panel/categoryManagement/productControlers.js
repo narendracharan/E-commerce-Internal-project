@@ -4,13 +4,24 @@ const { success, error } = require("../../response");
  exports.createProduct = async (req, res) => {
   try {
     const product = new productSchema(req.body);
-    product.product_Pic=req.files.map((x)=>x.location)
+    console.log(req.files);
+    if(req.files){
+    for(let i=0;i<req.files.length;i++){
+      if(req.files[i].fieldname=="product_Pic"){
+        product.product_Pic.push(req.files[i].location)
+      }
+       if(req.files[i].fieldname=="brandPic"){
+        product.brandPic=req.files[i].location
+      }
+    }
+  }
     const saveProduct = await product.save();
     res.status(201).json(success(res.statusCode, "Success", { saveProduct }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
-};
+}
 
 exports.productList = async (req, res) => {
   try {
