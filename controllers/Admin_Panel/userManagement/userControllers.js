@@ -165,8 +165,13 @@ exports.userDetails = async (req, res) => {
      gender:1
     }).populate("address_Id",{address:1,pinCode:1,mobileNumber:1,city:1,country:1})
     const order=await orderSchema.find({user_Id:id})
-    const review=await reviewSchema.find({user_Id:id})
-    res.status(200).json(success(res.statusCode,"Success",{list,order,review}));
+    var compltedOrder=0
+    const status =order.map((x)=>x.orderStatus=="Delivered")
+for(let i=0;i<status.length;i++){
+  compltedOrder+=status[i]
+}
+const review=await reviewSchema.find({user_Id:id})
+    res.status(200).json(success(res.statusCode,"Success",{list,order,review,compltedOrder}));
   } catch (err) {
     res.status(400).json(error("Failed",res.statusCode));
   }

@@ -10,7 +10,6 @@ exports.userSignup = async (req, res) => {
   try {
     const user = new userSchema(req.body);
     const { userEmail,userName } = req.body;
-    
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });

@@ -227,8 +227,8 @@ exports.brandProduct = async (req, res) => {
 
 exports.popularProduct=async(req,res)=>{
   try{
-const id=req.body.id
-const popularProduct=await productSchema.find({Subcategory_Id:id}).limit(8)
+const id=req.params.id
+const popularProduct=await productSchema.find({Subcategory_Id:id}).limit(10)
 res.status(200).json(success(res.statusCode,"Success",{popularProduct}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
