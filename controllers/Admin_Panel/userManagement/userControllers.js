@@ -40,10 +40,8 @@ exports.userSignup = async (req, res) => {
       expiresAt: Date.now() + 300,
     });
     await newOtpVerify.save();
-    console.log(mailOptions);
     await transporter.sendMail(mailOptions);
     const createUser = await users.save();
-    console.log(createUser);
     res
       .status(201)
       .json(success(res.statusCode, "Signup Successfully", { createUser }));

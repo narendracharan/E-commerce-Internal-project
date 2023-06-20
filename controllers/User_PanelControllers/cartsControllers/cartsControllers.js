@@ -93,6 +93,17 @@ exports.applyCoupan = async (req, res) => {
   }
 };
 
+exports.coupanDetails=async(req,res)=>{
+  try{
+    const coupanCode = req.body.coupanCode;
+    const details=await coupanSchema.find({coupanCode:coupanCode})
+    res.status(200).json(success(res.statusCode,"Success",{details}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+
 exports.orderSummery = async (req, res) => {
   try {
     const val = await coupanSchema.find({});
