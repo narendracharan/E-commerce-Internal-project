@@ -15,7 +15,7 @@ exports.createReporter = async (req, res) => {
 
 exports.reporterList = async (req, res) => {
   try {
-    const list = await reporterSchema.find({});
+    const list = await reporterSchema.find({}).populate("product_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
