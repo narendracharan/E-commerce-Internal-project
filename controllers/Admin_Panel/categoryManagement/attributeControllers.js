@@ -70,7 +70,7 @@ exports.selectSubSubCategory = async (req, res) => {
 
 exports.attributeList = async (req, res) => {
   try {
-    const list = await cateSchema.find({});
+    const list = await cateSchema.find({}).populate("category_Id").populate("subCategory_Id").populate("subSubCategory_Id");
     res.status(200).json(success(res.statusCode,"Success",{list}));
   } catch (err) {
     res.status(400).json(error("Failed",res.statusCode));

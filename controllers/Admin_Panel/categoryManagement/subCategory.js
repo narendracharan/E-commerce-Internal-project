@@ -10,7 +10,6 @@ exports.subCategory = async (req, res) => {
   try {
     const subCategory = new cateSchema(req.body)
     subCategory.subCategoryPic=req.file.location
-    console.log(req.file);
     const createSubCategory = await subCategory.save();
     res.status(200).json(success(res.statusCode,"Success",{createSubCategory}));
   } catch (err) {
@@ -59,7 +58,7 @@ exports.selectCategory = async (req, res) => {
 
 exports.subCategoryList = async (req, res) => {
   try {
-    const list = await cateSchema.find({});
+    const list = await cateSchema.find({}).populate("category_Id");
     res.status(200).json(success(res.statusCode,"Success",{list}));
   } catch (err) {
     res.status(400).json(error("Failed",res.statusCode));

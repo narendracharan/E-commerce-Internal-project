@@ -4,7 +4,6 @@ const { success, error } = require("../../response");
  exports.createProduct = async (req, res) => {
   try {
     const product = new productSchema(req.body);
-    console.log(req.files);
     if(req.files){
     for(let i=0;i<req.files.length;i++){
       if(req.files[i].fieldname=="product_Pic"){
@@ -18,14 +17,13 @@ const { success, error } = require("../../response");
     const saveProduct = await product.save();
     res.status(201).json(success(res.statusCode, "Success", { saveProduct }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 }
 
 exports.productList = async (req, res) => {
   try {
-    const list = await productSchema.find()
+    const list = await productSchema.find().populate("Subcategory_Id").populate("category_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json("Failed", res.statusCode);
