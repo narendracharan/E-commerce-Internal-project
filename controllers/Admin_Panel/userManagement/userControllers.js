@@ -192,6 +192,7 @@ exports.userDetails = async (req, res) => {
     for (let i = 0; i < price.length; i++) {
       totalSpent += price[i];
     }
+    const orderValue=compltedOrder /totalSpent
     const review = await reviewSchema.find({ user_Id: id });
     res
       .status(200)
@@ -202,6 +203,7 @@ exports.userDetails = async (req, res) => {
           review,
           compltedOrder,
           totalSpent,
+          orderValue
         })
       );
   } catch (err) {

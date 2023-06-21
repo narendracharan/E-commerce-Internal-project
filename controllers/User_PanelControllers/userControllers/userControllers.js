@@ -247,3 +247,18 @@ exports.deleteAccount=async(req,res)=>{
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
+
+exports.notificationUpdate=async(req,res)=>{
+  try{
+const id=req.params.id
+const data={
+  specialOffer:req.body.specialOffer,
+  promo:req.body.promo,
+  appUpdate:req.body.appUpdate
+}
+const updateNotification= await userSchema.findByIdAndUpdate(id,data,{new:true})
+res.status(200).json(success(res.statusCode,"Success",{updateNotification}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

@@ -50,6 +50,18 @@ const schema = new mongoose.Schema({
   otp:{
     type:String,
     require:true
+  },
+  specialOffer:{
+    type:Boolean,
+    default:false
+  },
+  promo:{
+    type:Boolean,
+    default:false
+  },
+  appUpdate:{
+    type:Boolean,
+    default:false
   }
 });
 schema.set("timestamps", true);

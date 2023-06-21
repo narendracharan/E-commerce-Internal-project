@@ -1,5 +1,5 @@
 const express=require("express")
-const { userSignup, userLogin, sendMailResetPassword, resetPassword, updateProfile, aboutProfile, logOut, userResetPassword, verifyEmail, deleteAccount, profilePic } = require("../../../controllers/User_PanelControllers/userControllers/userControllers")
+const { userSignup, userLogin, sendMailResetPassword, resetPassword, updateProfile, aboutProfile, logOut, userResetPassword, verifyEmail, deleteAccount, profilePic, notificationUpdate } = require("../../../controllers/User_PanelControllers/userControllers/userControllers")
 const { signupValidation } = require("../../../validation/userValidation")
 const router=express.Router()
 const tokenAuthorisationUser=require("../../../middleware/userAuth")
@@ -16,4 +16,5 @@ router.post("/logOut",tokenAuthorisationUser,logOut)
 router.post("/change-password/:id",tokenAuthorisationUser,userResetPassword)
 router.post("/verify-email",tokenAuthorisationUser,verifyEmail)
 router.delete("/delete-account/:id",tokenAuthorisationUser,deleteAccount)
+router.patch("/update-notification/:id",tokenAuthorisationUser,notificationUpdate)
 module.exports=router   
