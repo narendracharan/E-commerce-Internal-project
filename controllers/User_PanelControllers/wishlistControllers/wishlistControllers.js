@@ -40,3 +40,16 @@ exports.deleteWishList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.removeProduct=async(req,res)=>{
+  try{
+const id=req.params.id
+const removeData=await   wishSchema.deleteOne({product_Id:id})
+res
+.status(200)
+.json(success(res.statusCode, "Wish List Deleted", { removeData }));
+
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

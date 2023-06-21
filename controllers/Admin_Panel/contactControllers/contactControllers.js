@@ -1,4 +1,6 @@
+const aboutSchema = require("../../../models/Admin_PanelSchema/contactSchema/aboutSchema");
 const contactSchema = require("../../../models/Admin_PanelSchema/contactSchema/contact");
+const privacySchema = require("../../../models/Admin_PanelSchema/contactSchema/privacySchema");
 const { error, success } = require("../../response");
 
 exports.createContact = async (req, res) => {
@@ -42,3 +44,23 @@ exports.contactView = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.createAbout=async(req,res)=>{
+  try{
+const create=new aboutSchema(req.body)
+const saveData=await create.save()
+res.status(200).json(success(res.statusCode,"Success",{saveData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.createPrivacy=async(req,res)=>{
+  try{
+    const create=new privacySchema(req.body)
+    const saveData=await create.save()
+    res.status(200).json(success(res.statusCode,"Success",{saveData}))
+      }catch(err){
+        res.status(400).json(error("Failed",res.statusCode))
+      }
+}
