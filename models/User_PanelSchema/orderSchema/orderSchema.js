@@ -50,6 +50,11 @@ paymentIntent: {
     ref:"agent",
     require:true
   },
+  seller_Id:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"user",
+    require:true
+},
   taxPrice:{
     type:Number,
     require:true

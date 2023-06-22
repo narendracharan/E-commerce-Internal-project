@@ -73,55 +73,49 @@ exports.sendMailResetPassword = async (req, res) => {
     const { userEmail } = req.body;
     const user = await userSchema.findOne({userEmail:userEmail})
     if (user) {
-      const secret = user._id + process.env.SECRET_KEY;
-      const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });
-      const link = `http://ec2-65-2-108-172.ap-south-1.compute.amazonaws.com:3000/api/user/reset${user._id}/${token}}`;
-      let info = await transporter.sendMail({
+      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+      var mailOptions = {
         from: "s04450647@gmail.com",
         to: userEmail,
-        subject: "Email Send For Reset Password",
-        text: `<a href=${link}></a>`,
+        subject: "Your Signup Successfully",
+        text: `This ${otp} Otp Verify To Email`,
+      };
+      transporter.sendMail(mailOptions);
+      const newOtpVerify = await new userSchema({
+        otp: otp,
+        expiresAt: Date.now() + 300,
       });
+      await newOtpVerify.save();
+      await transporter.sendMail(mailOptions);
       return res.status(200).json(
         success(res.statusCode, "Mail Send Successfully", {
           userID: user._id,
-          token,
         })
       );
     } else {
       res.status(200).json(error(" userEmail are incorrect", res.statusCode));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
-exports.resetPassword = async (req, res) => {
-  try {
-    const { password, confirm_Password } = req.body;
-    const { id, token } = req.params;
-    const user = await User.findById(id);
-    const secret = user._id + process.env.SECRET_KEY;
-    const decodedToken = jwt.verify(token, secret);
-    if ((password, confirm_Password)) {
-      if (password != confirm_Password) {
-        res.status(400).json(error("Password Not Match", res.statusCode));
-      } else {
-        const newPassword = await bcrypt.hash(password, 10);
-        const createPassword = await User.findByIdAndUpdate(user._id, {
-          $set: { password: newPassword },
-        });
-        res.status(200).json(
-          success(res.statusCode, "Password Updated Successfully", {
-            createPassword,
-          })
-        );
-      }
-    }
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+exports.verifyOtp=async(req,res)=>{
+  try{
+const otp=req.body.otp
+const verify=await userSchema.find({otp:otp})
+if(verify){
+  res.status(400).json(error(success(res.statusCode,"Success",{verify})))
+}else{
+  res.status(400).json(error("InValid Otp",res.statusCode))
+}
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed",res.statusCode))
   }
-};
+}
+
 
 exports.profilePic=async(req,res)=>{
   try{

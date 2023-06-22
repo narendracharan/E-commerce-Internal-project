@@ -1,6 +1,5 @@
 const mongoose=require("mongoose")
 
-
 const schema=new mongoose.Schema({
     comment:{
         type:String,
@@ -19,7 +18,8 @@ const schema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"userPanel",
         require:true
-    }
+    },
+   
 })
 
 schema.set("timestamps",true)

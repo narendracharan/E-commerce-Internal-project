@@ -7,7 +7,6 @@ const path=require("path");
 const commonRoutes = require("./routes/commonRoutes");
 const cors=require("cors")
 const multer=require("./middleware/multer")
-
 const corsoptions={
   origin:"*",
   credentials:true,

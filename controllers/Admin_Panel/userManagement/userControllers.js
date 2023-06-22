@@ -18,7 +18,6 @@ exports.userSignup = async (req, res) => {
       return res.status(422).json({ errors: error.array() });
     }
     const exit = await userSchema.findOne({ userEmail: userEmail });
-    console.log(exit);
     if (exit) {
       return res.status(403).json({
         status: "Failed",
@@ -29,7 +28,7 @@ exports.userSignup = async (req, res) => {
     users.password = await bcrypt.hash(users.password, Salt);
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     var mailOptions = {
-      from: "narendracharan25753@gmail.com",
+      from: "s04450647@gmail.com",
       to: userEmail,
       subject: "Your Signup Successfully",
       text: `This ${otp} Otp Verify To Email`,

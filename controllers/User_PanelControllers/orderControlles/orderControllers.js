@@ -15,6 +15,7 @@ exports.createOrder = async (req, res) => {
       taxPrice,
       shippingPrice,
       orderStatus,
+      seller_Id
     } = req.body;
     const { carts } = req.body;
     const val = await coupanSchema.find({});
@@ -44,6 +45,7 @@ exports.createOrder = async (req, res) => {
       taxPrice,
       shippingPrice,
       orderStatus,
+      seller_Id
     }).save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {

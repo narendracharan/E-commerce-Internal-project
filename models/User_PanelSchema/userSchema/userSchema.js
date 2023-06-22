@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
     default:true
   },
   otp:{
-    type:String,
+    type:Number,
     require:true
   },
   specialOffer:{
