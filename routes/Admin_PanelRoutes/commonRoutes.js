@@ -19,6 +19,7 @@ const coupan=require("./coupanRoutes/commonRoutes")
 const blog=require("./blogRoutes/commonRoutes")
 const agentCommonRoutes=require("./agentRoutes/commonRoutes")
 const transacationRoutes=require("./transactionRoutes/transacationRoutes")
+const offerRoutes=require("./offerRoutes/offerRoutes")
 
 router.use("/user",user)
 router.use("/category",category)
@@ -39,4 +40,5 @@ router.use("/coupan",coupan)
 router.use("/blog",blog)
 router.use("/agent",agentCommonRoutes)
 router.use("/transacation",transacationRoutes)
+router.use("/offer",offerRoutes)
 module.exports=router

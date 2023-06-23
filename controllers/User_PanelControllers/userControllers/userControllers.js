@@ -106,12 +106,11 @@ exports.verifyOtp=async(req,res)=>{
 const otp=req.body.otp
 const verify=await userSchema.find({otp:otp})
 if(verify){
-  res.status(400).json(error(success(res.statusCode,"Success",{verify})))
+  res.status(200).json(error(success(res.statusCode,"Success",{verify})))
 }else{
   res.status(400).json(error("InValid Otp",res.statusCode))
 }
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.statusCode))
   }
 }

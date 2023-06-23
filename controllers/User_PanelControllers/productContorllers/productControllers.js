@@ -205,10 +205,8 @@ exports.rating = async (req, res) => {
 
 exports.Brandlist = async (req, res) => {
   try {
-    const brandlist = await productSchema.find();
-    const brand = brandlist.map((x) => x.brandName);
-    const brandPic=brandlist.map((x)=>x.brandPic)
-    res.status(200).json(success(res.statusCode, "Success", { brand,brandPic }));
+    const brandlist = await productSchema.find().select(["brandName","brandPic"]);
+    res.status(200).json(success(res.statusCode, "Success", {brandlist}));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
