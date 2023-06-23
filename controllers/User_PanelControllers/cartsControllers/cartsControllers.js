@@ -5,6 +5,7 @@ const cartSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSch
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { error, success } = require("../../response");
 const User = require("../../../models/Admin_PanelSchema/userSchema/userSchema");
+const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 
 exports.addToCart = async (req, res) => {
   try {
@@ -12,6 +13,7 @@ exports.addToCart = async (req, res) => {
     const { _id } = req.user;
     let products = [];  
       const user = await userSchema.findById(_id);
+      
       for (let i = 0; i < carts.length; i++) {
         let object = {};
         object.product_Id = carts[i].product_Id;
@@ -20,12 +22,15 @@ exports.addToCart = async (req, res) => {
           .findById(carts[i].product_Id)
           .select("Price")
           .exec();
+        const dis=await offerSchema.find({product_Id:carts[i].product_Id})
+        object.Discount=dis.map((x)=>x.Discount)
         object.Price = getPrice.Price;
         products.push(object);
+      
       }
       let cartsTotal = 0;
       for (let i = 0; i < products.length; i++) {
-        cartsTotal = cartsTotal + products[i].Price * products[i].quantity;
+        cartsTotal = cartsTotal + products[i].Price * products[i].quantity-products[i].Discount;
       }
       let newCarts = await new cartSchema({
         products,
@@ -34,6 +39,7 @@ exports.addToCart = async (req, res) => {
       }).save();
       res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

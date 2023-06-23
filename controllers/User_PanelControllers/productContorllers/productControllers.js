@@ -1,5 +1,6 @@
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const { error, success } = require("../../response");
 
@@ -16,13 +17,17 @@ exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
     const details = await productSchema.findById(id);
+    const Discount=await offerSchema.find({product_Id:id}).select("Discount")
+    const discount=Discount.map((x)=>x.Discount)
+    const price=details.Price
+    const afterDiscountPrice=(price-discount)
     if (details.stockQuantity == 0) {
       res.status(400).json(error("Product Out of Stock", res.statusCode));
     }
     const reviewCount = await reviewSchema.find({ product_Id: id }).count();
     res
       .status(200)
-      .json(success(res.statusCode, "Success", { details, reviewCount }));
+      .json(success(res.statusCode, "Success", { details,Discount,afterDiscountPrice,reviewCount }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
