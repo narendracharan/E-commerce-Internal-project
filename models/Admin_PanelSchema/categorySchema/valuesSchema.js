@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  valuesName: {
+  valuesName_en: {
     type: String,
     require: true,
   },
+  valuesName_ar:{
+    type:String,
+    require:true
+},
   shipmentService: {
     type: Boolean,
     default: true,

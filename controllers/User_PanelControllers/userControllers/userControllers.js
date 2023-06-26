@@ -103,10 +103,12 @@ exports.sendMailResetPassword = async (req, res) => {
 
 exports.verifyOtp=async(req,res)=>{
   try{
+const id=req.params.id
 const otp=req.body.otp
-const verify=await userSchema.find({otp:otp})
-if(verify){
-  res.status(200).json(success(res.statusCode,"Success",{verify}))
+const verify=await userSchema.findById(id)
+const verifyOtp =verify.otp
+if(verifyOtp==otp){
+  res.status(200).json(success(res.statusCode,"Verify Otp Successfully"))
 }else{
   res.status(400).json(error("InValid Otp",res.statusCode))
 }
@@ -114,7 +116,6 @@ if(verify){
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
-
 
 exports.profilePic=async(req,res)=>{
   try{

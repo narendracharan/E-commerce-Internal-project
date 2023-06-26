@@ -1,7 +1,11 @@
 const mongoose=require("mongoose")
 
 const schema=new mongoose.Schema({
-    userName:{
+    userName_en:{
+        type:String,
+        require:true
+    },
+    userName_ar:{
         type:String,
         require:true
     },

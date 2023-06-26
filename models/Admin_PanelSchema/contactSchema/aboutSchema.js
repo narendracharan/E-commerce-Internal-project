@@ -1,6 +1,10 @@
 const mongoose=require("mongoose")
 const schema=new mongoose.Schema({
-    aboutUs:{
+    aboutUs_en:{
+        type:String,
+        require:true
+    },
+    aboutUs_ar:{
         type:String,
         require:true
     },

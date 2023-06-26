@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  subSubCategoryName: {
+  subSubCategoryName_en: {
     type: String,
     require: true,
   },
+  subSubCategoryName_ar:{
+    type:String,
+    require:true
+},
   shipmentService: {
     type: Boolean,
     default: true,

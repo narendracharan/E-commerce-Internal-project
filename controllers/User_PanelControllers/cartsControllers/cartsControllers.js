@@ -13,7 +13,6 @@ exports.addToCart = async (req, res) => {
     const { _id } = req.user;
     let products = [];  
       const user = await userSchema.findById(_id);
-      
       for (let i = 0; i < carts.length; i++) {
         let object = {};
         object.product_Id = carts[i].product_Id;
@@ -26,7 +25,6 @@ exports.addToCart = async (req, res) => {
         object.Discount=dis.map((x)=>x.Discount)
         object.Price = getPrice.Price;
         products.push(object);
-      
       }
       let cartsTotal = 0;
       for (let i = 0; i < products.length; i++) {

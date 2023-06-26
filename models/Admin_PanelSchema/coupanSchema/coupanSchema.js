@@ -1,7 +1,12 @@
 const mongoose=require("mongoose")
 
 const schema=new mongoose.Schema({
-    coupanTitle:{
+    coupanTitle_en:{
+        type:String,
+        require:true,
+
+    },
+    coupanTitle_ar:{
         type:String,
         require:true,
 

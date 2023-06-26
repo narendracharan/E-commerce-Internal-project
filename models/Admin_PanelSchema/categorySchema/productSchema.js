@@ -1,7 +1,11 @@
 const mongoose=require("mongoose")
 
 const schema=new mongoose.Schema({
-    productName:{
+    productName_en:{
+        type:String,
+        require:true
+    },
+    productName_ar:{
         type:String,
         require:true
     },

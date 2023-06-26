@@ -1,7 +1,11 @@
 const mongoose=require("mongoose")
 
 const cateSchema=new mongoose.Schema({
-    categoryName:{
+    categoryName_en:{
+        type:String,
+        require:true
+    },
+    categoryName_ar:{
         type:String,
         require:true
     },
