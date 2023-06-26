@@ -34,6 +34,10 @@ const schema=new mongoose.Schema({
     type:String,
     require:true
    },
+   otp:{
+    type:Number,
+    require:true
+  },
    address:{
     type:String,
     require:true

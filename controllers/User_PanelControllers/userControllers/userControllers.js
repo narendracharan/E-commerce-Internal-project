@@ -107,6 +107,7 @@ const id=req.params.id
 const otp=req.body.otp
 const verify=await userSchema.findById(id)
 const verifyOtp =verify.otp
+
 if(verifyOtp==otp){
   res.status(200).json(success(res.statusCode,"Verify Otp Successfully"))
 }else{

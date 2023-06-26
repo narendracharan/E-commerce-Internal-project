@@ -63,19 +63,23 @@ exports.sendEmail = async (req, res) => {
     const { Email } = req.body;
     const user = await agentSchema.findOne({ Email: Email });
     if (user) {
-      const secret = user._id + process.env.SECRET_KEY;
-      const token = jwt.sign({ userID: user._id }, secret, { expiresIn: "3d" });
-      const link = `http://ec2-65-2-108-172.ap-south-1.compute.amazonaws.com:3000/api/user/reset${user._id}/${token}}`;
-      let info = await transporter.sendMail({
-        from: "s04450647@gmail.com",
-        to: Email,
-        subject: "Email Send For Reset Password",
-        text: `<a href=${link}></a>`,
-      });
+        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+        var mailOptions = {
+          from: "s04450647@gmail.com",
+          to: Email,
+          subject: "Your Signup Successfully",
+          text: `This ${otp} Otp Verify To Email`,
+        };
+        transporter.sendMail(mailOptions);
+        const newOtpVerify = await new agentSchema({
+        otp:otp
+        });
+        console.log(newOtpVerify);
+        await newOtpVerify.save();
+        await transporter.sendMail(mailOptions);
       return res.status(200).json(
         success(res.statusCode, "Mail Send Successfully", {
           userID: user._id,
-          token,
         })
       );
     } else {
@@ -87,32 +91,23 @@ exports.sendEmail = async (req, res) => {
   }
 };
 
-exports.ResetPassword = async (req, res) => {
-  try {
-    const { password, confirm_Password } = req.body;
-    const { id, token } = req.params;
-    const user = await User.findById(id);
-    const secret = user._id + process.env.SECRET_KEY;
-    const decodedToken = jwt.verify(token, secret);
-    if ((password, confirm_Password)) {
-      if (password != confirm_Password) {
-        res.status(400).json(error("Password Not Match", res.statusCode));
-      } else {
-        const newPassword = await bcrypt.hash(password, 10);
-        const createPassword = await User.findByIdAndUpdate(user._id, {
-          $set: { password: newPassword },
-        });
-        res.status(200).json(
-          success(res.statusCode, "Password Updated Successfully", {
-            createPassword,
-          })
-        );
-      }
-    }
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+
+
+exports.verifyOtp=async(req,res)=>{
+  try{
+const id=req.params.id
+const otp=req.body.otp
+const verify=await agentSchema.findById(id)
+const verifyOtp =verify.otp
+if(verifyOtp==otp){
+  res.status(200).json(success(res.statusCode,"Verify Otp Successfully"))
+}else{
+  res.status(400).json(error("InValid Otp",res.statusCode))
+}
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
   }
-};
+}
 
 exports.userList = async (req, res) => {
   try {
@@ -376,7 +371,7 @@ exports.totalRevenue = async (req, res) => {
 exports.updateOnline = async (req, res) => {
   try {
     const id = req.params.id;
-    const onlineStatus = req.query;
+    const onlineStatus = req.body.onlineStatus;
     const updateData = await agentSchema.findByIdAndUpdate(id, onlineStatus, {
       new: true,
     });
@@ -386,3 +381,13 @@ exports.updateOnline = async (req, res) => {
   }
 };
 
+
+exports.detailsUser=async(req,res)=>{
+  try{
+const id=req.params.id
+const details=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,profile_Pic:1})
+res.status(200).json(success(res.statusCode,"Success",{details}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
