@@ -50,7 +50,6 @@ exports.createBannerTwo = async (req, res) => {
   exports.createBannerFive = async (req, res) => {
     try {
       const banners = new homeSchema(req.body);
-      
       banners.homeScreenFive = req.file.location;
       const bannersData = await banners.save();
       res.status(201).json(success("Success",res.statusCode,  {bannersData}));

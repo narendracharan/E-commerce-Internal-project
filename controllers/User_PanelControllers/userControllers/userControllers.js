@@ -187,15 +187,13 @@ exports.logOut = async (req, res) => {
 
 exports.userResetPassword=async(req,res)=>{
   try{
-const id=req.params.id
-const { password, confirm_Password } = req.body;
-const user = await User.findById(id);
+const { password, confirm_Password ,userEmail} = req.body;
 if ((password, confirm_Password)) {
   if (password != confirm_Password) {
     res.status(400).json(error("Password Not Match", res.statusCode));
   } else {
     const newPassword = await bcrypt.hash(password, 10);
-    const createPassword = await User.findByIdAndUpdate(user.id, {
+    const createPassword = await User.findOneAndUpdate({userEmail:userEmail}, {
       $set: { password: newPassword },
     });
     res.status(200).json(
@@ -206,6 +204,7 @@ if ((password, confirm_Password)) {
   }
 }
   }catch(err){
+    console.log(err);
     res.status(400).json(error("Failed",res.status))
   }
 }

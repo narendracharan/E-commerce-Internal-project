@@ -6,7 +6,6 @@ const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema"
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
-const { verify } = require("jsonwebtoken");
 
 exports.addUser = async (req, res) => {
   try {
@@ -82,7 +81,6 @@ exports.sendEmail = async (req, res) => {
       res.status(400).json(error("Email Not Found", res.statusCode));
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -201,16 +199,14 @@ exports.userSerach = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { oldPassword, password, confirm_Password } = req.body;
-    const user = await User.findById(id);
+    const { oldPassword, password,Email, confirm_Password } = req.body;
+    const user = await User.findOne({Email:Email});
     if ((oldPassword, password, confirm_Password)) {
       if (password != confirm_Password) {
         res.status(400).json(error("Password Not Match", res.statusCode));
       } else {
         const newPassword = await bcrypt.hash(password, 10);
-        const createPassword = await User.findByIdAndUpdate(
-          user.id,
+        const createPassword = await User.findOneAndUpdate({Email:Email},
           { $set: { password: newPassword } },
           { new: true }
         );

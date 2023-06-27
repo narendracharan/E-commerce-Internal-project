@@ -1,6 +1,5 @@
 const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
 const { error, success } = require("../../response");
-const { categorySearch } = require("../categoryManagement/categoryControllers");
 
 exports.generalCoupan = async (req, res) => {
   try {

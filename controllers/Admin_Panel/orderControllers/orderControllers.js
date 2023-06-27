@@ -13,7 +13,7 @@ exports.orderList = async (req, res) => {
 exports.orderSearch = async (req, res) => {
   try {
     const orderStatus = req.body.orderStatus;
-    const orderData = await  orderSchema.find({
+    const orderData = await orderSchema.find({
       orderStatus: { $regex: orderStatus, $options: "i" },
     });
     if (orderData.length > 0) {
@@ -28,23 +28,24 @@ exports.orderSearch = async (req, res) => {
   }
 };
 
-
-exports.orderDetails=async(req,res)=>{
-  try{
-    const id=req.params.id
-const orderDetails= await orderSchema.findById(id)
-res.status(200).json(success(res.statusCode,"Success",{orderDetails}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.orderDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const orderDetails = await orderSchema.findById(id);
+    res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.deleteOrder=async(req,res)=>{
-  try{
-const id=req.params.id
-const deleteOrder=await orderSchema.findByIdAndDelete(id)
-res.status(200).json(success(res.statusCode,"deleted order",{deleteOrder}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.deleteOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteOrder = await orderSchema.findByIdAndDelete(id);
+    res
+      .status(200)
+      .json(success(res.statusCode, "deleted order", { deleteOrder }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
