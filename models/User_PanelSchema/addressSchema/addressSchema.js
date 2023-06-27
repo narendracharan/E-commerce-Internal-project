@@ -22,6 +22,26 @@ const schema=new mongoose.Schema({
         type:String,
         require:true
     },
+    fullName:{
+        type:String,
+        require:true
+    },
+    mobileNumber:{
+        type:Number,
+        require:true
+    },
+    Email:{
+        type:String,
+        require:true
+    },
+    addressTwo:{
+        type:String,
+        require:true
+    },
+    pinCode:{
+        type:Number,
+        require:true
+    },
     user_Id:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"user",

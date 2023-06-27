@@ -61,7 +61,11 @@ const schema=new mongoose.Schema({
    jobStatus:{
     type:String,
     default:"Available"
-   }
+   },
+    expiresAt:{
+        type:Date,
+        require:true
+    },
 })
 
 schema.set("timestamps",true)

@@ -3,10 +3,11 @@ const { transporter } = require("../../../service/mailService");
 const { error, success } = require("../../response");
 const bcrypt = require("bcrypt");
 const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema");
-const jwt = require("jsonwebtoken");
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
+const { verify } = require("jsonwebtoken");
+
 exports.addUser = async (req, res) => {
   try {
     const user = new agentSchema(req.body);
@@ -63,20 +64,15 @@ exports.sendEmail = async (req, res) => {
     const { Email } = req.body;
     const user = await agentSchema.findOne({ Email: Email });
     if (user) {
-        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-        var mailOptions = {
-          from: "s04450647@gmail.com",
-          to: Email,
-          subject: "Your Signup Successfully",
-          text: `This ${otp} Otp Verify To Email`,
-        };
-        transporter.sendMail(mailOptions);
-        const newOtpVerify = await new agentSchema({
-        otp:otp
-        });
-        console.log(newOtpVerify);
-        await newOtpVerify.save();
-        await transporter.sendMail(mailOptions);
+      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+      var mailOptions = {
+        from: "s04450647@gmail.com",
+        to: Email,
+        subject: "Your Signup Successfully",
+        text: `This ${otp} Otp Verify To Email`,
+      };
+      await agentSchema.findOneAndUpdate({Email:Email},{otp:otp})
+      await transporter.sendMail(mailOptions);
       return res.status(200).json(
         success(res.statusCode, "Mail Send Successfully", {
           userID: user._id,
@@ -91,23 +87,25 @@ exports.sendEmail = async (req, res) => {
   }
 };
 
-
-
-exports.verifyOtp=async(req,res)=>{
-  try{
-const id=req.params.id
-const otp=req.body.otp
-const verify=await agentSchema.findById(id)
-const verifyOtp =verify.otp
-if(verifyOtp==otp){
-  res.status(200).json(success(res.statusCode,"Verify Otp Successfully"))
-}else{
-  res.status(400).json(error("InValid Otp",res.statusCode))
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.verifyOtp = async (req, res) => {
+  try {
+    const {otp,Email} = req.body
+    const verify = await agentSchema.findOne({Email:Email})
+    if(!otp){
+      res.status(201).json(error("Please Provide Otp",res.statusCode))
+    }
+      if (verify.otp==otp) {
+        return res
+          .status(200)
+          .json(success(res.statusCode, "Verify Otp Successfully"));
+     }else{
+   return res.status(200)
+          .json(error("Invalid Otp",res.statusCode));
+     }
+    } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
 exports.userList = async (req, res) => {
   try {
@@ -160,16 +158,14 @@ exports.userDetails = async (req, res) => {
       mobileNumber: 1,
       address: 1,
     });
-    res
-      .status(200)
-      .json(
-        success(res.statusCode, "Success", {
-          userDetail,
-          details,
-          totalearning,
-          compltedOrder,
-        })
-      );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        userDetail,
+        details,
+        totalearning,
+        compltedOrder,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -249,7 +245,7 @@ exports.orderList = async (req, res) => {
     const orderList = await orderSchema
       .find({})
       .populate("user_Id")
-      .populate("address_Id");
+      .populate("address_Id").populate("deleiverdBy")
     res.status(200).json(success(res.statusCode, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -259,7 +255,7 @@ exports.orderList = async (req, res) => {
 exports.orderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderDetails = await orderSchema.findById(id);
+    const orderDetails = await orderSchema.findById(id).populate("address_Id").populate("deleiverdBy").populate("user_Id")
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -268,14 +264,10 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderHistory = async (req, res) => {
   try {
-    const orderdata = await orderSchema.aggregate([
-      {
-        $match: {
-          orderStatus: "Delivered",
-        },
-      },
-    ]);
-    res.status(200).json(success(res.statusCode, "success", { orderdata }));
+    const orderdata = await orderSchema.find().populate("address_Id").populate("deleiverdBy").populate("user_Id")
+    const orderDetails=orderdata.filter((x)=>x.orderStatus=="Delivered")
+   
+    res.status(200).json(success(res.statusCode, "success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -307,14 +299,9 @@ exports.updateUser = async (req, res) => {
 
 exports.withdrawOrder = async (req, res) => {
   try {
-    const withdrawData = await orderSchema.aggregate([
-      {
-        $match: {
-          orderStatus: "NotSend",
-        },
-      },
-    ]);
-    res.status(200).json(success(res.statusCode, "Success", { withdrawData }));
+    const withdrawData = await orderSchema.find().populate("address_Id").populate("deleiverdBy").populate("user_Id")
+    const orderDetails=withdrawData.filter((x)=>x.orderStatus=="NotSend")
+    res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -343,7 +330,7 @@ exports.agentDeatails = async (req, res) => {
 exports.updateStatus = async (req, res) => {
   try {
     const { _id } = req.query;
-    const orderStatus = req.query;
+    const orderStatus = req.body;
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
@@ -371,7 +358,7 @@ exports.totalRevenue = async (req, res) => {
 exports.updateOnline = async (req, res) => {
   try {
     const id = req.params.id;
-    const onlineStatus = req.body.onlineStatus;
+    const onlineStatus = req.body;
     const updateData = await agentSchema.findByIdAndUpdate(id, onlineStatus, {
       new: true,
     });
@@ -381,13 +368,17 @@ exports.updateOnline = async (req, res) => {
   }
 };
 
-
-exports.detailsUser=async(req,res)=>{
-  try{
-const id=req.params.id
-const details=await agentSchema.findById(id,{name:1,Email:1,mobileNumber:1,profile_Pic:1})
-res.status(200).json(success(res.statusCode,"Success",{details}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.detailsUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const details = await agentSchema.findById(id, {
+      name: 1,
+      Email: 1,
+      mobileNumber: 1,
+      profile_Pic: 1,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { details }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
