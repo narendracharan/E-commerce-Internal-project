@@ -17,17 +17,26 @@ exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
     const details = await productSchema.findById(id);
-    const Discount=await offerSchema.find({product_Id:id}).select("Discount")
-    const discount=Discount.map((x)=>x.Discount)
-    const price=details.Price
-    const afterDiscountPrice=(price-discount)
+    const Discount = await offerSchema
+      .find({ product_Id: id })
+      .select("Discount");
+    const discount = Discount.map((x) => x.Discount);
+    const price = details.Price;
+    const afterDiscountPrice = price - discount;
     if (details.stockQuantity == 0) {
       res.status(400).json(error("Product Out of Stock", res.statusCode));
     }
     const reviewCount = await reviewSchema.find({ product_Id: id }).count();
     res
       .status(200)
-      .json(success(res.statusCode, "Success", { details,Discount,afterDiscountPrice,reviewCount }));
+      .json(
+        success(res.statusCode, "Success", {
+          details,
+          Discount,
+          afterDiscountPrice,
+          reviewCount,
+        })
+      );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -210,8 +219,10 @@ exports.rating = async (req, res) => {
 
 exports.Brandlist = async (req, res) => {
   try {
-    const brandlist = await productSchema.find().select(["brandName","brandPic"]);
-    res.status(200).json(success(res.statusCode, "Success", {brandlist}));
+    const brandlist = await productSchema
+      .find()
+      .select(["brandName", "brandPic"]);
+    res.status(200).json(success(res.statusCode, "Success", { brandlist }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -227,13 +238,16 @@ exports.brandProduct = async (req, res) => {
   }
 };
 
-
-exports.popularProduct=async(req,res)=>{
-  try{
-const id=req.params.id
-const popularProduct=await productSchema.find({Subcategory_Id:id}).limit(10)
-res.status(200).json(success(res.statusCode,"Success",{popularProduct}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.popularProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const popularProduct = await productSchema
+      .find({ Subcategory_Id: id })
+      .limit(10);
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { popularProduct }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

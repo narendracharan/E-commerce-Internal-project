@@ -8,10 +8,10 @@ const { s3upload } = require("../../../middleware/multer");
 router.post("/signup",signupValidation,userSignup);
 router.post("/login", userLogin);
 router.post("/sendMail",sendUserResetPassword);
-router.post("/reset-password/:id/:token",resetPassword);
+router.post("/reset-password",resetPassword);
 router.post("/userList",tokenAuthorisationUser,userList)
 router.post("/details/:id",tokenAuthorisationUser,userDetails)
-router.post("/verifyOtp",tokenAuthorisationUser,OtpVerify)
+router.post("/verifyOtp",OtpVerify)
 router.post("/editProfile/:id",tokenAuthorisationUser,s3upload.single("profile_Pic"),editProfile)
 router.post("/checkStatus/:id",tokenAuthorisationUser,checkStatus)
 module.exports = router;

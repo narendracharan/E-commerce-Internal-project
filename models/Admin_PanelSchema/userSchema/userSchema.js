@@ -27,7 +27,7 @@ const schema=new mongoose.Schema({
         require:true
     },
     otp:{
-        type:String,
+        type:Number,
         require:true,
     },
     expiresAt:{

@@ -91,7 +91,6 @@ exports.sendMailResetPassword = async (req, res) => {
       res.status(200).json(error(" userEmail are incorrect", res.statusCode));
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -204,7 +203,6 @@ if ((password, confirm_Password)) {
   }
 }
   }catch(err){
-    console.log(err);
     res.status(400).json(error("Failed",res.status))
   }
 }

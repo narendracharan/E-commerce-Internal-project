@@ -45,9 +45,9 @@ exports.createOrder = async (req, res) => {
       shippingPrice,
       orderStatus
     }).save();
+    
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

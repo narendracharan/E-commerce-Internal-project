@@ -200,8 +200,7 @@ exports.userSerach = async (req, res) => {
 exports.changePassword = async (req, res) => {
   try {
     const { oldPassword, password,Email, confirm_Password } = req.body;
-    const user = await User.findOne({Email:Email});
-    if ((oldPassword, password, confirm_Password)) {
+    if ((oldPassword, password, confirm_Password,Email)) {
       if (password != confirm_Password) {
         res.status(400).json(error("Password Not Match", res.statusCode));
       } else {
@@ -216,6 +215,8 @@ exports.changePassword = async (req, res) => {
           })
         );
       }
+    }else{
+      res.status(200).json(error("All filed are required", res.statusCode));
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.status));
