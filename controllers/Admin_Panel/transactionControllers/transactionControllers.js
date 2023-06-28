@@ -20,3 +20,22 @@ exports.transactionDetails = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.searchTransaction=async(req,res)=>{
+  try{
+const paymentIntent=req.body.paymentIntent
+const searchData=await orderSchema.find({
+  paymentIntent: { $regex: paymentIntent, $options: "i" },
+})
+if(searchData.length >0){
+  return res
+  .status(200)
+  .json(success(res.statusCode, "Success", { searchData }));
+} else {
+res.status(200).json(error("Data are Not Found", res.statusCode));
+}
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

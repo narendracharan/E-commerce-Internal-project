@@ -242,7 +242,7 @@ exports.orderList = async (req, res) => {
     const orderList = await orderSchema
       .find({})
       .populate("user_Id")
-      .populate("address_Id").populate("deleiverdBy")
+      .populate("address_Id").populate("deliverdBy",{name:1,address:1})
     res.status(200).json(success(res.statusCode, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -252,7 +252,7 @@ exports.orderList = async (req, res) => {
 exports.orderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderDetails = await orderSchema.findById(id).populate("address_Id").populate("deleiverdBy").populate("user_Id")
+    const orderDetails = await orderSchema.findById(id).populate("address_Id").populate("deliverdBy",{name:1,address:1}).populate("user_Id").populate("products.product_Id")
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -261,7 +261,7 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderHistory = async (req, res) => {
   try {
-    const orderdata = await orderSchema.find().populate("address_Id").populate("deleiverdBy").populate("user_Id")
+    const orderdata = await orderSchema.find().populate("address_Id").populate("deliverdBy").populate("user_Id")
     const orderDetails=orderdata.filter((x)=>x.orderStatus=="Delivered")
    
     res.status(200).json(success(res.statusCode, "success", { orderDetails }));
@@ -296,7 +296,7 @@ exports.updateUser = async (req, res) => {
 
 exports.withdrawOrder = async (req, res) => {
   try {
-    const withdrawData = await orderSchema.find().populate("address_Id").populate("deleiverdBy").populate("user_Id")
+    const withdrawData = await orderSchema.find().populate("address_Id").populate("deliverdBy").populate("user_Id")
     const orderDetails=withdrawData.filter((x)=>x.orderStatus=="NotSend")
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
@@ -331,8 +331,10 @@ exports.updateStatus = async (req, res) => {
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
+  updateData.allStatus.push(updateData.orderStatus)
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

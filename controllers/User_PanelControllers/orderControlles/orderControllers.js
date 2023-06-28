@@ -1,5 +1,6 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
+const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
@@ -17,7 +18,6 @@ exports.createOrder = async (req, res) => {
       orderStatus,
     } = req.body;
     const { carts } = req.body;
-    const val = await coupanSchema.find({});
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
@@ -28,14 +28,19 @@ exports.createOrder = async (req, res) => {
         .findById(carts[i].product_Id)
         .select("Price")
         .exec();
+      const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
+      object.Disount = dis.map((x) => x.Discount);
       object.Price = getPrice.Price;
       products.push(object);
     }
     let cartsTotal = 0;
     for (let i = 0; i < products.length; i++) {
-      cartsTotal = cartsTotal + products[i].Price * products[i].quantity;
+      cartsTotal =
+        cartsTotal +
+        products[i].Price * products[i].quantity -
+        products[i].Disount;
     }
-    let newCarts = await new orderSchema({
+    let newCarts = new orderSchema({
       products,
       cartsTotal,
       user_Id,
@@ -43,11 +48,14 @@ exports.createOrder = async (req, res) => {
       deliverdBy,
       taxPrice,
       shippingPrice,
-      orderStatus
-    }).save();
-    
+      orderStatus,
+      allStatus:[orderStatus]
+    })
+    newCarts.allStatus.push(newCarts.orderStatus)
+    await newCarts.save()
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -64,7 +72,10 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
-    const orderList = await orderSchema.find({}).populate("products.product_Id").populate("user_Id");
+    const orderList = await orderSchema
+      .find({})
+      .populate("products.product_Id")
+      .populate("user_Id");
     res.status(200).json(success(res.status, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -105,9 +116,7 @@ exports.orderList = async (req, res) => {
 
 exports.orderSuccessDetails = async (req, res) => {
   try {
-    const Delivered = await orderSchema
-      .find()
-      .populate("products.product_Id");
+    const Delivered = await orderSchema.find().populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Delivered");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -127,9 +136,7 @@ exports.orderReview = async (req, res) => {
 
 exports.cancelledOrder = async (req, res) => {
   try {
-    const cancelled = await orderSchema
-      .find()
-      .populate("products.product_Id");
+    const cancelled = await orderSchema.find().populate("products.product_Id");
     const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -139,9 +146,7 @@ exports.cancelledOrder = async (req, res) => {
 
 exports.IndeliveryOrder = async (req, res) => {
   try {
-    const Delivered = await orderSchema
-      .find()
-      .populate("products.product_Id");
+    const Delivered = await orderSchema.find().populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Processing");
 
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
@@ -149,5 +154,3 @@ exports.IndeliveryOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
-

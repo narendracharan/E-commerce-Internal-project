@@ -13,7 +13,6 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 1,
       },
-    
     },
   ],
   cartsTotal: Number,
@@ -22,46 +21,49 @@ const schema = new mongoose.Schema({
     default: "pending",
     enum: [
       "Approved",
-       "Packed",
+      "Packed",
       "Shipped",
       "Delivered",
       "Cancelled",
-       "pending",,
-       "Processing",
-       "NotSend"
+      "pending",
+      "Processing",
+      "NotSend",
     ],
   },
-paymentIntent: {
-  type:String,
-  default:"Cash on Delivery"
-},
+  paymentIntent: {
+    type: String,
+    default: "Cash on Delivery",
+  },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "userPanel",
     require: true,
   },
-  address_Id:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"address",
-    require:true
+  address_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "address",
+    require: true,
   },
-  deliverdBy:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"agent",
-    require:true
+  deliverdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "agent",
+    require: true,
   },
-  taxPrice:{
-    type:Number,
-    require:true
+  taxPrice: {
+    type: Number,
+    require: true,
   },
-  shippingPrice:{
-    type:Number,
-    require:true
+  shippingPrice: {
+    type: Number,
+    require: true,
   },
-  deleiverdBy:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"agent",
-  }
+  deliverdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "agent",
+  },
+  allStatus: {
+    type: Array,
+  },
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("userOrder", schema);
