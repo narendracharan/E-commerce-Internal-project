@@ -13,16 +13,14 @@ exports.createWish = async (req, res) => {
 
 exports.wishlist = async (req, res) => {
   try {
-    const list = await wishSchema
-      .find()
-      .populate("product_Id", {
-        productName: 1,
-        product_Pic: 1,
-        Price: 1,
-        _id: 1,
-        oldPrice: 1,
-        category_Id: 1,
-      });
+    const list = await wishSchema.find().populate("product_Id", {
+      productName: 1,
+      product_Pic: 1,
+      Price: 1,
+      _id: 1,
+      oldPrice: 1,
+      category_Id: 1,
+    });
     res.status(200).json(success(res.statusCode, "Wish List", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -31,8 +29,8 @@ exports.wishlist = async (req, res) => {
 
 exports.deleteWishList = async (req, res) => {
   try {
-     const id = req.params.id;
-     const deleteDta = await wishSchema.findByIdAndDelete(id)
+    const id = req.params.id;
+    const deleteDta = await wishSchema.findByIdAndDelete(id);
     res
       .status(200)
       .json(success(res.statusCode, "Wish List Deleted", { deleteDta }));
@@ -41,15 +39,14 @@ exports.deleteWishList = async (req, res) => {
   }
 };
 
-exports.removeProduct=async(req,res)=>{
-  try{
-const id=req.params.id
-const removeData=await   wishSchema.deleteOne({product_Id:id})
-res
-.status(200)
-.json(success(res.statusCode, "Wish List Deleted", { removeData }));
-
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.removeProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const removeData = await wishSchema.deleteOne({ product_Id: id });
+    res
+      .status(200)
+      .json(success(res.statusCode, "Wish List Deleted", { removeData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

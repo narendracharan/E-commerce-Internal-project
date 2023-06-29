@@ -38,31 +38,31 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  address_Id:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"address",
-    require:true
+  address_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "address",
+    require: true,
   },
-  status:{
-    type:Boolean,
-    default:true
+  status: {
+    type: Boolean,
+    default: true,
   },
-  otp:{
-    type:Number,
-    require:true
+  otp: {
+    type: Number,
+    require: true,
   },
-  specialOffer:{
-    type:Boolean,
-    default:false
+  specialOffer: {
+    type: Boolean,
+    default: false,
   },
-  promo:{
-    type:Boolean,
-    default:false
+  promo: {
+    type: Boolean,
+    default: false,
   },
-  appUpdate:{
-    type:Boolean,
-    default:false
-  }
+  appUpdate: {
+    type: Boolean,
+    default: false,
+  },
 });
 schema.set("timestamps", true);
 schema.methods.generateUserAuthToken = function () {

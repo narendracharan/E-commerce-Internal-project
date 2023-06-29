@@ -18,11 +18,11 @@ exports.allPendingOrder = async (req, res) => {
     const pending = await orderSchema.aggregate([
       {
         $match: {
-          orderStatus : "pending",
+          orderStatus: "pending",
         },
       },
       {
-        $group : {
+        $group: {
           _id: "$orderStatus",
           total: {
             $sum: 1,
@@ -51,20 +51,20 @@ exports.totalOrder = async (req, res) => {
   }
 };
 
-exports.bannerlist=async(req,res)=>{
-  try{
-const listBanner =await homeScreenSchema.find({})
-res.status(200).json(success(res.statusCode,"Success",{listBanner}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.bannerlist = async (req, res) => {
+  try {
+    const listBanner = await homeScreenSchema.find({});
+    res.status(200).json(success(res.statusCode, "Success", { listBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.notificationList=async(req,res)=>{
-  try{
-const listData=await notificationSchema.find({})
-res.status(200).json(success(res.statusCode,"Success",{listData}))
-  }catch(err){
-    res.status(500).json(error("Failed",res.statusCode))
+exports.notificationList = async (req, res) => {
+  try {
+    const listData = await notificationSchema.find({});
+    res.status(200).json(success(res.statusCode, "Success", { listData }));
+  } catch (err) {
+    res.status(500).json(error("Failed", res.statusCode));
   }
-}
+};

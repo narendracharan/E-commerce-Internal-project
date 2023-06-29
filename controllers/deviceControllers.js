@@ -14,7 +14,9 @@ exports.addLanguage = async (req, res) => {
 exports.updateLanguage = async (req, res) => {
   try {
     const id = req.params.id;
-    const updateData = await deviceSchema.findByIdAndUpdate(id,req.body,{new:true});
+    const updateData = await deviceSchema.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res
       .status(200)
       .json(success(res.statusCode, "Updated Data", { updateData }));

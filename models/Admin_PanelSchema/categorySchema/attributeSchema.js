@@ -5,10 +5,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  attributeName_ar:{
-    type:String,
-    require:true
-},
+  attributeName_ar: {
+    type: String,
+    require: true,
+  },
   shipmentService: {
     type: String,
     default: true,
@@ -17,15 +17,15 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  category_Id:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"category",
-    require:true
+  category_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "category",
+    require: true,
   },
-  subCategory_Id:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"subCategory",
-    require:true
+  subCategory_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "subCategory",
+    require: true,
   },
   subSubCategory_Id: {
     type: mongoose.Schema.Types.ObjectId,

@@ -29,10 +29,8 @@ exports.updateContent = async (req, res) => {
 exports.contentList = async (req, res) => {
   try {
     const list = await contentSchema.find({});
-    res.status(200).json(success(res.statusCode,"Success" ,{ list }));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", statusCode));
   }
 };
-
-

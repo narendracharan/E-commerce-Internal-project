@@ -10,4 +10,4 @@ router.post("/search-category",tokenAuthorisationUser,categorySearch)
 router.patch("/update/:id",tokenAuthorisationUser,categoryUpdate)
 router.post("/sub/:id",tokenAuthorisationUser,checkSubCategory)
 router.post("/checkstatus/:id",tokenAuthorisationUser,checkStatus)
-module.exports=router
+module.exports = router;

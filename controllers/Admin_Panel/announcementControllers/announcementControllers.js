@@ -4,11 +4,11 @@ const { success, error } = require("../../response");
 exports.createAnnouncement = async (req, res) => {
   try {
     const create = new announcementSchema(req.body);
-    create.pic=req.file.location
-    const saveData = await create.save();
-    res.status(200).json(success(res.statusCode,"Success",{saveData}));
+    create.pic = req.file.location
+    const saveData = await create.save()
+    res.status(200).json(success(res.statusCode, "Success", { saveData }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -19,21 +19,22 @@ exports.searchAnnouncement = async (req, res) => {
       heading: { $regex: heading, $options: "i" },
     });
     if (searchData.length > 0) {
-    return  res.status(200).json(success(res.statusCode,"Success",{searchData}));
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { searchData }));
     } else {
-      res.status(200).json(error("Data are Not Found",res.statusCode));
+      res.status(200).json(error("Data are Not Found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.announcementList = async (req, res) => {
   try {
     const list = await announcementSchema.find({});
-    res.status(200).json(success(res.statusCode,"Success",{list}));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
-

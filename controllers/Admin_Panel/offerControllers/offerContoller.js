@@ -7,7 +7,6 @@ exports.addOffer = async (req, res) => {
     const saveData = await offer.save();
     res.status(201).json(success(res.statusCode, "Success", { saveData }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

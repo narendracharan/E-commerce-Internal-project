@@ -5,13 +5,13 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  subCategoryName_ar:{
-    type:String,
-    require:true
-},
-  subCategoryPic:{
-    type:String,
-    require:true
+  subCategoryName_ar: {
+    type: String,
+    require: true,
+  },
+  subCategoryPic: {
+    type: String,
+    require: true,
   },
   shipmentService: {
     type: Boolean,

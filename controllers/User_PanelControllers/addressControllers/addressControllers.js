@@ -44,7 +44,7 @@ exports.deleteAddress = async (req, res) => {
 
 exports.addressDetails = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     const detailsData = await addressSchema.findById(id);
     res.status(200).json(success(res.statusCode, "Success", { detailsData }));
   } catch (err) {

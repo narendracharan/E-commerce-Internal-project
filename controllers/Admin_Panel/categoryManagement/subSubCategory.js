@@ -6,7 +6,7 @@ const values = require("../../../models/Admin_PanelSchema/categorySchema/valuesS
 const attributeSchema = require("../../../models/Admin_PanelSchema/categorySchema/attributeSchema");
 const { error, success } = require("../../response");
 
- exports.subSubCategory = async (req, res) => {
+exports.subSubCategory = async (req, res) => {
   try {
     const subSubCategory = new cateSchema(req.body);
     const saveSubSubCategory = await subSubCategory.save();
@@ -34,11 +34,17 @@ exports.checkStatus = async (req, res) => {
       req.body,
       { new: true }
     );
-    res.status(200).json(success(res.statusCode,"Success",{ updateStatus,
-      attributeStatus,
-      valuesStatus,}));
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Success", {
+          updateStatus,
+          attributeStatus,
+          valuesStatus,
+        })
+      );
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -47,37 +53,43 @@ exports.checkAttribute = async (req, res) => {
     const id = req.params.id;
     const checkData = await Attribute.find({ subSubCategory_Id: id });
     const valuesData = await values.find({ subSubCategory_Id: id });
-    res.status(200).json(success(res.statusCode,"Success",{ checkData,
-      valuesData,}));
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { checkData, valuesData }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.selectCategory = async (req, res) => {
   try {
     const categoryData = await category.find({});
-    res.status(200).json(success(res.statusCode,"Success",{ categoryData}));
+    res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.selectSubCategory = async (req, res) => {
   try {
     const subCategoryData = await subCategory.find();
-    res.status(200).json(success(res.statusCode,"Success",{subCategoryData}));
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { subCategoryData }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.subSubCategoryList = async (req, res) => {
   try {
-    const list = await cateSchema.find({}).populate("category_Id").populate("subCategory_Id");
-    res.status(200).json(success(res.statusCode,"Success",{list}));
+    const list = await cateSchema
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -87,9 +99,9 @@ exports.subSubCategoryUpdate = async (req, res) => {
     const update = await cateSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.status(200).json(success(res.statusCode,"Success",{update}));
+    res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -100,14 +112,13 @@ exports.subSubCategorySearch = async (req, res) => {
       subSubCategoryName: { $regex: subSubCategory, $options: "i" },
     });
     if (categoryData.length > 0) {
-    return  res.status(200).json(success(res.statusCode,"Success",{categoryData}));
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { categoryData }));
     } else {
-      res.status(200).json(error("Data are Not Found",res.statusCode));
+      res.status(200).json(error("Data are Not Found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json("Failed",res.statusCode);
+    res.status(400).json("Failed", res.statusCode);
   }
 };
-
-
-

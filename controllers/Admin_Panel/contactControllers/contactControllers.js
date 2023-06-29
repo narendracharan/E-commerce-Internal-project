@@ -16,7 +16,7 @@ exports.createContact = async (req, res) => {
 exports.contactlist = async (req, res) => {
   try {
     const list = await contactSchema.find({});
-    res.status(200).json(success( res.statusCode,"Success",{ list }));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -25,9 +25,8 @@ exports.contactlist = async (req, res) => {
 exports.contactDelete = async (req, res) => {
   try {
     const id = req.params.id;
-
     const deletData = await contactSchema.findByIdAndDelete(id);
-       res
+    res
       .status(200)
       .json(success(res.statusCode, "Success DeletedData", { deletData }));
   } catch (err) {
@@ -37,30 +36,36 @@ exports.contactDelete = async (req, res) => {
 
 exports.contactView = async (req, res) => {
   try {
-    const id=req.params.id
-    const contactData=await contactSchema.findById(id,{"_id":0,"userName":0,"subject":0,"status":0,"Email":0})
-    res.status(200).json(success(res.statusCode,"Success",{contactData}))
+    const id = req.params.id;
+    const contactData = await contactSchema.findById(id, {
+      _id: 0,
+      userName: 0,
+      subject: 0,
+      status: 0,
+      Email: 0,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { contactData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
-exports.createAbout=async(req,res)=>{
-  try{
-const create=new aboutSchema(req.body)
-const saveData=await create.save()
-res.status(200).json(success(res.statusCode,"Success",{saveData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.createAbout = async (req, res) => {
+  try {
+    const create = new aboutSchema(req.body);
+    const saveData = await create.save();
+    res.status(200).json(success(res.statusCode, "Success", { saveData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.createPrivacy=async(req,res)=>{
-  try{
-    const create=new privacySchema(req.body)
-    const saveData=await create.save()
-    res.status(200).json(success(res.statusCode,"Success",{saveData}))
-      }catch(err){
-        res.status(400).json(error("Failed",res.statusCode))
-      }
-}
+exports.createPrivacy = async (req, res) => {
+  try {
+    const create = new privacySchema(req.body);
+    const saveData = await create.save();
+    res.status(200).json(success(res.statusCode, "Success", { saveData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

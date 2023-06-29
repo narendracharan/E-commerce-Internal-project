@@ -1,7 +1,5 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
-const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
-const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 
@@ -49,10 +47,10 @@ exports.createOrder = async (req, res) => {
       taxPrice,
       shippingPrice,
       orderStatus,
-      allStatus:[orderStatus]
-    })
-    newCarts.allStatus.push(newCarts.orderStatus)
-    await newCarts.save()
+      allStatus: [orderStatus],
+    });
+    newCarts.allStatus.push(newCarts.orderStatus);
+    await newCarts.save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
     console.log(err);
@@ -63,9 +61,10 @@ exports.createOrder = async (req, res) => {
 exports.orderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const order = await orderSchema.findById(id).populate("address_Id");
+    const order = await orderSchema.findById(id).populate("address_Id").populate("products.product_Id")
     res.status(200).json(success(res.status, "Success", { order }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -148,7 +147,6 @@ exports.IndeliveryOrder = async (req, res) => {
   try {
     const Delivered = await orderSchema.find().populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Processing");
-
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

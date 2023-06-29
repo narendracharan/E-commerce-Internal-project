@@ -6,15 +6,20 @@ const attributeSchema = require("../../../models/Admin_PanelSchema/categorySchem
 const valueSchema = require("../../../models/Admin_PanelSchema/categorySchema/valuesSchema");
 const { success, error } = require("../../../controllers/response");
 
-
 exports.createCategory = async (req, res) => {
   try {
     const category = new cateSchema(req.body);
-    category.categoryPic=req.file.location
+    category.categoryPic = req.file.location;
     const saveCategory = await category.save();
-    res.status(201).json(success(res.statusCode,"Category Create Successfully",{saveCategory}));
+    res
+      .status(201)
+      .json(
+        success(res.statusCode, "Category Create Successfully", {
+          saveCategory,
+        })
+      );
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -45,13 +50,19 @@ exports.checkStatus = async (req, res) => {
       req.body,
       { new: true }
     );
-    res.status(200).json(success(res.statusCode,"Success",{ updateStatus,
-      updateSubCategoryStatus,
-      updateSubSubCategoryStatus,
-      updateAttributeStatus,
-      updateValuesStatus,}));
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Success", {
+          updateStatus,
+          updateSubCategoryStatus,
+          updateSubSubCategoryStatus,
+          updateAttributeStatus,
+          updateValuesStatus,
+        })
+      );
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -62,19 +73,25 @@ exports.checkSubCategory = async (req, res) => {
     const subSubCategoryData = await subSubCategorySchema.find({
       category_Id: id,
     });
-    res.status(200).json(success(res.statusCode,"Success",{subCategoryData,
-      subSubCategoryData}));
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Success", {
+          subCategoryData,
+          subSubCategoryData,
+        })
+      );
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.categoryList = async (req, res) => {
   try {
     const list = await cateSchema.find({});
-    res.status(200).json(success(res.statusCode,"Success",{list}));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -84,9 +101,9 @@ exports.categoryUpdate = async (req, res) => {
     const updated = await cateSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.status(200).json(success(res.statusCode,"Success",{updated}));
+    res.status(200).json(success(res.statusCode, "Success", { updated }));
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
@@ -97,11 +114,13 @@ exports.categorySearch = async (req, res) => {
       categoryName: { $regex: category, $options: "i" },
     });
     if (categoryData.length > 0) {
-     return res.status(200).json(success(res.statusCode,"Success",{categoryData}));
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { categoryData }));
     } else {
-      res.status(200).json(error("Data are Not Found",res.statusCode));
+      res.status(200).json(error("Data are Not Found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed",res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };

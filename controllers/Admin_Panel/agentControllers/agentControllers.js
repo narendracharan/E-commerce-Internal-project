@@ -70,7 +70,7 @@ exports.sendEmail = async (req, res) => {
         subject: "Your Signup Successfully",
         text: `This ${otp} Otp Verify To Email`,
       };
-      await agentSchema.findOneAndUpdate({Email:Email},{otp:otp})
+      await agentSchema.findOneAndUpdate({ Email: Email }, { otp: otp });
       await transporter.sendMail(mailOptions);
       return res.status(200).json(
         success(res.statusCode, "Mail Send Successfully", {
@@ -87,20 +87,19 @@ exports.sendEmail = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   try {
-    const {otp,Email} = req.body
-    const verify = await agentSchema.findOne({Email:Email})
-    if(!otp){
-      res.status(201).json(error("Please Provide Otp",res.statusCode))
+    const { otp, Email } = req.body;
+    const verify = await agentSchema.findOne({ Email: Email });
+    if (!otp) {
+      res.status(201).json(error("Please Provide Otp", res.statusCode));
     }
-      if (verify.otp==otp) {
-        return res
-          .status(200)
-          .json(success(res.statusCode, "Verify Otp Successfully"));
-     }else{
-   return res.status(200)
-          .json(error("Invalid Otp",res.statusCode));
-     }
-    } catch (err) {
+    if (verify.otp == otp) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Verify Otp Successfully"));
+    } else {
+      return res.status(200).json(error("Invalid Otp", res.statusCode));
+    }
+  } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -199,13 +198,14 @@ exports.userSerach = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const { oldPassword, password,Email, confirm_Password } = req.body;
-    if ((oldPassword, password, confirm_Password,Email)) {
+    const { oldPassword, password, Email, confirm_Password } = req.body;
+    if ((oldPassword, password, confirm_Password, Email)) {
       if (password != confirm_Password) {
         res.status(400).json(error("Password Not Match", res.statusCode));
       } else {
         const newPassword = await bcrypt.hash(password, 10);
-        const createPassword = await User.findOneAndUpdate({Email:Email},
+        const createPassword = await User.findOneAndUpdate(
+          { Email: Email },
           { $set: { password: newPassword } },
           { new: true }
         );
@@ -215,7 +215,7 @@ exports.changePassword = async (req, res) => {
           })
         );
       }
-    }else{
+    } else {
       res.status(200).json(error("All filed are required", res.statusCode));
     }
   } catch (err) {
@@ -242,7 +242,8 @@ exports.orderList = async (req, res) => {
     const orderList = await orderSchema
       .find({})
       .populate("user_Id")
-      .populate("address_Id").populate("deliverdBy",{name:1,address:1})
+      .populate("address_Id")
+      .populate("deliverdBy", { name: 1, address: 1 });
     res.status(200).json(success(res.statusCode, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -252,7 +253,12 @@ exports.orderList = async (req, res) => {
 exports.orderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderDetails = await orderSchema.findById(id).populate("address_Id").populate("deliverdBy",{name:1,address:1}).populate("user_Id").populate("products.product_Id")
+    const orderDetails = await orderSchema
+      .findById(id)
+      .populate("address_Id")
+      .populate("deliverdBy", { name: 1, address: 1 })
+      .populate("user_Id")
+      .populate("products.product_Id");
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -261,9 +267,12 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderHistory = async (req, res) => {
   try {
-    const orderdata = await orderSchema.find().populate("address_Id").populate("deliverdBy").populate("user_Id")
-    const orderDetails=orderdata.filter((x)=>x.orderStatus=="Delivered")
-   
+    const orderdata = await orderSchema
+      .find()
+      .populate("address_Id")
+      .populate("deliverdBy")
+      .populate("user_Id");
+    const orderDetails = orderdata.filter((x) => x.orderStatus == "Delivered");
     res.status(200).json(success(res.statusCode, "success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -296,8 +305,12 @@ exports.updateUser = async (req, res) => {
 
 exports.withdrawOrder = async (req, res) => {
   try {
-    const withdrawData = await orderSchema.find().populate("address_Id").populate("deliverdBy").populate("user_Id")
-    const orderDetails=withdrawData.filter((x)=>x.orderStatus=="NotSend")
+    const withdrawData = await orderSchema
+      .find()
+      .populate("address_Id")
+      .populate("deliverdBy")
+      .populate("user_Id");
+    const orderDetails = withdrawData.filter((x) => x.orderStatus == "NotSend");
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -331,10 +344,10 @@ exports.updateStatus = async (req, res) => {
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
-  updateData.allStatus.push(updateData.orderStatus)
+    updateData.allStatus.push(updateData.orderStatus);
+    await updateData.save();
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

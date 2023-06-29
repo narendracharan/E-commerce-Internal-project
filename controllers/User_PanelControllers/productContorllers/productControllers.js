@@ -27,16 +27,14 @@ exports.productDetails = async (req, res) => {
       res.status(400).json(error("Product Out of Stock", res.statusCode));
     }
     const reviewCount = await reviewSchema.find({ product_Id: id }).count();
-    res
-      .status(200)
-      .json(
-        success(res.statusCode, "Success", {
-          details,
-          Discount,
-          afterDiscountPrice,
-          reviewCount,
-        })
-      );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        details,
+        Discount,
+        afterDiscountPrice,
+        reviewCount,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

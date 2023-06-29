@@ -22,5 +22,5 @@ const schema = new mongoose.Schema({
     require: true,
   },
 });
-schema.set("timestamps",true)
-module.exports=mongoose.model("Banners",schema)
+schema.set("timestamps", true);
+module.exports = mongoose.model("Banners", schema);

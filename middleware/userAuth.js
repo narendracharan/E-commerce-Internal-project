@@ -18,9 +18,3 @@ function tokenAuthorisationUser(req, res, next) {
   }
 }
 module.exports = tokenAuthorisationUser;
-
-
-
-
-
-

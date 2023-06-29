@@ -9,7 +9,7 @@ const { validationResult } = require("express-validator");
 exports.userSignup = async (req, res) => {
   try {
     const user = new userSchema(req.body);
-    const { userEmail,userName } = req.body;
+    const { userEmail, userName } = req.body;
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -71,7 +71,7 @@ exports.userLogin = async (req, res) => {
 exports.sendMailResetPassword = async (req, res) => {
   try {
     const { userEmail } = req.body;
-    const user = await userSchema.findOne({userEmail:userEmail})
+    const user = await userSchema.findOne({ userEmail: userEmail });
     if (user) {
       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
       var mailOptions = {
@@ -80,8 +80,8 @@ exports.sendMailResetPassword = async (req, res) => {
         subject: "Your Signup Successfully",
         text: `This ${otp} Otp Verify To Email`,
       };
-      await userSchema.findOneAndUpdate({userEmail:userEmail},{otp:otp})
-        await transporter.sendMail(mailOptions);
+      await userSchema.findOneAndUpdate({ userEmail: userEmail }, { otp: otp });
+      await transporter.sendMail(mailOptions);
       return res.status(200).json(
         success(res.statusCode, "Mail Send Successfully", {
           userID: user._id,
@@ -95,42 +95,44 @@ exports.sendMailResetPassword = async (req, res) => {
   }
 };
 
-exports.verifyOtp=async(req,res)=>{
-  try{
-const {otp,userEmail}=req.body
-const verify=await userSchema.findOne({userEmail:userEmail})
-if(verify.otp==otp){
-  res.status(200).json(success(res.statusCode,"Verify Otp Successfully"))
-}else{
-  res.status(400).json(error("InValid Otp",res.statusCode))
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { otp, userEmail } = req.body;
+    const verify = await userSchema.findOne({ userEmail: userEmail });
+    if (verify.otp == otp) {
+      res.status(200).json(success(res.statusCode, "Verify Otp Successfully"));
+    } else {
+      res.status(400).json(error("InValid Otp", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.profilePic=async(req,res)=>{
-  try{
-const id=req.params.id
-const data={
-  profile_Pic: req.file.location,
-  userName: req.body.userName,
-  userEmail: req.body.userEmail,
-  mobileNumber: req.body.mobileNumber,
-}
-const profile = await userSchema.findByIdAndUpdate(id, data, {
-  new: true,
-});
-res.status(200).json(success(res.statusCode, " updated profile", { profile }));
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.profilePic = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = {
+      profile_Pic: req.file.location,
+      userName: req.body.userName,
+      userEmail: req.body.userEmail,
+      mobileNumber: req.body.mobileNumber,
+    };
+    const profile = await userSchema.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    res
+      .status(200)
+      .json(success(res.statusCode, " updated profile", { profile }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
 exports.updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
-  
+
     const user = new userSchema(req.body);
     const password = await bcrypt.hash(user.password, 10);
     const data = {
@@ -169,80 +171,90 @@ exports.aboutProfile = async (req, res) => {
 exports.logOut = async (req, res) => {
   try {
     const authHeader = req.headers["x-auth-token-user"];
-    jwt.sign(authHeader, "ultra-security", {
-      expiresIn: 1,
-    }, (logout, err) => {
-      if (logout) {
-        res.status(200).json(success(res.statusCode, "Successfully Logout "));
-      } else {
-        res.status(400).json(error("Failed", res.statusCode, { err }));
+    jwt.sign(
+      authHeader,
+      "ultra-security",
+      {
+        expiresIn: 1,
+      },
+      (logout, err) => {
+        if (logout) {
+          res.status(200).json(success(res.statusCode, "Successfully Logout "));
+        } else {
+          res.status(400).json(error("Failed", res.statusCode, { err }));
+        }
       }
-    });
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
+exports.userResetPassword = async (req, res) => {
+  try {
+    const { password, confirm_Password, userEmail } = req.body;
+    if ((password, confirm_Password)) {
+      if (password != confirm_Password) {
+        res.status(400).json(error("Password Not Match", res.statusCode));
+      } else {
+        const newPassword = await bcrypt.hash(password, 10);
+        const createPassword = await User.findOneAndUpdate(
+          { userEmail: userEmail },
+          {
+            $set: { password: newPassword },
+          }
+        );
+        res.status(200).json(
+          success(res.statusCode, "Password Updated Successfully", {
+            createPassword,
+          })
+        );
+      }
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.status));
+  }
+};
 
-exports.userResetPassword=async(req,res)=>{
-  try{
-const { password, confirm_Password ,userEmail} = req.body;
-if ((password, confirm_Password)) {
-  if (password != confirm_Password) {
-    res.status(400).json(error("Password Not Match", res.statusCode));
-  } else {
-    const newPassword = await bcrypt.hash(password, 10);
-    const createPassword = await User.findOneAndUpdate({userEmail:userEmail}, {
-      $set: { password: newPassword },
+exports.verifyEmail = async (req, res) => {
+  try {
+    const { userEmail } = req.body;
+    const verifyEmail = await userSchema.findOne({ userEmail: userEmail });
+    if (verifyEmail) {
+      res.status(200).json(success(res.statusCode, "Success", { verifyEmail }));
+    } else {
+      res.status(400).json(error("Invalid userEmail", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.deleteAccount = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteData = await userSchema.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.notificationUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = {
+      specialOffer: req.body.specialOffer,
+      promo: req.body.promo,
+      appUpdate: req.body.appUpdate,
+    };
+    const updateNotification = await userSchema.findByIdAndUpdate(id, data, {
+      new: true,
     });
-    res.status(200).json(
-      success(res.statusCode, "Password Updated Successfully", {
-        createPassword,
-      })
-    );
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { updateNotification }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.status))
-  }
-}
-
-
-exports.verifyEmail=async(req,res)=>{
-  try{
-const {userEmail}=req.body
-const verifyEmail=await userSchema.findOne({userEmail:userEmail})
-if(verifyEmail){
-  res.status(200).json(success(res.statusCode,"Success",{verifyEmail}))
-}else{
-  res.status(400).json(error("Invalid userEmail",res.statusCode))
-}
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
-  }
-}
-
-exports.deleteAccount=async(req,res)=>{
-  try{
-    const id=req.params.id
-    const deleteData=await userSchema.findByIdAndDelete(id)
-    res.status(200).json(success(res.statusCode,"Success",{deleteData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
-  }
-}
-
-exports.notificationUpdate=async(req,res)=>{
-  try{
-const id=req.params.id
-const data={
-  specialOffer:req.body.specialOffer,
-  promo:req.body.promo,
-  appUpdate:req.body.appUpdate
-}
-const updateNotification= await userSchema.findByIdAndUpdate(id,data,{new:true})
-res.status(200).json(success(res.statusCode,"Success",{updateNotification}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
-  }
-}
+};

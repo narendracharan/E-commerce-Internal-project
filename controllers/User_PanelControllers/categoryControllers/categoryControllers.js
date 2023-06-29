@@ -24,15 +24,17 @@ exports.subCatagoryList = async (req, res) => {
   }
 };
 
-exports.checkSubCategoryProduct=async(req,res)=>{
-  try{
-    const id=req.params.id;
-    const listData=await productSchema.find({Subcategory_Id:id}).sort({_id:-1})
-    res.status(200).json(success(res.statusCode, "Success",{listData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.checkSubCategoryProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const listData = await productSchema
+      .find({ Subcategory_Id: id })
+      .sort({ _id: -1 });
+    res.status(200).json(success(res.statusCode, "Success", { listData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 exports.checkCategoryProduct = async (req, res) => {
   try {
     const id = req.params.id;
