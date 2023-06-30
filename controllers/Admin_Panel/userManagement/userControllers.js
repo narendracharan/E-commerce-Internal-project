@@ -72,9 +72,7 @@ exports.OtpVerify = async (req, res) => {
 
 exports.downlaod=async(req,res)=>{
   try{
-    const user = await Userschema.find({
-      
-    })
+    const user = await Userschema.find({})
     
     let allOrders = [];
     for (const exportOrder of user) {

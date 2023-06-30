@@ -35,5 +35,5 @@ router.post(
 );
 router.post("/user-search",tokenAuthorisationUser,userSerach)
 router.post("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
-router.post("/download",downlaod)
+router.post("/download",tokenAuthorisationUser,downlaod)
 module.exports = router;
