@@ -107,9 +107,9 @@ exports.subSubCategoryUpdate = async (req, res) => {
 
 exports.subSubCategorySearch = async (req, res) => {
   try {
-    const subSubCategory = req.body.subSubCategoryName;
+    const subSubCategoryName_en = req.body.subSubCategoryName_en;
     const categoryData = await cateSchema.find({
-      subSubCategoryName: { $regex: subSubCategory, $options: "i" },
+      subSubCategoryName_en: { $regex:subSubCategoryName_en, $options: "i" },
     });
     if (categoryData.length > 0) {
       return res

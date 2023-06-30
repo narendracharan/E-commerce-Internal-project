@@ -102,9 +102,9 @@ exports.attributeUpdate = async (req, res) => {
 
 exports.attributeSearch = async (req, res) => {
   try {
-    const attribute = req.body.attributesName;
+    const  attributeName_en = req.body.attributeName_en;
     const categoryData = await cateSchema.find({
-      attributeName: { $regex: attribute, $options: "i" },
+      attributeName_en: { $regex:attributeName_en, $options: "i" },
     });
     if (categoryData.length > 0) {
       return res

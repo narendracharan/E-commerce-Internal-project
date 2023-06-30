@@ -109,9 +109,9 @@ exports.categoryUpdate = async (req, res) => {
 
 exports.categorySearch = async (req, res) => {
   try {
-    const category = req.body.categoryName;
+    const   categoryName_en = req.body.categoryName_en;
     const categoryData = await cateSchema.find({
-      categoryName: { $regex: category, $options: "i" },
+      categoryName_en: { $regex:  categoryName_en , $options: "i" },
     });
     if (categoryData.length > 0) {
       return res

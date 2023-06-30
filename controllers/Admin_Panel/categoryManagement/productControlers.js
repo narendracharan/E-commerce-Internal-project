@@ -35,9 +35,9 @@ exports.productList = async (req, res) => {
 
 exports.productSearch = async (req, res) => {
   try {
-    const product = req.body.productName;
+    const productName_en = req.body.productName_en;
     const productData = await productSchema.find({
-      productName: { $regex: product, $options: "i" },
+      productName_en: { $regex: productName_en, $options: "i" },
     });
     if (productData.length > 0) {
       return res

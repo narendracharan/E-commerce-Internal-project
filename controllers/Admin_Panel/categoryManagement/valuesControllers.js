@@ -97,9 +97,9 @@ exports.valuesUpdate = async (req, res) => {
 
 exports.valuesSearch = async (req, res) => {
   try {
-    const values = req.body.valuesName;
+    const  valuesName_en = req.body.valuesName_en;
     const valuesData = await valueSchema.find({
-      valuesName: { $regex: values, $options: "i" },
+      valuesName_en: { $regex: valuesName_en, $options: "i" },
     });
     if (valuesData.length > 0) {
       return res
