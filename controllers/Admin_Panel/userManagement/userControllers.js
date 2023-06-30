@@ -73,12 +73,10 @@ exports.OtpVerify = async (req, res) => {
 exports.downlaod=async(req,res)=>{
   try{
     const user = await Userschema.find({})
-    
     let allOrders = [];
     for (const exportOrder of user) {
       let date = String(exportOrder.createdAt).split(" ");
       const newDate = `${date[2]}/${date[1]}/${date[3]}`;
-      // console.log(date[2],date[1],date[3]);
       let obj = {
         "user Date": newDate,
         "User Name": `${exportOrder.userName}`,
@@ -96,7 +94,6 @@ exports.downlaod=async(req,res)=>{
       })
     );
   } catch (err) {
-    console.log(err);
     res.status(401).json(error("Error in exporting", res.statusCode));
   }
 };

@@ -2,6 +2,8 @@ const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
+const { transporter } = require("../../../service/mailService");
+const { sendEmail } = require("../../Admin_Panel/agentControllers/agentControllers");
 
 const { error, success } = require("../../response");
 

@@ -98,11 +98,12 @@ exports.categoryList = async (req, res) => {
 exports.categoryUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const updated = await cateSchema.findByIdAndUpdate(id, req.body, {
+    const updated = await cateSchema.findByIdAndUpdate(id, req.body,{
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updated }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
