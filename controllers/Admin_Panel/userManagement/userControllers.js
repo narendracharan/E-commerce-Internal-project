@@ -7,6 +7,9 @@ const { validationResult } = require("express-validator");
 const Userschema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
+const jsonrawtoxlsx = require("jsonrawtoxlsx");
+const fs=require("fs");
+const { json } = require("body-parser");
 
 exports.userSignup = async (req, res) => {
   const users = new userSchema(req.body);
@@ -66,6 +69,40 @@ exports.OtpVerify = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.downlaod=async(req,res)=>{
+  try{
+    const user = await Userschema.find({
+      
+    })
+    
+    let allOrders = [];
+    for (const exportOrder of user) {
+      let date = String(exportOrder.createdAt).split(" ");
+      const newDate = `${date[2]}/${date[1]}/${date[3]}`;
+      // console.log(date[2],date[1],date[3]);
+      let obj = {
+        "user Date": newDate,
+        "User Name": `${exportOrder.userName}`,
+        "Mobile Number":` ${exportOrder.mobileNumber}`,
+        "User Status": `${exportOrder.status}`,
+      };
+      allOrders.push(obj);
+    }
+    const filename = Date.now();
+    const excel = jsonrawtoxlsx(allOrders);
+    const file = fs.writeFileSync(`./public/${filename}.xlsx`, excel, "binary");
+    res.status(201).json(
+      success(res.statusCode, "Exported Successfully", {
+        file: `${process.env.BASE_URL}/${filename}.xlsx`,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(error("Error in exporting", res.statusCode));
+  }
+};
+
 
 exports.editProfile = async (req, res) => {
   try {

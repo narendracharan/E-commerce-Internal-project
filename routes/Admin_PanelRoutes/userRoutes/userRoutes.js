@@ -14,6 +14,8 @@ const {
   editProfile,
   checkStatus,
   userSerach,
+  downlod,
+  downlaod,
 } = require("../../../controllers/Admin_Panel/userManagement/userControllers");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -33,4 +35,5 @@ router.post(
 );
 router.post("/user-search",tokenAuthorisationUser,userSerach)
 router.post("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
+router.post("/download",downlaod)
 module.exports = router;
