@@ -88,25 +88,11 @@ exports.editProfile = async (req, res) => {
 };
 
 exports.userList = async (req, res) => {
-  const userName = req.body.userName;
   try {
-    var { page, pagesize } = req.body;
-    var skip;
-    if (page <= 1) {
-      return (skip = 0);
-    } else {
-      skip = (page - 1) * pagesize;
-    }
-    const count = await Userschema.count();
-    const totalpage = Math.ceil(count / pagesize);
-    const createData = await Userschema.find({
-      userName: { $regex: userName, $options: "i" },
-    })
-      .skip(skip)
-      .limit(pagesize);
+    const createData = await Userschema.find()
     res
       .status(200)
-      .json(success(res.statusCode, "Success", { createData, totalpage }));
+      .json(success(res.statusCode, "Success", { createData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -154,6 +140,7 @@ exports.userDetails = async (req, res) => {
       birthDay: 1,
       status: 1,
       gender: 1,
+      mobileNumber:1
     }).populate("address_Id", {
       address: 1,
       pinCode: 1,
@@ -189,8 +176,6 @@ exports.userDetails = async (req, res) => {
   }
 };
 
-
-
 exports.sendUserResetPassword = async (req, res) => {
   try {
     const { userEmail } = req.body;
@@ -209,7 +194,6 @@ exports.sendUserResetPassword = async (req, res) => {
       res.status(400).json(error("userEmail are empty", res.statusCode));
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json(error("Failed", res.statusCode));
   }
 };

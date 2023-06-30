@@ -132,7 +132,6 @@ exports.profilePic = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
-
     const user = new userSchema(req.body);
     const password = await bcrypt.hash(user.password, 10);
     const data = {
