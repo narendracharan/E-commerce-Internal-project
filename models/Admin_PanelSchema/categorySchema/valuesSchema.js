@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
   },
   valuesName_ar: {
     type: String,
-    require: true,
+    require:true,
   },
   shipmentService: {
     type: Boolean,
