@@ -13,8 +13,10 @@ const {
   OtpVerify,
   editProfile,
   checkStatus,
+  userSerach,
 } = require("../../../controllers/Admin_Panel/userManagement/userControllers");
 const { s3upload } = require("../../../middleware/multer");
+
 
 router.post("/signup", signupValidation, userSignup);
 router.post("/login", userLogin);
@@ -29,5 +31,6 @@ router.post(
   s3upload.single("profile_Pic"),
   editProfile
 );
+router.post("/user-search",tokenAuthorisationUser,userSerach)
 router.post("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
 module.exports = router;

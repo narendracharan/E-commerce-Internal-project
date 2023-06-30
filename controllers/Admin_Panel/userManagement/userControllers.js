@@ -189,6 +189,8 @@ exports.userDetails = async (req, res) => {
   }
 };
 
+
+
 exports.sendUserResetPassword = async (req, res) => {
   try {
     const { userEmail } = req.body;
@@ -211,6 +213,24 @@ exports.sendUserResetPassword = async (req, res) => {
     res.status(500).json(error("Failed", res.statusCode));
   }
 };
+
+exports.userSerach=async(req,res)=>{
+  const userName=req.body.userName
+  try{
+    const userData = await Userschema.find({
+      userName: { $regex:userName, $options: "i" },
+    });
+    if (userData.length > 0) {
+      res
+        .status(200)
+        .json(success(res.statusCode, "Success", { userData }));
+    } else {
+      res.status(200).json(error("Data are Not Found", res.statusCode));
+    }
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
 
 exports.resetPassword = async (req, res) => {
   const { password, confirmPassword, userEmail } = req.body;

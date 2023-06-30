@@ -138,7 +138,7 @@ exports.userDetails = async (req, res) => {
     const id = req.params.id;
     const details = await orderSchema
       .find({ deliverdBy: id })
-      .populate("deliverdBy");
+      .populate("deliverdBy").populate("user_Id")
     const total = details.map((x) => x.orderStatus == "Delivered");
     var compltedOrder = 0;
     for (let i = 0; i < total.length; i++) {
@@ -149,12 +149,7 @@ exports.userDetails = async (req, res) => {
     for (let i = 0; i < shiping.length; i++) {
       totalearning += shiping[i];
     }
-    const userDetail = await agentSchema.findById(id, {
-      name: 1,
-      Email: 1,
-      mobileNumber: 1,
-      address: 1,
-    });
+    const userDetail = await agentSchema.findById(id);
     res.status(200).json(
       success(res.statusCode, "Success", {
         userDetail,
