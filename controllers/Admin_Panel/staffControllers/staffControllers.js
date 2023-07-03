@@ -26,9 +26,11 @@ exports.staffList = async (req, res) => {
 exports.staffSearch = async (req, res) => {
   try {
     const staff = req.body.staffName;
-    const staffData = await staffSchema.find({
-      StaffName: { $regex: staff, $options: "i" },
+    const staffData = await staffSchema.find(
+      {
+      staffName: { $regex: staff, $options: "i" },
     });
+
     if (staffData.length > 0) {
       return res
         .status(200)
