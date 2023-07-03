@@ -7,7 +7,7 @@ const { s3upload } = require("../../../middleware/multer")
 router.post("/create",tokenAuthorisationUser,s3upload.single("categoryPic"),createCategory)
 router.post("/list",tokenAuthorisationUser,categoryList)
 router.post("/search-category",tokenAuthorisationUser,categorySearch)
-router.patch("/update/:id",tokenAuthorisationUser,categoryUpdate)
+router.patch("/update/:id",tokenAuthorisationUser,s3upload.single("categoryPic"),categoryUpdate)
 router.post("/sub/:id",tokenAuthorisationUser,checkSubCategory)
 router.post("/checkstatus/:id",tokenAuthorisationUser,checkStatus)
 module.exports = router;

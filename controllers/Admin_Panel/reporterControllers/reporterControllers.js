@@ -43,3 +43,24 @@ exports.productView = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.reporterSearch = async (req, res) => {
+  try {
+    const staff = req.body.reporter;
+    const repoterData = await reporterSchema.find(
+      {
+     reporter : { $regex: staff, $options: "i" },
+    });
+
+    if (repoterData.length > 0) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { repoterData }));
+    } else {
+      res.status(200).json(error("Data are Not Found", res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

@@ -20,7 +20,7 @@ router.post(
 );
 router.post("/subCategoryList", tokenAuthorisationUser, subCategoryList);
 router.patch(
-  "/subCategoryUpdate/:id",
+  "/subCategoryUpdate/:id",s3upload.single("subCategoryPic"),
   tokenAuthorisationUser,
   subCategoryUpdate
 );
