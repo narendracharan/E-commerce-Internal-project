@@ -6,6 +6,7 @@ const {
   productList,
   productSearch,
   updateProduct,
+  productDelete,
 } = require("../../../controllers/Admin_Panel/categoryManagement/productControlers");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -18,4 +19,5 @@ router.post(
 router.post("/productList", tokenAuthorisationUser, productList);
 router.post("/productSearch", tokenAuthorisationUser, productSearch);
 router.patch("/updateProduct/:id", tokenAuthorisationUser, updateProduct);
+router.delete("/delete-product/:id",tokenAuthorisationUser,productDelete)
 module.exports = router;
