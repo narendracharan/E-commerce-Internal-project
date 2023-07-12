@@ -11,7 +11,7 @@ const schema=new mongoose.Schema({
     },
     status:{
         type:String,
-       default:"Yet to schedule",
+       default:"assestment in progress",
        enum:[
         "Yet to schedule",
         "scheduled",

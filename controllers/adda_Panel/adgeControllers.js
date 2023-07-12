@@ -76,8 +76,8 @@ exports.adgeUserLogin = async (req, res) => {
 exports.adgeAddForm = async (req, res) => {
   try {
     const { userName, title } = req.body;
-    const count=await adgeSchema.find().count()
-    const uniQ_Id = "adbc"+count
+    const count = await adgeSchema.find().count();
+    const uniQ_Id = "adbc" + count;
     if ((userName, title)) {
       const newForm = new adgeSchema({
         userName: userName,
@@ -228,23 +228,27 @@ exports.adgeHome = async (req, res) => {
 exports.adgetotalScore = async (req, res) => {
   try {
     const Score = await adgeimgSchema.find({});
-    var subTotal =0;
-     var subTotal2 = 0;
-    for (let i = 0; i <Score.length; i++) {
-      Score[i].score.map((x)=>subTotal=subTotal+x)
-    }
-     let total = (subTotal * 100) / 700;
-     const dataGover = parseInt(total);
+    var subTotal = 0;
+    var subTotal2 = 0;
     for (let i = 0; i < Score.length; i++) {
-      Score[i].scoreTwo.map((x)=>subTotal2=subTotal2+x)
+      Score[i].score.map((x) => (subTotal = subTotal + x));
     }
-  
+    let total = (subTotal * 100) / 700;
+    const dataGover = parseInt(total);
+    for (let i = 0; i < Score.length; i++) {
+      Score[i].scoreTwo.map((x) => (subTotal2 = subTotal2 + x));
+    }
+
     let total2 = (subTotal2 * 100) / 700;
     const dataquality = parseInt(total2);
     const allTotal = subTotal + subTotal2;
     let score = (allTotal * 100) / 1400;
     const totalScore = parseInt(score);
-    await adgeimgSchema.findOneAndUpdate({totalGover:dataGover,totalQuatily:dataquality,totalScore:totalScore})
+    await adgeimgSchema.findOneAndUpdate({
+      totalGover: dataGover,
+      totalQuatily: dataquality,
+      totalScore: totalScore,
+    });
     res.status(200).json(
       success(res.statusCode, "Success", {
         totalScore,
@@ -270,7 +274,7 @@ exports.saveDraft = async (req, res) => {
 
 exports.exportsPDF = async (req, res) => {
   try {
-    const score = await adgeimgSchema.find()
+    const score = await adgeimgSchema.find();
     const filename = Date.now();
     const filepath = `./public/pdf/${filename}`;
     const pdf = generatePDF(filename, filepath, score, res);
@@ -280,14 +284,14 @@ exports.exportsPDF = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
 
 exports.exportsUserPDF = async (req, res) => {
   try {
-    const score = await adgeSchema.find()
+    const score = await adgeSchema.find();
     const filename = Date.now();
     const filepath = `./public/pdf/${filename}`;
     const pdf = generateUserPDF(filename, filepath, score, res);
