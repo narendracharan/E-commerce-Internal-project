@@ -254,6 +254,7 @@ exports.addaScheduleAdd = async (req, res) => {
       );
       res.status(200).json(success(res.statusCode, "Success", { update }));
     } catch (err) {
+    console.log(err);
       res.status(400).json(error("Failed", res.statusCode));
     }
   };
