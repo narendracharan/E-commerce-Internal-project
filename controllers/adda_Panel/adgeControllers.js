@@ -76,7 +76,8 @@ exports.adgeUserLogin = async (req, res) => {
 exports.adgeAddForm = async (req, res) => {
   try {
     const { userName, title } = req.body;
-    const uniQ_Id = uniq.v4("abc12");
+    const count=await adgeSchema.find().count()
+    const uniQ_Id = "adbc"+count
     if ((userName, title)) {
       const newForm = new adgeSchema({
         userName: userName,
@@ -89,6 +90,7 @@ exports.adgeAddForm = async (req, res) => {
       res.status(400).json(error("Please provide all filed", res.statusCode));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -278,7 +280,7 @@ exports.exportsPDF = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err);
+    console.log(err)
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
