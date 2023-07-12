@@ -35,7 +35,7 @@ const generatePDF = (filename, filepath, data, res) => {
     // return new Promise(function (resolve, reject) {
     pdf
       .create(html, options)
-      .toFile(`./public/pdf/${filename}`, function (error, response) {
+      .toFile(`./public/pdf/${filename}.pdf`, function (error, response) {
         if (error) {
           console.log(error);
           return error;
@@ -47,7 +47,7 @@ const generatePDF = (filename, filepath, data, res) => {
           console.log(response);
           console.log(response.filename);
           // resolve(response);
-          return response.filename;
+          //return response.filename;
           // return res.status(201).json(
           //   success(res.statusCode, "pdf exported", {
           //     file: `${process.env.BASE_URL}/pdfs/${filename}`,

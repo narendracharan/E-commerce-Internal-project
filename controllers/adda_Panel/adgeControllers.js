@@ -270,7 +270,7 @@ exports.exportsPDF = async (req, res) => {
   try {
     const score = await adgeimgSchema.find()
     const filename = Date.now();
-    const filepath = `/public/pdf/${filename}`;
+    const filepath = `./public/pdf/${filename}`;
     const pdf = generatePDF(filename, filepath, score, res);
     res.status(201).json(
       success(res.statusCode, "pdf exported", {
@@ -289,7 +289,6 @@ exports.exportsUserPDF = async (req, res) => {
     const filename = Date.now();
     const filepath = `./public/pdf/${filename}`;
     const pdf = generateUserPDF(filename, filepath, score, res);
-   
     res.status(201).json(
       success(res.statusCode, "pdf exported", {
         file: `${process.env.BASE_URL}/pdf/${filename}.pdf`,

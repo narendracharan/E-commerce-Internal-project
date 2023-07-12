@@ -37,7 +37,7 @@ const generateUserPDF = (filename, filepath, user, res) => {
     // return new Promise(function (resolve, reject) {
     pdf
       .create(html, options)
-      .toFile(`./public/pdf/${filename}`, function (error, response) {
+      .toFile(`./public/pdf/${filename}.pdf`, function (error, response) {
         if (error) {
           console.log(error);
           return error;
