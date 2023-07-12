@@ -18,7 +18,8 @@ const schema=new mongoose.Schema({
         "In progress",
         "assestment in progress",
         "assestment completed",
-       "Rejected"
+        "Yet to schedule Assign",
+        "Rejected"
        ]
     },
     score:{

@@ -74,10 +74,11 @@ exports.addaHome= async (req, res) => {
     try {
       const userList = await adgeSchema.find();
       const list = userList.filter((x) => x.status == "Yet to schedule");
+      const listShedule=userList.filter((x)=>x.status== "schedule")
       const listdata = userList.filter((x) => x.status == "assestment completed");
       res
         .status(200)
-        .json(success(res.statusCode, "Success", { list, listdata }));
+        .json(success(res.statusCode, "Success", { list, listShedule,listdata }));
     } catch (err) {
       res.status(400).json(error("Failed", res.statusCode));
     }
@@ -260,7 +261,7 @@ exports.addaScheduleAdd = async (req, res) => {
   exports.addaApprovedIn = async (req, res) => {
     try {
       const id = req.params.id;
-      const status = "assestment in progress";
+      const status = "Yet to schedule Assign";
       const updateData = await adgeSchema.findByIdAndUpdate(
         id,
         { status: status },

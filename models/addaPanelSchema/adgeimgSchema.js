@@ -180,6 +180,15 @@ const schema=new mongoose.Schema({
     scoreTwo:{
     type:Array
     },
+    totalGover:{
+        type:String
+    },
+    totalQuatily:{
+        type:String
+    },
+    totalScore:{
+        type:String
+    }
    
 })
 schema.set("timestamps",true)

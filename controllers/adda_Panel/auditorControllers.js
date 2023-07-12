@@ -4,8 +4,6 @@ const { error, success } = require("../response");
 const adgeSchema = require("../../models/addaPanelSchema/adgeSchema");
 const adgeimgSchema = require("../../models/addaPanelSchema/adgeimgSchema");
 
-
-
 exports.auditorUserSignup=async(req,res)=>{
     try {
         const user = new auditorUserSchema(req.body);
@@ -105,8 +103,10 @@ exports.auditorHome= async (req, res) => {
       const id = req.params.id;
       var status= "assestment completed"
       const Score = await adgeimgSchema.findOne({ adge_Id: id });
+      console.log(Score.status1);
       var status1 = 0;
       var status2 = 0;
+      
       if (Score.status1 == "yes") {
         status1 += 100;
       }
@@ -159,7 +159,7 @@ exports.auditorHome= async (req, res) => {
       await Score.save();
       res.status(200).json(success(res.statusCode, "Success", { Score }));
     } catch (err) {
-      console.log(err);
+        console.log(err);
       res.status(400).json(error("Failed", res.statusCode));
     }
   };
