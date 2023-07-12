@@ -14,7 +14,7 @@ const generateUserPDF = (filename, filepath, user, res) => {
       `/user.html`
     );
     const template = fs.readFileSync(dirPath, "utf8");
-    console.log(fs);
+   
     let createdDate = moment(user.createdAt).format("DD/MM/YYYY");
     // // data["orderDate"] = createdDate
     // data.createdDate = createdDate;

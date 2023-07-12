@@ -266,15 +266,12 @@ exports.saveDraft = async (req, res) => {
   }
 };
 
-
-
 exports.exportsPDF = async (req, res) => {
   try {
     const score = await adgeimgSchema.find()
     const filename = Date.now();
     const filepath = `/public/pdf/${filename}`;
     const pdf = generatePDF(filename, filepath, score, res);
-    console.log(pdf);
     res.status(201).json(
       success(res.statusCode, "pdf exported", {
         file: `${process.env.BASE_URL}/pdf/${filename}.pdf`,
@@ -285,13 +282,14 @@ exports.exportsPDF = async (req, res) => {
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
+
 exports.exportsUserPDF = async (req, res) => {
   try {
     const score = await adgeSchema.find()
     const filename = Date.now();
     const filepath = `./public/pdf/${filename}`;
     const pdf = generateUserPDF(filename, filepath, score, res);
-    console.log(pdf);
+   
     res.status(201).json(
       success(res.statusCode, "pdf exported", {
         file: `${process.env.BASE_URL}/pdf/${filename}.pdf`,

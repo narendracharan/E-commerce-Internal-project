@@ -6,17 +6,15 @@ const axios = require("axios");
 const moment = require("moment");
 const { success, error } = require("../controllers/response");
 
-
-
 const generatePDF = (filename, filepath, data, res) => {
     const dirPath = path.join(
       __dirname.replace("helpers", "templates"),
       `/reports.html`
     );
+    
     const template = fs.readFileSync(dirPath, "utf8");
-    console.log(template);
     let createdDate = moment(data.createdAt).format("DD/MM/YYYY");
-    // // data["orderDate"] = createdDate
+    // // data["orderDate"] = createdDatde
     // data.createdDate = createdDate;
     // data.forEach(async (elem) => {
     //   await axios
