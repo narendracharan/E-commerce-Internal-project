@@ -208,7 +208,7 @@ exports.adgeUpdateTitle = async (req, res) => {
 
 exports.adgeHome = async (req, res) => {
   try {
-    const list = await adgeSchema.find({ status: "Yet to schedule" });
+    const list = await adgeSchema.find({ status: "Yet to schedule" || "assestment in progress" });
     var data2 = [];
     const listData2 = await adgeSchema.find({ status: "scheduled" });
     const listData3 = await adgeSchema.find({ status: "assestment completed" });
