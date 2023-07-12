@@ -74,7 +74,7 @@ exports.addaHome= async (req, res) => {
     try {
       const userList = await adgeSchema.find();
       const list = userList.filter((x) => x.status == "Yet to schedule");
-      const listShedule=userList.filter((x)=>x.status== "schedule")
+      const listShedule=userList.filter((x)=>x.status== "scheduled")
       const listdata = userList.filter((x) => x.status == "assestment completed");
       res
         .status(200)
