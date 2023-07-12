@@ -4,7 +4,7 @@ const mongoose=require("mongoose")
 const schema=new mongoose.Schema({
     question_Id:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"adgeImage"
+        ref:"adgePanel"
     }
 })
 schema.set("timestamps",true)
