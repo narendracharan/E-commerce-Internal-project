@@ -239,7 +239,7 @@ exports.addaScheduleAdd = async (req, res) => {
     try {
       const id = req.params.id;
       let status = "scheduled";
-      const { type, to, from, Status } = req.body;
+      const { type, to, from, Status,schedule } = req.body;
       const update = await adgeSchema.findOneAndUpdate(
         { _id: id },
         {
@@ -248,12 +248,12 @@ exports.addaScheduleAdd = async (req, res) => {
           from: new Date(from),
           Status: Status,
           status: status,
+          schedule:schedule
         },
         { new: true }
       );
       res.status(200).json(success(res.statusCode, "Success", { update }));
     } catch (err) {
-      console.log(err);
       res.status(400).json(error("Failed", res.statusCode));
     }
   };

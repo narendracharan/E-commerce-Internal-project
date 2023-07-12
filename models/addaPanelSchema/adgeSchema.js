@@ -41,6 +41,10 @@ const schema=new mongoose.Schema({
        type:Date,
        require:true
     },
+    schedule:{
+    type:Boolean,
+    default:false
+    },
     Status:{
         type:String,
         default:"Active"
