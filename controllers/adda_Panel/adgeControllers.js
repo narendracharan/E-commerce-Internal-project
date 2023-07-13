@@ -219,7 +219,6 @@ exports.adgeHome = async (req, res) => {
     data2.push(listData3);
     res.status(200).json(success(res.statusCode, "Success", { list, data2 }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
