@@ -76,7 +76,7 @@ exports.addaHome = async (req, res) => {
     const list = userList.filter(
       (x) => x.status == "Yet to schedule" || x.status == "scheduled"
     );
-    const listdata = userList.filter((x) => x.status == "assestment completed");
+    const listdata = userList.filter((x) => x.status == "assestment completed" || "Rejected" );
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
