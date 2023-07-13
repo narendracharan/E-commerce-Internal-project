@@ -77,7 +77,7 @@ exports.adgeAddForm = async (req, res) => {
   try {
     const { userName, title } = req.body;
     const count = await adgeSchema.find().count();
-    const uniQ_Id = "adbc" + count;
+    const uniQ_Id = "ABUD" + count;
     if ((userName, title)) {
       const newForm = new adgeSchema({
         userName: userName,
@@ -155,7 +155,7 @@ exports.adgeQuestions = async (req, res) => {
 exports.questionList = async (req, res) => {
   try {
     const id = req.params.id;
-    const listData = await adgeimgSchema.findOne({ adge_Id: id });
+    const listData = await adgeimgSchema.findOne({ adge_Id: id })
     res.status(200).json(success(res.statusCode, "Success", { listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -168,7 +168,7 @@ exports.adgeDashboard = async (req, res) => {
     const status = await adgeSchema.find();
     const rej = status.map((x) => x.status == "Rejected");
     const appr = status.map((x) => x.status == "assestment completed");
-    const proc = status.map((x) => x.status == "In Progress");
+    const proc = status.map((x) => x.status ==  "assestment in progress");
     var rejected = 0;
     var approved = 0;
     var pending = 0;
@@ -208,7 +208,7 @@ exports.adgeUpdateTitle = async (req, res) => {
 
 exports.adgeHome = async (req, res) => {
   try {
-    const list = await adgeSchema.find({ status: "Yet to schedule" || "assestment in progress" });
+    const list = await adgeSchema.find({ status: "assestment in progress" });
     var data2 = [];
     const listData2 = await adgeSchema.find({ status: "scheduled" });
     const listData3 = await adgeSchema.find({ status: "assestment completed" });
