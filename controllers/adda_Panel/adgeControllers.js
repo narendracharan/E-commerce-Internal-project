@@ -305,3 +305,27 @@ exports.exportsUserPDF = async (req, res) => {
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
+
+
+exports.updateQuestion=async(req,res)=>{
+  try{
+const id=req.params.id
+let {accept1,accept2,accept3,accept4,accept5,accept6,accept7,qaccept1,qaccept2,qaccept3,qaccept4,qaccept5,qaccept6,qaccept7}=req.body
+const updateData=await adgeSchema.findByIdAndUpdate(id,{accept1:accept1,accept2:accept2,accept3:accept3,accept4:accept4,accept5:accept5,accept6:accept6,accept7:accept7,qaccept1:qaccept1,qaccept2:qaccept2,qaccept3:qaccept3,qaccept4:qaccept4,qaccept5:qaccept5,qaccept6:qaccept6,qaccept7:qaccept7},{new:true})
+  res.status(200).json(success(res.statusCode,"Success",{updateData}))
+}catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.submit=async(req,res)=>{
+  try{
+const id=req.params.id
+const status= "Yet to schedule"
+const update=await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
+res.status(200).json(success(res.statusCode,"Success",{update}))
+  }catch(err){
+    res.status(400).json("Failed",res.statusCode)
+  }
+}
+

@@ -52,6 +52,48 @@ const schema=new mongoose.Schema({
     uniQ_Id:{
         type:String,
     },
+    accept1:{
+        type:String,
+    },
+    accept2:{
+        type:String,
+    },
+    accept3:{
+        type:String,
+    },
+    accept4:{
+        type:String,
+    },
+    accept5:{
+        type:String,
+    },
+    accept6:{
+        type:String,
+    },
+    accept7:{
+        type:String,
+    },
+    qaccept1:{
+        type:String,
+    },
+    qaccept2:{
+        type:String,
+    },
+    qaccept3:{
+        type:String,
+    },
+    qaccept4:{
+        type:String,
+    },
+    qaccept5:{
+        type:String,
+    },
+    qaccept6:{
+        type:String,
+    },
+    qaccept7:{
+        type:String,
+    },
 })
 schema.set("timestamps",true)
 module.exports=mongoose.model("adgePanel",schema)
