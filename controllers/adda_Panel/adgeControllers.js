@@ -98,7 +98,6 @@ exports.adgeAddForm = async (req, res) => {
 exports.adgeQuestions = async (req, res) => {
   try {
     const docData = new adgeimgSchema(req.body);
-    console.log(req.files);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "doc1") {
@@ -210,7 +209,7 @@ exports.adgeHome = async (req, res) => {
   try {
     const list = await adgeSchema.find({ status: "assestment in progress" });
     var data2 = [];
-    const listData2 = await adgeSchema.find({ status: "scheduled" });
+    const listData2 = await adgeSchema.find({ status: "Yet to schedule Assign" });
     const listData3 = await adgeSchema.find({ status: "assestment completed" });
     const listData23 = await adgeSchema.find({
       status: "assestment in progress",
@@ -257,7 +256,6 @@ exports.adgetotalScore = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -284,7 +282,6 @@ exports.exportsPDF = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
@@ -301,7 +298,6 @@ exports.exportsUserPDF = async (req, res) => {
       })
     );
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("error exportsPDF", res.statusCode));
   }
 };
