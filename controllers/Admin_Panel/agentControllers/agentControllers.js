@@ -340,8 +340,6 @@ exports.updateStatus = async (req, res) => {
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
-    //   updateData.allStatus.push(updateData.orderStatus);
-    // await updateData.save();
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
     console.log(err);

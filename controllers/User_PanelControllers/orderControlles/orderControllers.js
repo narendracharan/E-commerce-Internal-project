@@ -52,7 +52,6 @@ exports.createOrder = async (req, res) => {
       taxPrice,
       shippingPrice,
       orderStatus,
-      allStatus: [orderStatus],
     })
   //   const filename=Date.now()
   //   const json = JSON.stringify(newCarts);
@@ -60,7 +59,6 @@ exports.createOrder = async (req, res) => {
   //  if(err) return console.log(err);
   //   })
   //newCarts.qrCode.push(qr)
-   newCarts.allStatus.push(newCarts.orderStatus);
     await newCarts.save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
@@ -82,7 +80,6 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
-    
     const orderList = await orderSchema
       .find({})
       .populate("products.product_Id")
@@ -171,6 +168,17 @@ exports.orderShipped=async(req,res)=>{
 const shipped=await orderSchema.find().populate(["products.product_Id","user_Id","address_Id"]);
 const shippedData=shipped.filter((x)=>x.orderStatus == "Shipped" || x.orderStatus==  "Inprogress" || x.orderStatus==  "Delivered")
 res.status(200).json(success(res.statusCode,"Success",{shippedData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.userCancelledOrder=async(req,res)=>{
+  try{
+const id=req.params.id
+let status= "Cancelled"
+const cancelledOrder=await orderSchema.findByIdAndUpdate(id,{orderStatus:status},{new:true})
+res.status(200).json(res.statusCode,"Success",{cancelledOrder})
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))
   }

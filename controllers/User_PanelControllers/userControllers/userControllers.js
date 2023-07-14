@@ -8,8 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.userSignup = async (req, res) => {
   try {
-    const user = new userSchema(req.body);
-    const { userEmail, userName } = req.body;
+    const {userEmail,userName,password} =req.body
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -21,12 +20,17 @@ exports.userSignup = async (req, res) => {
         message: "userEmail Already Exited",
       });
     }
-    user.password = await bcrypt.hash(user.password, 10);
-    const createUser = await user.save(userName);
+   const passwordHash=  await bcrypt.hash(password, 10);
+    const newUser=await new userSchema({
+      userEmail:userEmail,
+      userName:userName,
+      password:passwordHash
+    }).save()
     res
       .status(201)
-      .json(success(res.statusCode, "userSignup Successfully", { createUser }));
+      .json(success(res.statusCode, "userSignup Successfully", { newUser }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
