@@ -28,6 +28,7 @@ const schema = new mongoose.Schema({
       "pending",
       "Processing",
       "NotSend",
+      "Inprogress,"
     ],
   },
   paymentIntent: {

@@ -208,16 +208,8 @@ exports.adgeUpdateTitle = async (req, res) => {
 exports.adgeHome = async (req, res) => {
   try {
     const list = await adgeSchema.find({ status: "assestment in progress" });
-    var data2 = [];
-    const listData2 = await adgeSchema.find({ status: "Yet to schedule Assign" });
-    const listData3 = await adgeSchema.find({ status: "assestment completed" });
-    const listData23 = await adgeSchema.find({
-      status: "assestment in progress",
-    });
-    data2.push(listData2);
-    data2.push(listData23);
-    data2.push(listData3);
-    res.status(200).json(success(res.statusCode, "Success", { list, data2 }));
+    const listData = await adgeSchema.find({ status: "assestment completed" });
+    res.status(200).json(success(res.statusCode, "Success", { list, listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
