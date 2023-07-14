@@ -4,6 +4,8 @@ const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderS
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const { transporter } = require("../../../service/mailService");
 const { sendEmail } = require("../../Admin_Panel/agentControllers/agentControllers");
+const qrCode=require("qrcode")
+const path=require("path")
 
 const { error, success } = require("../../response");
 
@@ -40,6 +42,7 @@ exports.createOrder = async (req, res) => {
         products[i].Price * products[i].quantity -
         products[i].Disount;
     }
+
     let newCarts = new orderSchema({
       products,
       cartsTotal,
@@ -50,8 +53,14 @@ exports.createOrder = async (req, res) => {
       shippingPrice,
       orderStatus,
       allStatus: [orderStatus],
-    });
-    newCarts.allStatus.push(newCarts.orderStatus);
+    })
+  //   const filename=Date.now()
+  //   const json = JSON.stringify(newCarts);
+  //   let qr=  qrCode.toFile(path.join(__dirname,`${filename}.png`),json,(err,code)=>{
+  //  if(err) return console.log(err);
+  //   })
+  //newCarts.qrCode.push(qr)
+   newCarts.allStatus.push(newCarts.orderStatus);
     await newCarts.save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {

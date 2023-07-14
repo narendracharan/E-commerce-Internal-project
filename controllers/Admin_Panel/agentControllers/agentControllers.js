@@ -138,7 +138,8 @@ exports.userDetails = async (req, res) => {
     const id = req.params.id;
     const details = await orderSchema
       .find({ deliverdBy: id })
-      .populate("deliverdBy").populate("user_Id")
+      .populate("deliverdBy")
+      .populate("user_Id");
     const total = details.map((x) => x.orderStatus == "Delivered");
     var compltedOrder = 0;
     for (let i = 0; i < total.length; i++) {
@@ -339,10 +340,11 @@ exports.updateStatus = async (req, res) => {
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
-    updateData.allStatus.push(updateData.orderStatus);
-    await updateData.save();
+    //   updateData.allStatus.push(updateData.orderStatus);
+    // await updateData.save();
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
       "pending",
       "Processing",
       "NotSend",
-      "Inprogress,"
+      "Inprogress"
     ],
   },
   paymentIntent: {
@@ -65,6 +65,9 @@ const schema = new mongoose.Schema({
   allStatus: {
     type: Array,
   },
+  // qrCode:{
+  //   type:Array
+  // }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("userOrder", schema);
