@@ -82,6 +82,7 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
+    
     const orderList = await orderSchema
       .find({})
       .populate("products.product_Id")
@@ -163,3 +164,14 @@ exports.IndeliveryOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.orderShipped=async(req,res)=>{
+  try{
+const shipped=await orderSchema.find().populate(["products.product_Id","user_Id","address_Id"]);
+const shippedData=shipped.filter((x)=>x.orderStatus == "Shipped" || x.orderStatus==  "Inprogress" || x.orderStatus==  "Delivered")
+res.status(200).json(success(res.statusCode,"Success",{shippedData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
