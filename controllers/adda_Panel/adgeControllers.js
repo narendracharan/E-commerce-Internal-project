@@ -196,10 +196,10 @@ exports.adgeDashboard = async (req, res) => {
 exports.adgeUpdateTitle = async (req, res) => {
   try {
     const id = req.params.id;
-    const updateTitle = await adgeSchema.findByIdAndDelete(id)
-    //findByIdAndUpdate(id, req.body, {
-    //   new: true,
-    // });
+    const updateTitle = await adgeSchema.
+    findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     res.status(200).json(success(res.statusCode, "Update", { updateTitle }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -209,7 +209,7 @@ exports.adgeUpdateTitle = async (req, res) => {
 exports.adgeHome = async (req, res) => {
   try {
     const adge=await adgeSchema.find()
-    const list = adge.filter((x)=>x.status=="yet to submit" )
+    const list = adge.filter((x)=>x.status=="yet to submit" ).sort()
     //await adgeSchema.find({ status: "assestment in progress" });
     const listData = adge.filter((x)=>x.status == "assestment completed" || x.status == "In-progress").sort()
     //await adgeSchema.find({ status: "assestment completed"||,st "Yet to schedule"  }).sort()
