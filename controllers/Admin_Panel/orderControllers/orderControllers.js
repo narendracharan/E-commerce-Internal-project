@@ -75,7 +75,8 @@ exports.orderExel=async(req,res)=>{
         "order ID": `${exportOrder._id}`,
         "Payment Method":` ${exportOrder.paymentIntent}`,
         "Delivery Status": `${exportOrder.orderStatus}`,
-        "Total Amount":`${exportOrder.cartsTotal}`
+        "Total Amount":`${exportOrder.cartsTotal}`,
+       // "Image":`${exportOrder.products}`
       };
       allOrders.push(obj);
     }

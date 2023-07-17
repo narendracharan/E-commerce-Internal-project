@@ -11,14 +11,15 @@ const schema=new mongoose.Schema({
     },
     status:{
         type:String,
-       default:"assestment in progress",
+       default:"yet to submit",
        enum:[
-        "Yet to schedule",
+        "yet to submit",
         "scheduled",
-        "In progress",
-        "assestment in progress",
+        "In-progress",
         "assestment completed",
         "Yet to schedule Assign",
+        "In-review",
+        "Approve",
         "Rejected"
        ]
     },

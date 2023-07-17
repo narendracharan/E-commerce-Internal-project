@@ -74,8 +74,8 @@ exports.auditorUserLogin = async (req, res) => {
 exports.auditorHome = async (req, res) => {
   try {
     const userList = await adgeSchema.find();
-    const list = userList.filter((x) => x.status ==  "Yet to schedule Assign"  );
-    const listdata = userList.filter((x) => x.status == "assestment completed" || "Rejected");
+    const list = userList.filter((x) => x.status ==  "scheduled"  ).sort()
+    const listdata = userList.filter((x) => x.status == "assestment completed" || x.status=="Rejected").sort()
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
@@ -153,6 +153,14 @@ exports.auditorAprovedScore = async (req, res) => {
     let total = (status1 * 100) / 700;
     let total2 = (status2 * 100) / 700;
     let subTotal = ((status1 + status2) * 100) / 1400;
+    if(subTotal <40){
+      var status="Rejected"
+      const updateStatus= await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
+    }
+    if(subTotal >40){
+      var status="approve"
+      const updateStatus=await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
+    }
     Score.score.push(parseInt(total));
     Score.scoreTwo.push(parseInt(total2));
     let score = parseInt(subTotal);

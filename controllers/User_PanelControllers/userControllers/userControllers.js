@@ -27,13 +27,9 @@ exports.userSignup = async (req, res) => {
       password:passwordHash,
       mobileNumber:mobileNumber
     }).save()
-    const token = await newUser.generateUserAuthToken();
-    console.log(token);
     res
-    .header("x-auth-token-user", token)
-    .header("access-control-expose-headers", "x-auth-token-admin")
-       .status(201)
-      .json(success(res.statusCode, "userSignup Successfully", { newUser ,token}));
+      .status(201)
+      .json(success(res.statusCode, "userSignup Successfully", { newUser }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
