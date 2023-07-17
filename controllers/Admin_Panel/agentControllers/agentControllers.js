@@ -6,8 +6,6 @@ const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema"
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
-const moment=require("moment");
-const { now } = require("mongoose");
 
 exports.addUser = async (req, res) => {
   try {
@@ -342,7 +340,6 @@ exports.updateStatus = async (req, res) => {
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
     });
-
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
     console.log(err);

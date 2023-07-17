@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.userSignup = async (req, res) => {
   try {
-    const {userEmail,userName,password} =req.body
+    const {userEmail,userName,password,mobileNumber} =req.body
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -24,11 +24,16 @@ exports.userSignup = async (req, res) => {
     const newUser=await new userSchema({
       userEmail:userEmail,
       userName:userName,
-      password:passwordHash
+      password:passwordHash,
+      mobileNumber:mobileNumber
     }).save()
+    const token = await newUser.generateUserAuthToken();
+    console.log(token);
     res
-      .status(201)
-      .json(success(res.statusCode, "userSignup Successfully", { newUser }));
+    .header("x-auth-token-user", token)
+    .header("access-control-expose-headers", "x-auth-token-admin")
+       .status(201)
+      .json(success(res.statusCode, "userSignup Successfully", { newUser ,token}));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

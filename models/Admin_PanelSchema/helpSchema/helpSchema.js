@@ -5,7 +5,15 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  categoryName_ar: {
+    type: String,
+    require: true,
+  },
   subCategoryName: {
+    type: String,
+    require: true,
+  },
+  subCategoryName_ar: {
     type: String,
     require: true,
   },
