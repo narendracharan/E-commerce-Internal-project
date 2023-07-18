@@ -60,7 +60,7 @@ router.post("/generate-user-pdf", exportsUserPDF);
 router.post("/update-question/:id", updateQuestion);
 router.post("/update-submit/:id", submit);
 router.post("/delete-form/:id",formDelete)
-router.post("/submit-data/:id",submitData)
+router.post("/submit-data/:id",s3upload.any(),submitData)
 
 router.post("/adda-Signup", addaUserSignup);
 router.post("/adda-Login", addaUserLogin);
