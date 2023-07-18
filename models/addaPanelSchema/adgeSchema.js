@@ -226,7 +226,7 @@ const schema=new mongoose.Schema({
     //     type:mongoose.Schema.Types.ObjectId,
     //     ref:"adgePanel"
     // },
-    score:{
+    Score:{
         type:Array,
     },
     scoreTwo:{

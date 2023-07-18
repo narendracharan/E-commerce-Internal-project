@@ -172,7 +172,7 @@ exports.auditorAprovedScore = async (req, res) => {
         { new: true }
       );
     }
-    Score.score.push(parseInt(total));
+    Score.Score.push(parseInt(total));
     Score.scoreTwo.push(parseInt(total2));
     let score = parseInt(subTotal);
     await adgeSchema.findByIdAndUpdate(

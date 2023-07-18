@@ -711,6 +711,4 @@ exports.submitData=async(req,res)=>{
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-
-
 }
