@@ -97,58 +97,195 @@ exports.adgeAddForm = async (req, res) => {
 
 exports.adgeQuestions = async (req, res) => {
   try {
-    const docData = new adgeimgSchema(req.body);
-    const id=req.body.adge_Id
+    var {
+      status1,
+      comment1,
+      doc1,
+      status2,
+      comment2,
+      doc2,
+      status3,
+      comment3,
+      doc3,
+      status4,
+      comment4,
+      doc4,
+      status5,
+      comment5,
+      doc5,
+      status6,
+      comment6,
+      doc6,
+      status7,
+      comment7,
+      doc7,
+      qstatus1,
+      qcomment1,
+      qdoc1,
+      qstatus2,
+      qcomment2,
+      qdoc2,
+      qstatus3,
+      qcomment3,
+      qdoc3,
+      qstatus4,
+      qcomment4,
+      qdoc4,
+      qstatus5,
+      qcomment5,
+      qdoc5,
+      qstatus6,
+      qcomment6,
+      qdoc6,
+      qstatus7,
+      qcomment7,
+      qdoc7,
+     // adge_Id,
+    } = req.body;
+    var id = req.params.id;
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "doc1") {
-          docData.doc1 = req.files[i].location;
+          doc1 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc2") {
-          docData.doc2 = req.files[i].location;
+          doc2 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc3") {
-          docData.doc3 = req.files[i].location;
+          doc3 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc4") {
-          docData.doc4 = req.files[i].location;
+          doc4 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc5") {
-          docData.doc5 = req.files[i].location;
+          doc5 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc6") {
-          docData.doc6 = req.files[i].location;
+          doc6 = req.files[i].location;
         }
         if (req.files[i].fieldname == "doc7") {
-          docData.doc7 = req.files[i].location;
+          doc7 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc1") {
-          docData.qdoc1 = req.files[i].location;
+          qdoc1 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc2") {
-          docData.qdoc2 = req.files[i].location;
+          qdoc2 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc3") {
-          docData.qdoc3 = req.files[i].location;
+          qdoc3 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc4") {
-          docData.qdoc4 = req.files[i].location;
+          qdoc4 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc5") {
-          docData.qdoc5 = req.files[i].location;
+          qdoc5 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc6") {
-          docData.qdoc6 = req.files[i].location;
+          qdoc6 = req.files[i].location;
         }
         if (req.files[i].fieldname == "qdoc7") {
-          docData.qdoc7 = req.files[i].location;
+          qdoc7 = req.files[i].location;
         }
       }
     }
-    const status= "In-progress"
-    const data = await docData.save();
-    const update=await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
-    res.status(200).json(success(res.statusCode, "Success", { data }));
+    const status = "In-progress";
+    // const data = new adgeimgSchema({
+    //   status1: status1,
+    //   comment1: comment1,
+    //   doc1: doc1,
+    //   status2: status2,
+    //   comment2: comment2,
+    //   doc2: doc2,
+    //   status3: status3,
+    //   comment3: comment3,
+    //   doc3: doc3,
+    //   status4: status4,
+    //   comment4: comment4,
+    //   doc4: doc4,
+    //   status5: status5,
+    //   comment5: comment5,
+    //   doc5: doc5,
+    //   status6: status6,
+    //   comment6: comment6,
+    //   doc6: doc6,
+    //   status7: status7,
+    //   comment7: comment7,
+    //   doc7: doc7,
+    //   qstatus1: qstatus1,
+    //   qcomment1: qcomment1,
+    //   qdoc1: qdoc1,
+    //   qstatus2: qstatus2,
+    //   qcomment2: qcomment2,
+    //   qdoc2: qdoc2,
+    //   qstatus3: qstatus3,
+    //   qcomment3: qcomment3,
+    //   qdoc3: qdoc3,
+    //   qstatus4: qstatus4,
+    //   qcomment4: qcomment4,
+    //   qdoc4: qdoc4,
+    //   qstatus5: qstatus5,
+    //   qcomment5: qcomment5,
+    //   qdoc5: qdoc5,
+    //   qstatus6: qstatus6,
+    //   qcomment6: qcomment6,
+    //   qdoc6: qdoc6,
+    //   qstatus7: qstatus7,
+    //   qcomment7: qcomment7,
+    //   qdoc7: qdoc7,
+    //   adge_Id: adge_Id,
+    // });
+    //const allData = await data.save();
+    const update = await adgeSchema.findByIdAndUpdate(
+      id,
+      {
+        status: status,
+        status1: status1,
+        comment1: comment1,
+        doc1: doc1,
+        status2: status2,
+        comment2: comment2,
+        doc2: doc2,
+        status3: status3,
+        comment3: comment3,
+        doc3: doc3,
+        status4: status4,
+        comment4: comment4,
+        doc4: doc4,
+        status5: status5,
+        comment5: comment5,
+        doc5: doc5,
+        status6: status6,
+        comment6: comment6,
+        doc6: doc6,
+        status7: status7,
+        comment7: comment7,
+        doc7: doc7,
+        qstatus1: qstatus1,
+        qcomment1: qcomment1,
+        qdoc1: qdoc1,
+        qstatus2: qstatus2,
+        qcomment2: qcomment2,
+        qdoc2: qdoc2,
+        qstatus3: qstatus3,
+        qcomment3: qcomment3,
+        qdoc3: qdoc3,
+        qstatus4: qstatus4,
+        qcomment4: qcomment4,
+        qdoc4: qdoc4,
+        qstatus5: qstatus5,
+        qcomment5: qcomment5,
+        qdoc5: qdoc5,
+        qstatus6: qstatus6,
+        qcomment6: qcomment6,
+        qdoc6: qdoc6,
+        qstatus7: qstatus7,
+        qcomment7: qcomment7,
+        qdoc7: qdoc7,
+      },
+      { new: true }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -157,7 +294,7 @@ exports.adgeQuestions = async (req, res) => {
 exports.questionList = async (req, res) => {
   try {
     const id = req.params.id;
-    const listData = await adgeimgSchema.findOne({ adge_Id: id })
+    const listData = await adgeSchema.findById(id);
     res.status(200).json(success(res.statusCode, "Success", { listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -170,7 +307,7 @@ exports.adgeDashboard = async (req, res) => {
     const status = await adgeSchema.find();
     const rej = status.map((x) => x.status == "Rejected");
     const appr = status.map((x) => x.status == "assestment completed");
-    const proc = status.map((x) => x.status ==  "assestment in progress");
+    const proc = status.map((x) => x.status == "assestment in progress");
     var rejected = 0;
     var approved = 0;
     var pending = 0;
@@ -199,8 +336,7 @@ exports.adgeDashboard = async (req, res) => {
 exports.adgeUpdateTitle = async (req, res) => {
   try {
     const id = req.params.id;
-    const updateTitle = await adgeSchema.
-    findByIdAndUpdate(id, req.body, {
+    const updateTitle = await adgeSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Update", { updateTitle }));
@@ -211,12 +347,22 @@ exports.adgeUpdateTitle = async (req, res) => {
 
 exports.adgeHome = async (req, res) => {
   try {
-    const adge=await adgeSchema.find()
-    const list = adge.filter((x)=>x.status=="yet to submit" ).sort()
+    const adge = await adgeSchema.find();
+    const list = adge.filter((x) => x.status == "yet to submit").sort();
     //await adgeSchema.find({ status: "assestment in progress" });
-    const listData = adge.filter((x)=>x.status == "assestment completed" || x.status == "In-progress" ||x.status == "Approve" || x.status==  "Rejected").sort()
+    const listData = adge
+      .filter(
+        (x) =>
+          x.status == "assestment completed" ||
+          x.status == "In-progress" ||
+          x.status == "Approve" ||
+          x.status == "Rejected"
+      )
+      .sort();
     //await adgeSchema.find({ status: "assestment completed"||,st "Yet to schedule"  }).sort()
-    res.status(200).json(success(res.statusCode, "Success", { list, listData }));
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { list, listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -264,6 +410,7 @@ exports.saveDraft = async (req, res) => {
     const draftData = await draft.save();
     res.status(200).json(success(res.statusCode, "Success", { draftData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -300,35 +447,72 @@ exports.exportsUserPDF = async (req, res) => {
   }
 };
 
-
-exports.updateQuestion=async(req,res)=>{
-  try{
-const id=req.params.id
-let {accept1,accept2,accept3,accept4,accept5,accept6,accept7,qaccept1,qaccept2,qaccept3,qaccept4,qaccept5,qaccept6,qaccept7}=req.body
-const updateData=await adgeSchema.findByIdAndUpdate(id,{accept1:accept1,accept2:accept2,accept3:accept3,accept4:accept4,accept5:accept5,accept6:accept6,accept7:accept7,qaccept1:qaccept1,qaccept2:qaccept2,qaccept3:qaccept3,qaccept4:qaccept4,qaccept5:qaccept5,qaccept6:qaccept6,qaccept7:qaccept7},{new:true})
-  res.status(200).json(success(res.statusCode,"Success",{updateData}))
-}catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.updateQuestion = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let {
+      accept1,
+      accept2,
+      accept3,
+      accept4,
+      accept5,
+      accept6,
+      accept7,
+      qaccept1,
+      qaccept2,
+      qaccept3,
+      qaccept4,
+      qaccept5,
+      qaccept6,
+      qaccept7,
+    } = req.body;
+    const updateData = await adgeSchema.findByIdAndUpdate(
+      id,
+      {
+        accept1: accept1,
+        accept2: accept2,
+        accept3: accept3,
+        accept4: accept4,
+        accept5: accept5,
+        accept6: accept6,
+        accept7: accept7,
+        qaccept1: qaccept1,
+        qaccept2: qaccept2,
+        qaccept3: qaccept3,
+        qaccept4: qaccept4,
+        qaccept5: qaccept5,
+        qaccept6: qaccept6,
+        qaccept7: qaccept7,
+      },
+      { new: true }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { updateData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.submit=async(req,res)=>{
-  try{
-const id=req.params.id
-const status= "In-progress"
-const update=await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
-res.status(200).json(success(res.statusCode,"Success",{update}))
-  }catch(err){
-    res.status(400).json("Failed",res.statusCode)
+exports.submit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = "In-progress";
+    const update = await adgeSchema.findByIdAndUpdate(
+      id,
+      { status: status },
+      { new: true }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { update }));
+  } catch (err) {
+    res.status(400).json("Failed", res.statusCode);
   }
-}
+};
 
-exports.formDelete=async(req,res)=>{
-  try{
-const id=req.params.id
-const deleteData=await adgeSchema.findByIdAndDelete(id)
-res.status(200).json(success(res.statusCode,"Success",{deleteData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.formDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteData = await adgeSchema.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

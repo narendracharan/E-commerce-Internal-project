@@ -47,7 +47,7 @@ const router = express.Router();
 router.post("/adge-signup", adgeUserSignup);
 router.post("/adge-login", adgeUserLogin);
 router.post("/adge-add-form", adgeAddForm);
-router.post("/adge-question", s3upload.any(), adgeQuestions);
+router.post("/adge-question/:id", s3upload.any(), adgeQuestions);
 router.post("/adge-questionList/:id", questionList);
 router.post("/adge-dashboard", adgeDashboard);
 router.post("/adge-update-title/:id", adgeUpdateTitle);

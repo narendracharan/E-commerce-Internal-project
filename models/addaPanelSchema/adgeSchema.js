@@ -53,6 +53,194 @@ const schema=new mongoose.Schema({
     uniQ_Id:{
         type:String,
     },
+
+    doc1:{
+        type:String,
+        require:true
+    },
+    status1:{
+        type:String,
+        require:true
+    },
+    comment1:{
+        type:String,
+        require:true
+    },
+    doc2:{
+        type:String,
+        require:true
+    },
+    status2:{
+        type:String,
+        require:true
+    },
+    comment2:{
+        type:String,
+        require:true
+    },
+    doc3:{
+        type:String,
+        require:true
+    },
+    status3:{
+        type:String,
+        require:true
+    },
+    comment3:{
+        type:String,
+        require:true
+    },
+    doc4:{
+        type:String,
+        require:true
+    },
+    status4:{
+        type:String,
+        require:true
+    },
+    comment4:{
+        type:String,
+        require:true
+    },
+    doc5:{
+        type:String,
+        require:true
+    },
+    status5:{
+        type:String,
+        require:true
+    },
+    comment5:{
+        type:String,
+        require:true
+    },
+    doc6:{
+        type:String,
+        require:true
+    },
+    status6:{
+        type:String,
+        require:true
+    },
+    comment6:{
+        type:String,
+        require:true
+    },
+    doc7:{
+        type:String,
+        require:true
+    },
+    status7:{
+        type:String,
+        require:true
+    },
+    comment7:{
+        type:String,
+        require:true
+    },
+    qdoc1:{
+        type:String,
+        require:true
+    },
+    qstatus1:{
+        type:String,
+        require:true
+    },
+    qcomment1:{
+        type:String,
+        require:true
+    },
+    qdoc2:{
+        type:String,
+        require:true
+    },
+    qstatus2:{
+        type:String,
+        require:true
+    },
+    qcomment2:{
+        type:String,
+        require:true
+    },
+    qdoc3:{
+        type:String,
+        require:true
+    },
+    qstatus3:{
+        type:String,
+        require:true
+    },
+    qcomment3:{
+        type:String,
+        require:true
+    },
+    qdoc4:{
+        type:String,
+        require:true
+    },
+    qstatus4:{
+        type:String,
+        require:true
+    },
+    qcomment4:{
+        type:String,
+        require:true
+    },
+   qdoc5:{
+        type:String,
+        require:true
+    },
+    qstatus5:{
+        type:String,
+        require:true
+    },
+    qcomment5:{
+        type:String,
+        require:true
+    },
+    qdoc6:{
+        type:String,
+        require:true
+    },
+    qstatus6:{
+        type:String,
+        require:true
+    },
+    qcomment6:{
+        type:String,
+        require:true
+    },
+    qdoc7:{
+        type:String,
+        require:true
+    },
+    qstatus7:{
+        type:String,
+        require:true
+    },
+    qcomment7:{
+        type:String,
+        require:true
+    },
+    // adge_Id:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"adgePanel"
+    // },
+    score:{
+        type:Array,
+    },
+    scoreTwo:{
+    type:Array
+    },
+    totalGover:{
+        type:String
+    },
+    totalQuatily:{
+        type:String
+    },
+    totalScore:{
+        type:String
+    },
     accept1:{
         type:String,
     },
@@ -95,6 +283,7 @@ const schema=new mongoose.Schema({
     qaccept7:{
         type:String,
     },
+
 })
 schema.set("timestamps",true)
 module.exports=mongoose.model("adgePanel",schema)
