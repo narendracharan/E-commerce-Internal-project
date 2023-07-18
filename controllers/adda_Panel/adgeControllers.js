@@ -98,6 +98,7 @@ exports.adgeAddForm = async (req, res) => {
 exports.adgeQuestions = async (req, res) => {
   try {
     const docData = new adgeimgSchema(req.body);
+    const id=req.body.adge_Id
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "doc1") {
@@ -144,7 +145,9 @@ exports.adgeQuestions = async (req, res) => {
         }
       }
     }
+    const status= "In-progress"
     const data = await docData.save();
+    const update=await adgeSchema.findByIdAndUpdate(id,{status:status},{new:true})
     res.status(200).json(success(res.statusCode, "Success", { data }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -211,7 +214,7 @@ exports.adgeHome = async (req, res) => {
     const adge=await adgeSchema.find()
     const list = adge.filter((x)=>x.status=="yet to submit" ).sort()
     //await adgeSchema.find({ status: "assestment in progress" });
-    const listData = adge.filter((x)=>x.status == "assestment completed" || x.status == "In-progress").sort()
+    const listData = adge.filter((x)=>x.status == "assestment completed" || x.status == "In-progress" ||x.status == "Approve" || x.status==  "Rejected").sort()
     //await adgeSchema.find({ status: "assestment completed"||,st "Yet to schedule"  }).sort()
     res.status(200).json(success(res.statusCode, "Success", { list, listData }));
   } catch (err) {
@@ -320,3 +323,12 @@ res.status(200).json(success(res.statusCode,"Success",{update}))
   }
 }
 
+exports.formDelete=async(req,res)=>{
+  try{
+const id=req.params.id
+const deleteData=await adgeSchema.findByIdAndDelete(id)
+res.status(200).json(success(res.statusCode,"Success",{deleteData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

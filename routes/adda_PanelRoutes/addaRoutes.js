@@ -15,6 +15,7 @@ const {
   exportsUserPDF,
   updateQuestion,
   submit,
+  formDelete,
 } = require("../../controllers/adda_Panel/adgeControllers");
 const { s3upload } = require("../../middleware/multer");
 const {
@@ -57,6 +58,7 @@ router.post("/generate-pdf", exportsPDF);
 router.post("/generate-user-pdf", exportsUserPDF);
 router.post("/update-question/:id", updateQuestion);
 router.post("/update-submit/:id", submit);
+router.post("/delete-form/:id",formDelete)
 
 router.post("/adda-Signup", addaUserSignup);
 router.post("/adda-Login", addaUserLogin);
