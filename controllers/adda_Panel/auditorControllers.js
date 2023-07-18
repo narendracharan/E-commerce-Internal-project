@@ -107,7 +107,7 @@ exports.auditorAprovedScore = async (req, res) => {
   try {
     const id = req.params.id;
     var status = "assestment completed";
-    const Score = await adgeimgSchema.findOne({ adge_Id: id });
+    const Score = await adgeSchema.findById(id);
     var status1 = 0;
     var status2 = 0;
 
