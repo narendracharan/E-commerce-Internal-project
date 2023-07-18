@@ -235,11 +235,10 @@ exports.adgeQuestions = async (req, res) => {
     //   qdoc7: qdoc7,
     //   adge_Id: adge_Id,
     // });
-    //const allData = await data.save();
+    //const allData = await data.save()
     const update = await adgeSchema.findByIdAndUpdate(
       id,
       {
-       // status: status,
         status1: status1,
         comment1: comment1,
         doc1: doc1,
@@ -370,11 +369,11 @@ exports.adgeHome = async (req, res) => {
 
 exports.adgetotalScore = async (req, res) => {
   try {
-    const Score = await adgeimgSchema.find({});
+    const Score = await adgeSchema.find({});
     var subTotal = 0;
     var subTotal2 = 0;
     for (let i = 0; i < Score.length; i++) {
-      Score[i].score.map((x) => (subTotal = subTotal + x));
+      Score[i].Score.map((x) => (subTotal = subTotal + x));
     }
     let total = (subTotal * 100) / 700;
     const dataGover = parseInt(total);
@@ -562,7 +561,6 @@ exports.submitData=async(req,res)=>{
       qstatus7,
       qcomment7,
       qdoc7,
-     // adge_Id,
     } = req.body;
     var id = req.params.id;
     if (req.files) {
@@ -612,52 +610,6 @@ exports.submitData=async(req,res)=>{
       }
     }
     const status = "In-progress";
-    // const data = new adgeimgSchema({
-    //   status1: status1,
-    //   comment1: comment1,
-    //   doc1: doc1,
-    //   status2: status2,
-    //   comment2: comment2,
-    //   doc2: doc2,
-    //   status3: status3,
-    //   comment3: comment3,
-    //   doc3: doc3,
-    //   status4: status4,
-    //   comment4: comment4,
-    //   doc4: doc4,
-    //   status5: status5,
-    //   comment5: comment5,
-    //   doc5: doc5,
-    //   status6: status6,
-    //   comment6: comment6,
-    //   doc6: doc6,
-    //   status7: status7,
-    //   comment7: comment7,
-    //   doc7: doc7,
-    //   qstatus1: qstatus1,
-    //   qcomment1: qcomment1,
-    //   qdoc1: qdoc1,
-    //   qstatus2: qstatus2,
-    //   qcomment2: qcomment2,
-    //   qdoc2: qdoc2,
-    //   qstatus3: qstatus3,
-    //   qcomment3: qcomment3,
-    //   qdoc3: qdoc3,
-    //   qstatus4: qstatus4,
-    //   qcomment4: qcomment4,
-    //   qdoc4: qdoc4,
-    //   qstatus5: qstatus5,
-    //   qcomment5: qcomment5,
-    //   qdoc5: qdoc5,
-    //   qstatus6: qstatus6,
-    //   qcomment6: qcomment6,
-    //   qdoc6: qdoc6,
-    //   qstatus7: qstatus7,
-    //   qcomment7: qcomment7,
-    //   qdoc7: qdoc7,
-    //   adge_Id: adge_Id,
-    // });
-    //const allData = await data.save();
     const update = await adgeSchema.findByIdAndUpdate(
       id,
       {
