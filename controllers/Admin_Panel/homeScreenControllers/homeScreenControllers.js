@@ -26,7 +26,6 @@ exports.createBannerTwo = async (req, res) => {
 exports.createBannerThree = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-
     banners.homeScreenThree = req.file.location;
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
@@ -38,7 +37,6 @@ exports.createBannerThree = async (req, res) => {
 exports.createBannerFour = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-
     banners.homeScreenFour = req.file.location;
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
@@ -51,8 +49,8 @@ exports.createBannerFive = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
     banners.homeScreenFive = req.file.location;
-    const bannersData = await banners.save();
-    res.status(201).json(success("Success", res.statusCode, { bannersData }));
+    const bannersData = await banners.save()
+     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

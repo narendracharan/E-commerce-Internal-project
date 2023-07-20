@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  title: {
+  title_en: {
+    type: String,
+    require: true,
+  },
+  title_ar: {
     type: String,
     require: true,
   },
