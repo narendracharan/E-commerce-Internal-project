@@ -9,7 +9,11 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  contain: {
+  contain_en: {
+    type: String,
+    require: true,
+  },
+  contain_ar: {
     type: String,
     require: true,
   },
