@@ -47,7 +47,7 @@ exports.addToCart = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const item = await cartsSchema.findOneAndDelete(id);
+    const item = await cartsSchema.findByIdAndDelete(id);
     res.status(200).json(success(res.statusCode, "Success", { item }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
