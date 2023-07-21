@@ -1,4 +1,5 @@
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
+const { transporter } = require("../../../service/mailService");
 const { success, error } = require("../../response");
 const fs=require("fs")
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
@@ -55,8 +56,20 @@ exports.deleteOrder = async (req, res) => {
 
 exports.orderUpdate=async(req,res)=>{
   try{
-    const id =req.params.id
-const updateOrder=await orderSchema.findByIdAndUpdate(id,req.body,{new:true})
+const id =req.params.id
+const updateOrder=await orderSchema.findByIdAndUpdate(id,req.body,{new:true}).populate("user_Id")
+var mailOptions = {
+  from: "s04450647@gmail.com",
+  to:updateOrder.user_Id.userEmail,
+  subject: "Order Successfully",
+  text: `Hello ${updateOrder.user_Id.userName}
+  Your order has been successfully placed  and is being ${updateOrder.orderStatus}.
+  Order Number: ${updateOrder._id}
+  Date of Order: ${updateOrder.createdAt}
+  Item(s) Ordered: ${updateOrder.products.length}
+  Thank you    `
+};
+await transporter.sendMail(mailOptions)
 res.status(200).json(success(res.statusCode,"Success",{updateOrder}))
   }catch(err){
     res.status(400).json(error("Failed",res.statusCode))

@@ -59,8 +59,22 @@ exports.createOrder = async (req, res) => {
   //  if(err) return console.log(err);
   //   })
   //newCarts.qrCode.push(qr)
-    await newCarts.save();
-    
+    await newCarts.save()
+    const updated=await orderSchema.findOne({
+      _id : newCarts._id,
+     // user_Id:newCarts.user_Id
+    }).populate("user_Id")
+    var mailOptions = {
+      from: "s04450647@gmail.com",
+      to:updated.user_Id.userEmail,
+      subject: "Order Successfully",
+      text: `Hello ${updated.user_Id.userName}
+      Thank you for placing an order with us. We are pleased to confirm that your order has been successfully placed and is being ${newCarts.orderStatus}.
+      Order Number: ${newCarts._id}
+      Date of Order: ${newCarts.createdAt}
+      Item(s) Ordered: ${newCarts.products.length}`
+    };
+    await transporter.sendMail(mailOptions)
     res.status(200).json(success(res.statusCode, "Success", { newCarts }));
   } catch (err) {
     console.log(err);

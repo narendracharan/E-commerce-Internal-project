@@ -339,7 +339,19 @@ exports.updateStatus = async (req, res) => {
     const orderStatus = req.body;
     const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
       new: true,
-    });
+    }).populate("user_Id")
+    var mailOptions = {
+      from: "s04450647@gmail.com",
+      to:updateData.user_Id.userEmail,
+      subject: "Order Successfully",
+      text: `Hello ${updateData.user_Id.userName}
+      Your order has been successfully placed  and is being ${updateData.orderStatus}.
+      Order Number: ${updateData._id}
+      Date of Order: ${updateData.createdAt}
+      Item(s) Ordered: ${updateData.products.length}
+      Thank you    `
+    };
+    await transporter.sendMail(mailOptions)
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
     console.log(err);
@@ -368,7 +380,7 @@ exports.updateOnline = async (req, res) => {
     const onlineStatus = req.body;
     const updateData = await agentSchema.findByIdAndUpdate(id, onlineStatus, {
       new: true,
-    });
+    })
     res.status(200).json(success(res.statusCode, "Success", { updateData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
