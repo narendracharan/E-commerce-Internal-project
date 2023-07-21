@@ -13,14 +13,7 @@ exports.createWish = async (req, res) => {
 
 exports.wishlist = async (req, res) => {
   try {
-    const list = await wishSchema.find().populate("product_Id", {
-      productName: 1,
-      product_Pic: 1,
-      Price: 1,
-      _id: 1,
-      oldPrice: 1,
-      category_Id: 1,
-    });
+    const list = await wishSchema.find().populate("product_Id");
     res.status(200).json(success(res.statusCode, "Wish List", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

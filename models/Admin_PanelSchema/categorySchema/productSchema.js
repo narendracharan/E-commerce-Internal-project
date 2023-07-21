@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  dollarPrice:{
+    type:Number,
+    require:true
+  },
   totalRating: {
     type: String,
     default: 0,
