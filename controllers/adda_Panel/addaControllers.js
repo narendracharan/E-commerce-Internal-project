@@ -73,13 +73,14 @@ exports.addaUserLogin = async (req, res) => {
 exports.addaHome = async (req, res) => {
   try {
     const userList = await adgeSchema.find();
-    const list = userList.filter(
-      (x) => x.status == "In-progress" ||  x.status ==  "scheduled"
-    ).sort()
-    const listdata = userList.filter(
-      (x) =>
-        x.status == "assestment completed",
-    ).sort()
+    const list = userList
+      .filter((x) => x.status == "In-progress" || x.status == "scheduled")
+      .sort();
+    const listdata = userList
+      .filter(
+        (x) => x.status == "assestment completed" || x.status == "Rejected"
+      )
+      .sort();
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));

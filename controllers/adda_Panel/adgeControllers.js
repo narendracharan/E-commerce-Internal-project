@@ -140,7 +140,7 @@ exports.adgeQuestions = async (req, res) => {
       qstatus7,
       qcomment7,
       qdoc7,
-     // adge_Id,
+      // adge_Id,
     } = req.body;
     var id = req.params.id;
     if (req.files) {
@@ -189,7 +189,7 @@ exports.adgeQuestions = async (req, res) => {
         }
       }
     }
-   // const status = "In-progress";
+    // const status = "In-progress";
     // const data = new adgeimgSchema({
     //   status1: status1,
     //   comment1: comment1,
@@ -516,7 +516,7 @@ exports.formDelete = async (req, res) => {
   }
 };
 
-exports.submitData=async(req,res)=>{
+exports.submitData = async (req, res) => {
   try {
     var {
       status1,
@@ -613,7 +613,7 @@ exports.submitData=async(req,res)=>{
     const update = await adgeSchema.findByIdAndUpdate(
       id,
       {
-       status: status,
+        status: status,
         status1: status1,
         comment1: comment1,
         doc1: doc1,
@@ -663,4 +663,4 @@ exports.submitData=async(req,res)=>{
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

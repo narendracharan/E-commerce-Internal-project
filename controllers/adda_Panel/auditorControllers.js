@@ -165,7 +165,7 @@ exports.auditorAprovedScore = async (req, res) => {
       );
     }
     if (subTotal > 40) {
-      var status =  "Approve";
+      var status = "Approve";
       const updateStatus = await adgeSchema.findByIdAndUpdate(
         id,
         { status: status },
@@ -180,6 +180,7 @@ exports.auditorAprovedScore = async (req, res) => {
       { score: score, status: status },
       { new: true }
     );
+
     await Score.save();
     res.status(200).json(success(res.statusCode, "Success", { Score }));
   } catch (err) {
@@ -188,13 +189,14 @@ exports.auditorAprovedScore = async (req, res) => {
   }
 };
 
-
-exports.addAssign=async(req,res)=>{
-  try{
-const id=req.params.id
-const updateDta=await adgeSchema.findByIdAndUpdate(id,req.body,{new:true})
-res.status(200).json(success(res.statusCode,"Success",{updateDta}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.addAssign = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateDta = await adgeSchema.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { updateDta }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
