@@ -42,6 +42,7 @@ const {
   auditorHome,
   auditorRejected,
   auditorAprovedScore,
+  addAssign,
 } = require("../../controllers/adda_Panel/auditorControllers");
 const router = express.Router();
 
@@ -83,4 +84,5 @@ router.post("/auditor-Login", auditorUserLogin);
 router.post("/auditor-home", auditorHome);
 router.post("/auditor-rejected/:id", auditorRejected);
 router.post("/auditor-aproved-Score/:id", auditorAprovedScore);
+router.post("/auditor-assign/:id",addAssign)
 module.exports = router;

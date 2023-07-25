@@ -42,10 +42,15 @@ const schema=new mongoose.Schema({
        type:Date,
        require:true
     },
+    auditorName:String,
     schedule:{
     type:Boolean,
     default:false
     },
+    assign:{
+        type:Boolean,
+        default:false
+        },
     Status:{
         type:String,
         default:"Active"
