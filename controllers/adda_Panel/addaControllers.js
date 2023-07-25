@@ -74,11 +74,11 @@ exports.addaHome = async (req, res) => {
   try {
     const userList = await adgeSchema.find();
     const list = userList.filter(
-      (x) => x.status == "In-progress" 
+      (x) => x.status == "In-progress" ||  x.status ==  "scheduled"
     ).sort()
     const listdata = userList.filter(
       (x) =>
-        x.status ==  "scheduled",
+        x.status == "assestment completed",
     ).sort()
     res
       .status(200)

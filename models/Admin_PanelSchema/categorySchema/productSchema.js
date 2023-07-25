@@ -17,7 +17,15 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  Description_ar: {
+    type: String,
+    require: true,
+  },
   careInstuctions: {
+    type: String,
+    require: true,
+  },
+  careInstuctions_ar: {
     type: String,
     require: true,
   },
@@ -51,6 +59,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  SKU_ar: {
+    type: String,
+    require: true,
+  },
   stockQuantity: {
     type: Number,
     require: true,
@@ -63,11 +75,23 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  pageTitle_ar: {
+    type: String,
+    require: true,
+  },
   metaDescription: {
     type: String,
     require: true,
   },
+  metaDescription_ar: {
+    type: String,
+    require: true,
+  },
   visibility: {
+    type: String,
+    require: true,
+  },
+  visibility_ar: {
     type: String,
     require: true,
   },
@@ -83,11 +107,23 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  Tags_ar: {
+    type: String,
+    require: true,
+  },
   weight: {
     type: String,
     require: true,
   },
+  weight_ar: {
+    type: String,
+    require: true,
+  },
   brandName: {
+    type: String,
+    require: true,
+  },
+  brandName_ar: {
     type: String,
     require: true,
   },
@@ -96,6 +132,10 @@ const schema = new mongoose.Schema({
     require: true,
   },
   productColor: {
+    type: String,
+    require: true,
+  },
+  productColor_ar: {
     type: String,
     require: true,
   },
