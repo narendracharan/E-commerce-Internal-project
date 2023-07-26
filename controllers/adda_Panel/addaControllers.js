@@ -261,13 +261,24 @@ exports.addaScheduleAdd = async (req, res) => {
 exports.addaApprovedIn = async (req, res) => {
   try {
     const id = req.params.id;
-    const status = "scheduled";
-    const updateData = await adgeSchema.findByIdAndUpdate(
-      id,
-      { status: status },
-      { new: true }
-    );
-    res.status(200).json(success(res.statusCode, "Success", { updateData }));
+  const Score=await adgeSchema.findById(id)
+  if (Score.score < 40) {
+  var status = "Rejected";
+  const updateStatus = await adgeSchema.findByIdAndUpdate(
+    id,
+    { status: status },
+    { new: true }
+  );
+}
+if (Score.score > 40) {
+  var status = "Approve";
+  const updateStatus = await adgeSchema.findByIdAndUpdate(
+    id,
+    { status: status },
+    { new: true }
+  );
+}
+    res.status(200).json(success(res.statusCode, "Success", { Score }));
   } catch (err) {
     res.statusCode(400).json(error("Failed", res.statusCode));
   }

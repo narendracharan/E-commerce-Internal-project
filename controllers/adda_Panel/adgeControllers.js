@@ -140,7 +140,6 @@ exports.adgeQuestions = async (req, res) => {
       qstatus7,
       qcomment7,
       qdoc7,
-      // adge_Id,
     } = req.body;
     var id = req.params.id;
     if (req.files) {

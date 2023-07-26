@@ -8,7 +8,6 @@ const {
   adgeDashboard,
   adgeUpdateTitle,
   adgeHome,
-  adgeScore,
   adgetotalScore,
   saveDraft,
   exportsPDF,
