@@ -75,17 +75,16 @@ exports.addaHome = async (req, res) => {
     const userList = await adgeSchema.find();
     const list = userList
       .filter((x) => x.status == "In-progress" || x.status == "scheduled")
-      .sort();
+      .reverse()
     const listdata = userList
       .filter(
         (x) => x.status == "assestment completed" || x.status == "Rejected"
       )
-      .sort();
+      .reverse()
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

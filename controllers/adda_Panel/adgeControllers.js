@@ -346,7 +346,7 @@ exports.adgeUpdateTitle = async (req, res) => {
 exports.adgeHome = async (req, res) => {
   try {
     const adge = await adgeSchema.find();
-    const list = adge.filter((x) => x.status == "yet to submit").sort();
+    const list = adge.filter((x) => x.status == "yet to submit").reverse()
     //await adgeSchema.find({ status: "assestment in progress" });
     const listData = adge
       .filter(
@@ -356,12 +356,13 @@ exports.adgeHome = async (req, res) => {
           x.status == "Approve" ||
           x.status == "Rejected"
       )
-      .sort();
+      .reverse()
     //await adgeSchema.find({ status: "assestment completed"||,st "Yet to schedule"  }).sort()
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

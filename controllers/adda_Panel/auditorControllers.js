@@ -74,12 +74,12 @@ exports.auditorUserLogin = async (req, res) => {
 exports.auditorHome = async (req, res) => {
   try {
     const userList = await adgeSchema.find();
-    const list = userList.filter((x) => x.status == "scheduled").sort();
+    const list = userList.filter((x) => x.status == "scheduled").reverse()
     const listdata = userList
       .filter(
         (x) => x.status == "assestment completed" || x.status == "Rejected"
       )
-      .sort();
+      .reverse()
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
