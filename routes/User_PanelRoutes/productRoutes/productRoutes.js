@@ -36,7 +36,7 @@ router.post("/review", tokenAuthorisationUser, productDiscount);
 router.post("/rating-product", tokenAuthorisationUser, ratingProduct);
 router.post("/high-Discount-list", tokenAuthorisationUser, highDiscount);
 router.post("/brand-list", tokenAuthorisationUser, Brandlist);
-router.post("/brand-product", tokenAuthorisationUser, brandProduct);
+router.post("/brand-product/:id", tokenAuthorisationUser, brandProduct);
 router.post("/popular-product/:id", tokenAuthorisationUser, popularProduct);
 
 module.exports = router;

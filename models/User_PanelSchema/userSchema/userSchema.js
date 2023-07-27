@@ -6,6 +6,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  userName_ar: {
+    type: String,
+    require: true,
+  },
   userEmail: {
     type: String,
     require: true,

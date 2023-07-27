@@ -1,3 +1,4 @@
+const brandSchema = require("../../../models/Admin_PanelSchema/categorySchema/brandSchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const { success, error } = require("../../response");
 
@@ -8,9 +9,6 @@ exports.createProduct = async (req, res) => {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "product_Pic") {
           product.product_Pic.push(req.files[i].location);
-        }
-        if (req.files[i].fieldname == "brandPic") {
-          product.brandPic = req.files[i].location;
         }
       }
     }
@@ -25,8 +23,7 @@ exports.productList = async (req, res) => {
   try {
     const list = await productSchema
       .find()
-      .populate("Subcategory_Id")
-      .populate("category_Id");
+      .populate(["Subcategory_Id","category_Id","brand"])
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json("Failed", res.statusCode);
@@ -70,5 +67,26 @@ const deleteData=await productSchema.findByIdAndDelete(id)
 res.status(200).json(success(res.statusCode, "Success", { deleteData }))
   }catch(err){
     res.status(400).json(error("Failed", res.statusCode));
+  }
+}
+
+exports.addBrand=async(req,res)=>{
+  try{
+const brand=new brandSchema(req.body)
+  brand.brandPic = req.file.location
+  const brandData=await brand.save()
+res.status(200).json(success(res.statusCode,"Success",{brandData}))
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.brandList=async(req,res)=>{
+  try{
+const list=await brandSchema.find({})
+res.status(200).json(success(res.statusCode,"Success",{list}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
   }
 }

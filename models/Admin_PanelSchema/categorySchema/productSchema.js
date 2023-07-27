@@ -119,17 +119,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  brandName: {
-    type: String,
-    require: true,
-  },
-  brandName_ar: {
-    type: String,
-    require: true,
-  },
-  brandPic: {
-    type: String,
-    require: true,
+  brand_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"brand",
+    require: true
   },
   productColor: {
     type: String,

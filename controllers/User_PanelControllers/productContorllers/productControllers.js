@@ -1,3 +1,4 @@
+const brandSchema = require("../../../models/Admin_PanelSchema/categorySchema/brandSchema");
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
@@ -18,7 +19,7 @@ exports.productDetails = async (req, res) => {
     const id = req.params.id;
     const details = await productSchema.findById(id);
     const Discount = await offerSchema
-      .find({ product_Id: id })
+      .find({ product_Id: id }).populate("brand_Id")
       .select("Discount");
     const discount = Discount.map((x) => x.Discount);
     const price = details.Price;
@@ -217,9 +218,8 @@ exports.rating = async (req, res) => {
 
 exports.Brandlist = async (req, res) => {
   try {
-    const brandlist = await productSchema
-      .find()
-      .select(["brandName", "brandPic"]);
+    const brandlist = await brandSchema
+      .find({})
     res.status(200).json(success(res.statusCode, "Success", { brandlist }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -228,8 +228,8 @@ exports.Brandlist = async (req, res) => {
 
 exports.brandProduct = async (req, res) => {
   try {
-    const brandname = req.query.brandname;
-    const product = await productSchema.find({ brandName: brandname });
+    const id = req.params.id;
+    const product = await productSchema.find({ brand_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
