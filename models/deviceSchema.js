@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = new mongoose.Schema({
   language: {
     type: String,
-    default: "English",
+   require:true
   },
   deviceOs: {
     type: String,
