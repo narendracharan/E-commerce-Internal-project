@@ -228,7 +228,7 @@ exports.Brandlist = async (req, res) => {
 
 exports.brandProduct = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.query.id;
     const product = await productSchema.find({ brand_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
