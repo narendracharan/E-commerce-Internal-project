@@ -22,11 +22,12 @@ exports.createProduct = async (req, res) => {
 exports.productList = async (req, res) => {
   try {
     const list = await productSchema
-      .find()
-      .populate(["Subcategory_Id","category_Id","brand"])
+      .find().populate("Subcategory_Id").populate("category_Id").populate("brand_Id")
+     // .populate(["Subcategory_Id","category_Id","brand_Id"])
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    res.status(400).json("Failed", res.statusCode);
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
