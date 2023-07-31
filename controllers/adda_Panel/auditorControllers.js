@@ -106,6 +106,7 @@ exports.auditorRejected = async (req, res) => {
 exports.auditorAprovedScore = async (req, res) => {
   try {
     const id = req.params.id;
+    const {approved}=req.body
     const Score = await adgeSchema.findById(id);
     var status1 = 0;
     var status2 = 0;
@@ -161,7 +162,7 @@ exports.auditorAprovedScore = async (req, res) => {
     let score = parseInt(subTotal);
   const data=  await adgeSchema.findByIdAndUpdate(
       id,
-      { score: score},
+      { score: score,approved:approved},
       { new: true }
     );
     console.log(data);

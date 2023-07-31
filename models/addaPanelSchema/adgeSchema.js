@@ -51,6 +51,10 @@ const schema=new mongoose.Schema({
         type:Boolean,
         default:false
         },
+    approved:{
+            type:Boolean,
+            default:false
+            },
     Status:{
         type:String,
         default:"Active"
@@ -58,7 +62,6 @@ const schema=new mongoose.Schema({
     uniQ_Id:{
         type:String,
     },
-
     doc1:{
         type:String,
         require:true
@@ -288,6 +291,90 @@ const schema=new mongoose.Schema({
     qaccept7:{
         type:String,
     },
+    addaComment1:{
+      type:String,
+    },
+     addaComment2:{
+        type:String,
+      },
+      addaComment3:{
+        type:String,
+      },
+      addaComment4:{
+        type:String,
+      },
+      addaComment5:{
+        type:String,
+      },
+      addaComment6:{
+        type:String,
+      },
+      addaComment7:{
+        type:String,
+      },
+      addaComment8:{
+        type:String,
+      },
+      addaComment9:{
+        type:String,
+      },
+      addaComment10:{
+        type:String,
+      },
+      addaComment11:{
+        type:String,
+      },
+      addaComment12:{
+        type:String,
+      },
+      addaComment13:{
+        type:String,
+      },
+      addaComment14:{
+        type:String,
+      },
+      auditorComment1:{
+        type:String
+      },
+      auditorComment2:{
+        type:String
+      },
+      auditorComment3:{
+        type:String
+      },
+      auditorComment4:{
+        type:String
+      },
+      auditorComment5:{
+        type:String
+      },
+      auditorComment6:{
+        type:String
+      },
+      auditorComment7:{
+        type:String
+      },
+      auditorComment8:{
+        type:String
+      },
+      auditorComment9:{
+        type:String
+      },
+      auditorComment10:{
+        type:String
+      },
+      auditorComment11:{
+        type:String
+      },
+      auditorComment12:{
+        type:String
+      },
+      auditorComment13:{
+        type:String
+      },
+      auditorComment14:{
+        type:String
+      },
 
 })
 schema.set("timestamps",true)

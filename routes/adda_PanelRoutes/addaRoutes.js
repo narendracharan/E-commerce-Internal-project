@@ -34,6 +34,7 @@ const {
   addaUserDelete,
   addaScheduleAdd,
   addaApprovedIn,
+  addaCommentAdd,
 } = require("../../controllers/adda_Panel/addaControllers");
 const {
   auditorUserSignup,
@@ -77,6 +78,7 @@ router.post("/adda-user-search", addaUserSearch);
 router.post("/adda-user-delete/:id", addaUserDelete);
 router.post("/adda-shedule-add/:id", addaScheduleAdd);
 router.post("/adda-aproved-in/:id", addaApprovedIn);
+router.post("/add-comment/:id",addaCommentAdd)
 
 router.post("/auditor-signup", auditorUserSignup);
 router.post("/auditor-Login", auditorUserLogin);

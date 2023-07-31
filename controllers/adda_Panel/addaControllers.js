@@ -252,7 +252,6 @@ exports.addaScheduleAdd = async (req, res) => {
     );
     res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -282,3 +281,13 @@ if (Score.score > 40) {
     res.statusCode(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.addaCommentAdd=async(req,res)=>{
+  try{
+const id=req.params.id
+const updatedata=await adgeSchema.findByIdAndUpdate(id,req.body,{new:true})
+res.status(200).json(success(res.statusCode,"Success",{updatedata}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
