@@ -334,9 +334,60 @@ exports.adgeDashboard = async (req, res) => {
 exports.adgeUpdateTitle = async (req, res) => {
   try {
     const id = req.params.id;
+    const data=await adgeSchema.find().count()
     const updateTitle = await adgeSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+    const uniq="ABUD"+data
+    const find=await adgeSchema.findById({_id:id})
+    const newOne=new adgeSchema({
+      title:find.title,
+      userName:find.userName,
+      uniQ_Id:uniq,
+      status1:find.status1,
+      status2:find.status2,
+      status3:find.status3,
+      status4:find.status4,
+      status5:find.status5,
+      status6:find.status6,
+      status7:find.status7,
+      qstatus1:find.qaccept1,
+      qstatus2:find.qaccept2,
+      qstatus3:find.qaccept3,
+      qstatus4:find.qaccept4,
+      qstatus5:find.qaccept5,
+      qstatus6:find.qaccept6,
+      qstatus7:find.qaccept7,
+      comment1:find.comment1,
+      comment2:find.comment2,
+      comment3:find.comment3,
+      comment4:find.comment4,
+      comment5:find.comment5,
+      comment6:find.comment6,
+      comment7:find.comment7,
+      qcomment1:find.qcomment1,
+      qcomment2:find.qcomment2,
+      qcomment3:find.qcomment3,
+      qcomment4:find.qcomment4,
+      qcomment5:find.qcomment5,
+      qcomment6:find.qcomment6,
+      qcomment7:find.qcomment7,
+      doc1:find.doc1,
+      doc2:find.doc2,
+      doc3:find.doc3,
+      doc4:find.doc4,
+      doc5:find.doc5,
+      doc6:find.doc6,
+      doc7:find.doc7,
+      qdoc1:find.qdoc1,
+      qdoc2:find.qdoc2,
+      qdoc3:find.qdoc3,
+      qdoc4:find.qdoc4,
+      qdoc5:find.qdoc5,
+      qdoc6:find.qdoc6,
+      qdoc7:find.qdoc7,
+      createdAt:Date.now()
+    }).save()
     res.status(200).json(success(res.statusCode, "Update", { updateTitle }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
