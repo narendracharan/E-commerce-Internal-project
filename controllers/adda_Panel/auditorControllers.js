@@ -74,12 +74,12 @@ exports.auditorUserLogin = async (req, res) => {
 exports.auditorHome = async (req, res) => {
   try {
     const userList = await adgeSchema.find();
-    const list = userList.filter((x) => x.status == "scheduled").reverse()
+    const list = userList.filter((x) => x.status == "scheduled").reverse();
     const listdata = userList
       .filter(
         (x) => x.status == "assestment completed" || x.status == "Rejected"
       )
-      .reverse()
+      .reverse();
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
@@ -106,7 +106,7 @@ exports.auditorRejected = async (req, res) => {
 exports.auditorAprovedScore = async (req, res) => {
   try {
     const id = req.params.id;
-    const {approved}=req.body
+    const { approved } = req.body;
     const Score = await adgeSchema.findById(id);
     var status1 = 0;
     var status2 = 0;
@@ -156,13 +156,13 @@ exports.auditorAprovedScore = async (req, res) => {
     let total = (status1 * 100) / 700;
     let total2 = (status2 * 100) / 700;
     let subTotal = ((status1 + status2) * 100) / 1400;
-  
+
     Score.Score.push(parseInt(total));
     Score.scoreTwo.push(parseInt(total2));
     let score = parseInt(subTotal);
-  const data=  await adgeSchema.findByIdAndUpdate(
+    const data = await adgeSchema.findByIdAndUpdate(
       id,
-      { score: score,approved:approved},
+      { score: score, approved: approved },
       { new: true }
     );
     console.log(data);

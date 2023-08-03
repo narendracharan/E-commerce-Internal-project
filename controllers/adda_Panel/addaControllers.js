@@ -75,12 +75,12 @@ exports.addaHome = async (req, res) => {
     const userList = await adgeSchema.find();
     const list = userList
       .filter((x) => x.status == "In-progress" || x.status == "scheduled")
-      .reverse()
+      .reverse();
     const listdata = userList
       .filter(
         (x) => x.status == "assestment completed" || x.status == "Rejected"
       )
-      .reverse()
+      .reverse();
     res
       .status(200)
       .json(success(res.statusCode, "Success", { list, listdata }));
@@ -259,35 +259,37 @@ exports.addaScheduleAdd = async (req, res) => {
 exports.addaApprovedIn = async (req, res) => {
   try {
     const id = req.params.id;
-  const Score=await adgeSchema.findById(id)
-  if (Score.score < 40) {
-  var status = "Rejected";
-  const updateStatus = await adgeSchema.findByIdAndUpdate(
-    id,
-    { status: status },
-    { new: true }
-  );
-}
-if (Score.score > 40) {
-  var status = "Approve";
-  const updateStatus = await adgeSchema.findByIdAndUpdate(
-    id,
-    { status: status },
-    { new: true }
-  );
-}
+    const Score = await adgeSchema.findById(id);
+    if (Score.score < 40) {
+      var status = "Rejected";
+      const updateStatus = await adgeSchema.findByIdAndUpdate(
+        id,
+        { status: status },
+        { new: true }
+      );
+    }
+    if (Score.score > 40) {
+      var status = "Approve";
+      const updateStatus = await adgeSchema.findByIdAndUpdate(
+        id,
+        { status: status },
+        { new: true }
+      );
+    }
     res.status(200).json(success(res.statusCode, "Success", { Score }));
   } catch (err) {
     res.statusCode(400).json(error("Failed", res.statusCode));
   }
 };
 
-exports.addaCommentAdd=async(req,res)=>{
-  try{
-const id=req.params.id
-const updatedata=await adgeSchema.findByIdAndUpdate(id,req.body,{new:true})
-res.status(200).json(success(res.statusCode,"Success",{updatedata}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.addaCommentAdd = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedata = await adgeSchema.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).json(success(res.statusCode, "Success", { updatedata }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

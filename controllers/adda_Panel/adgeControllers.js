@@ -188,53 +188,6 @@ exports.adgeQuestions = async (req, res) => {
         }
       }
     }
-    // const status = "In-progress";
-    // const data = new adgeimgSchema({
-    //   status1: status1,
-    //   comment1: comment1,
-    //   doc1: doc1,
-    //   status2: status2,
-    //   comment2: comment2,
-    //   doc2: doc2,
-    //   status3: status3,
-    //   comment3: comment3,
-    //   doc3: doc3,
-    //   status4: status4,
-    //   comment4: comment4,
-    //   doc4: doc4,
-    //   status5: status5,
-    //   comment5: comment5,
-    //   doc5: doc5,
-    //   status6: status6,
-    //   comment6: comment6,
-    //   doc6: doc6,
-    //   status7: status7,
-    //   comment7: comment7,
-    //   doc7: doc7,
-    //   qstatus1: qstatus1,
-    //   qcomment1: qcomment1,
-    //   qdoc1: qdoc1,
-    //   qstatus2: qstatus2,
-    //   qcomment2: qcomment2,
-    //   qdoc2: qdoc2,
-    //   qstatus3: qstatus3,
-    //   qcomment3: qcomment3,
-    //   qdoc3: qdoc3,
-    //   qstatus4: qstatus4,
-    //   qcomment4: qcomment4,
-    //   qdoc4: qdoc4,
-    //   qstatus5: qstatus5,
-    //   qcomment5: qcomment5,
-    //   qdoc5: qdoc5,
-    //   qstatus6: qstatus6,
-    //   qcomment6: qcomment6,
-    //   qdoc6: qdoc6,
-    //   qstatus7: qstatus7,
-    //   qcomment7: qcomment7,
-    //   qdoc7: qdoc7,
-    //   adge_Id: adge_Id,
-    // });
-    //const allData = await data.save()
     const update = await adgeSchema.findByIdAndUpdate(
       id,
       {
@@ -334,60 +287,60 @@ exports.adgeDashboard = async (req, res) => {
 exports.adgeUpdateTitle = async (req, res) => {
   try {
     const id = req.params.id;
-    const data=await adgeSchema.find().count()
+    const data = await adgeSchema.find().count();
     const updateTitle = await adgeSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    const uniq="ABUD"+data
-    const find=await adgeSchema.findById({_id:id})
-    const newOne=new adgeSchema({
-      title:find.title,
-      userName:find.userName,
-      uniQ_Id:uniq,
-      status1:find.status1,
-      status2:find.status2,
-      status3:find.status3,
-      status4:find.status4,
-      status5:find.status5,
-      status6:find.status6,
-      status7:find.status7,
-      qstatus1:find.qaccept1,
-      qstatus2:find.qaccept2,
-      qstatus3:find.qaccept3,
-      qstatus4:find.qaccept4,
-      qstatus5:find.qaccept5,
-      qstatus6:find.qaccept6,
-      qstatus7:find.qaccept7,
-      comment1:find.comment1,
-      comment2:find.comment2,
-      comment3:find.comment3,
-      comment4:find.comment4,
-      comment5:find.comment5,
-      comment6:find.comment6,
-      comment7:find.comment7,
-      qcomment1:find.qcomment1,
-      qcomment2:find.qcomment2,
-      qcomment3:find.qcomment3,
-      qcomment4:find.qcomment4,
-      qcomment5:find.qcomment5,
-      qcomment6:find.qcomment6,
-      qcomment7:find.qcomment7,
-      doc1:find.doc1,
-      doc2:find.doc2,
-      doc3:find.doc3,
-      doc4:find.doc4,
-      doc5:find.doc5,
-      doc6:find.doc6,
-      doc7:find.doc7,
-      qdoc1:find.qdoc1,
-      qdoc2:find.qdoc2,
-      qdoc3:find.qdoc3,
-      qdoc4:find.qdoc4,
-      qdoc5:find.qdoc5,
-      qdoc6:find.qdoc6,
-      qdoc7:find.qdoc7,
-      createdAt:Date.now()
-    }).save()
+    const uniq = "ABUD" + data;
+    const find = await adgeSchema.findById({ _id: id });
+    const newOne = new adgeSchema({
+      title: find.title,
+      userName: find.userName,
+      uniQ_Id: uniq,
+      status1: find.status1,
+      status2: find.status2,
+      status3: find.status3,
+      status4: find.status4,
+      status5: find.status5,
+      status6: find.status6,
+      status7: find.status7,
+      qstatus1: find.qaccept1,
+      qstatus2: find.qaccept2,
+      qstatus3: find.qaccept3,
+      qstatus4: find.qaccept4,
+      qstatus5: find.qaccept5,
+      qstatus6: find.qaccept6,
+      qstatus7: find.qaccept7,
+      comment1: find.comment1,
+      comment2: find.comment2,
+      comment3: find.comment3,
+      comment4: find.comment4,
+      comment5: find.comment5,
+      comment6: find.comment6,
+      comment7: find.comment7,
+      qcomment1: find.qcomment1,
+      qcomment2: find.qcomment2,
+      qcomment3: find.qcomment3,
+      qcomment4: find.qcomment4,
+      qcomment5: find.qcomment5,
+      qcomment6: find.qcomment6,
+      qcomment7: find.qcomment7,
+      doc1: find.doc1,
+      doc2: find.doc2,
+      doc3: find.doc3,
+      doc4: find.doc4,
+      doc5: find.doc5,
+      doc6: find.doc6,
+      doc7: find.doc7,
+      qdoc1: find.qdoc1,
+      qdoc2: find.qdoc2,
+      qdoc3: find.qdoc3,
+      qdoc4: find.qdoc4,
+      qdoc5: find.qdoc5,
+      qdoc6: find.qdoc6,
+      qdoc7: find.qdoc7,
+      createdAt: Date.now(),
+    }).save();
     res.status(200).json(success(res.statusCode, "Update", { updateTitle }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -397,7 +350,7 @@ exports.adgeUpdateTitle = async (req, res) => {
 exports.adgeHome = async (req, res) => {
   try {
     const adge = await adgeSchema.find();
-    const list = adge.filter((x) => x.status == "yet to submit").reverse()
+    const list = adge.filter((x) => x.status == "yet to submit").reverse();
     //await adgeSchema.find({ status: "assestment in progress" });
     const listData = adge
       .filter(
@@ -407,7 +360,7 @@ exports.adgeHome = async (req, res) => {
           x.status == "Approve" ||
           x.status == "Rejected"
       )
-      .reverse()
+      .reverse();
     //await adgeSchema.find({ status: "assestment completed"||,st "Yet to schedule"  }).sort()
     res
       .status(200)

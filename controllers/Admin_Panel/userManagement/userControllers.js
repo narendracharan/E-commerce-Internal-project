@@ -166,15 +166,7 @@ exports.userLogin = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const list = await Userschema.findById(id, {
-      _id: 0,
-      userName: 1,
-      userEmail: 1,
-      birthDay: 1,
-      status: 1,
-      gender: 1,
-      mobileNumber:1
-    }).populate("address_Id", {
+    const list = await Userschema.findById(id).populate("address_Id", {
       address: 1,
       pinCode: 1,
       mobileNumber: 1,
