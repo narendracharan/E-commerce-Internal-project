@@ -15,7 +15,13 @@ exports.createReporter = async (req, res) => {
 
 exports.reporterList = async (req, res) => {
   try {
-    const list = await reporterSchema.find({}).populate("product_Id")
+    const {from,to}=req.body
+    const list = await reporterSchema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    }).populate("product_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -25,7 +31,7 @@ exports.reporterList = async (req, res) => {
 exports.userView = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await userSchema.findById(id);
+    const details = await reporterSchema.findById(id);
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -35,7 +41,7 @@ exports.userView = async (req, res) => {
 exports.productView = async (req, res) => {
   try {
     const id = req.params.id;
-    const productDetails = await productSchema.findById(id);
+    const productDetails = await reporterSchema.findById(id);
     res
       .status(200)
       .json(success(res.statusCode, "Success", { productDetails }));

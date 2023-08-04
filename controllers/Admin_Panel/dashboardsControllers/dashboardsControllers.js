@@ -22,7 +22,13 @@ exports.userCount = async (req, res) => {
 
 exports.recentOrderList = async (req, res) => {
   try {
-    const list = await UserorderSchema.find({}).populate("user_Id");
+    const {from,to}=req.body
+    const list = await UserorderSchema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    }).populate("user_Id");
     res.status(400).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

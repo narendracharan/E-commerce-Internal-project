@@ -13,8 +13,14 @@ exports.addOffer = async (req, res) => {
 
 exports.offerList = async (req, res) => {
   try {
+    const {from,to}=req.body
     const list = await offerSchema
-      .find({})
+      .find({
+        $and:[
+          from ?{createdAt:{$gte:new Date(from)}}:{},
+          to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+        ]
+      })
       .populate("product_Id",{productName_en:1});
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {

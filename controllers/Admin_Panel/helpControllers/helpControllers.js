@@ -13,7 +13,13 @@ exports.createhelp = async (req, res) => {
 
 exports.helpList = async (req, res) => {
   try {
-    const list = await helpSchema.find({});
+    const {from,to}=req.body
+    const list = await helpSchema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

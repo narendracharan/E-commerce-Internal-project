@@ -33,7 +33,13 @@ exports.coupanUsage = async (req, res) => {
 
 exports.coupanList = async (req, res) => {
   try {
-    const list = await coupanSchema.find({});
+    const {from,to}=req.body
+    const list = await coupanSchema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

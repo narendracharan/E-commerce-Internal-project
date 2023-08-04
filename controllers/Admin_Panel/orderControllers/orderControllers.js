@@ -6,9 +6,17 @@ const jsonrawtoxlsx = require("jsonrawtoxlsx");
 
 exports.orderList = async (req, res) => {
   try {
-    const list = await orderSchema.find({}).populate("products.product_Id");
+    const {from ,to}=req.body
+    const list = await orderSchema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    }).populate("products.product_Id")
+    console.log(list);
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

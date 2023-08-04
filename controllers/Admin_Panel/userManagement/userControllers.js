@@ -122,11 +122,18 @@ exports.editProfile = async (req, res) => {
 
 exports.userList = async (req, res) => {
   try {
-    const createData = await Userschema.find()
+    const {from,to}=req.body
+    const createData = await Userschema.find({
+      $and:[
+        from ?{createdAt:{$gte:new Date(from)}}:{},
+        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
+      ]
+    }).sort({createdAt:-1})
     res
       .status(200)
       .json(success(res.statusCode, "Success", { createData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
