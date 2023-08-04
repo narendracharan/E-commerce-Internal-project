@@ -29,7 +29,7 @@ exports.recentOrderList = async (req, res) => {
         to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
       ]
     }).populate("user_Id");
-    res.status(400).json(success(res.statusCode, "Success", { list }));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

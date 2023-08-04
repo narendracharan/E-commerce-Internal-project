@@ -70,9 +70,9 @@ exports.deleteCoupan = async (req, res) => {
 
 exports.coupanSearch = async (req, res) => {
   try {
-    const coupanTitle = req.body.coupanTitle;
+    const coupanTitle_en = req.body.coupanTitle_en;
     const coupanData = await coupanSchema.find({
-      coupanTitle: { $regex: coupanTitle, $options: "i" },
+      coupanTitle_en: { $regex: coupanTitle_en, $options: "i" },
     });
     if (coupanData.length > 0) {
       return res

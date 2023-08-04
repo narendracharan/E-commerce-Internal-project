@@ -9,4 +9,5 @@ router.use("/admin",adminRoutes)
 router.use("/user",userRoutes)
 router.use("/device",deviceRoutes)
 router.use("/adda",addaRoutes)
+
 module.exports=router

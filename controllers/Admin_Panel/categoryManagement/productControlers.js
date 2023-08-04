@@ -52,7 +52,39 @@ exports.productSearch = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const updateData = await productSchema.findByIdAndUpdate(id, req.body, {
+    const data = { 
+      productName_en : req.body.productName_en ,
+      productName_ar:req.body.productName_ar,
+      slug:req.body.slug,
+      Description:req.body.Description,
+      Description_ar:req.body.Description_ar,
+      careInstuctions:req.body.careInstuctions,
+      careInstuctions_ar:req.body.careInstuctions_ar,
+      Price:req.body.Price,
+      oldPrice:req.body.oldPrice,
+      dollarPrice:req.body.dollarPrice,
+      SKU:req.body.SKU,
+      SKU_ar:req.body.SKU_ar,
+      stockQuantity:req.body.stockQuantity,
+      pageTitle:req.body.pageTitle,
+      pageTitle_ar:req.body.pageTitle_ar,
+      metaDescription:req.body.metaDescription,
+      metaDescription_ar:req.body.metaDescription_ar,
+      visibility:req.body.visibility,
+      visibility_ar:req.body.visibility_ar,
+      Discount:req.body.Discount,
+      Tags:req.body.Tags,
+      Tags_ar:req.body.Tags_ar,
+      weight:req.body.weight,
+      weight_ar:req.body.weight_ar,
+      productColor:req.body.productColor,
+      productColor_ar:req.body.productColor_ar,
+      brand_Id:req.body.brand_Id,
+      category_Id:req.body.category_Id,
+      Subcategory_Id:req.body.Subcategory_Id,
+      product_Pic:req.body.product_Pic
+    }
+    const updateData = await productSchema.findByIdAndUpdate(id,data , {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updateData }));
