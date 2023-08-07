@@ -21,7 +21,15 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  Question_ar: {
+    type: String,
+    require: true,
+  },
   Answer: {
+    type: String,
+    require: true,
+  },
+  Answer_ar: {
     type: String,
     require: true,
   },
