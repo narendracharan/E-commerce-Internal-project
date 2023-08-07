@@ -86,7 +86,15 @@ exports.subCategoryList = async (req, res) => {
 exports.subCategoryUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const updated = await cateSchema.findByIdAndUpdate(id, req.body, {
+    const data={
+      subCategoryName_en:req.body.subCategoryName_en,
+      subCategoryName_ar:req.body.subCategoryName_ar,
+      subCategoryPic:req.body.subCategoryPic,
+      shipmentService:req.body.shipmentService,
+      status:req.body.status,
+      category_Id:req.body.category_Id
+    }
+    const updated = await cateSchema.findByIdAndUpdate(id,data, {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updated }));

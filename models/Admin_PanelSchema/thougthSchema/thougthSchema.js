@@ -9,6 +9,14 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  title_ar:{
+    type: String,
+    require: true
+  },
+  description_ar:{
+    type: String,
+    require: true
+  },
   thougth_Pic:{
     type:String,
     require:true

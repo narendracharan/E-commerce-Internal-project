@@ -4,7 +4,7 @@ const { error, success } = require("../../response");
 exports.createThougth = async (req, res) => {
   try {
     const thougth = new thougthSchema(req.body);
-    thougth.thougth_Pic=req.file.location;
+    thougth.thougth_Pic = req.file.location;
     const thoughtsData = await thougth.save();
     res.status(201).json(success(res.statusCode, "Success", { thoughtsData }));
   } catch (err) {
@@ -39,12 +39,12 @@ exports.thougthSearch = async (req, res) => {
   }
 };
 
-exports.deleteThougth=async(req,res)=>{
-  try{
-const id=req.params.id
-const deleteData=await thougthSchema.findByIdAndDelete(id)
-res.status(200).json(success(res.statusCode,"Success",{deleteData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.deleteThougth = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteData = await thougthSchema.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
