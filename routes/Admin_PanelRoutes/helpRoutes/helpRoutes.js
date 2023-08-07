@@ -8,6 +8,7 @@ const {
   createQuestion,
   questionList,
   updateQuestion,
+  deleteQuestion,
 } = require("../../../controllers/Admin_Panel/helpControllers/helpControllers");
 
 router.post("/createHelp", tokenAuthorisationUser, createhelp);
@@ -16,4 +17,5 @@ router.post("/helpSearch", tokenAuthorisationUser, helpSearch);
 router.post("/createQuestion", tokenAuthorisationUser, createQuestion);
 router.post("/questionList", tokenAuthorisationUser, questionList);
 router.patch("/updateQuestion/:id", tokenAuthorisationUser, updateQuestion);
+router.post("/delete-help/:id",tokenAuthorisationUser,deleteQuestion)
 module.exports = router;

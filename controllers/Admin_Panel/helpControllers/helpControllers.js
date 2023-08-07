@@ -72,3 +72,14 @@ exports.updateQuestion = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.deleteQuestion=async(req,res)=>{
+  try{
+const id=req.params.id
+const deleteData=await helpSchema.findByIdAndDelete(id)
+res.status(200).json(success(res.statusCode,"Success",{deleteData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

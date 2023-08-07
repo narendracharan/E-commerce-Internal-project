@@ -9,6 +9,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  thougth_Pic:{
+    type:String,
+    require:true
+  },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
