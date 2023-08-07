@@ -1,4 +1,5 @@
 const helpSchema = require("../../../models/Admin_PanelSchema/helpSchema/helpSchema");
+const questionSchema = require("../../../models/Admin_PanelSchema/helpSchema/questionSchema");
 const { error, success } = require("../../response");
 
 exports.createhelp = async (req, res) => {
@@ -44,7 +45,7 @@ exports.helpSearch = async (req, res) => {
 
 exports.createQuestion = async (req, res) => {
   try {
-    const question = new helpSchema(req.body);
+    const question = new questionSchema(req.body);
     const questionData = await question.save();
     res.status(201).json(success(res.statusCode, "Success", { questionData }));
   } catch (err) {
@@ -54,7 +55,7 @@ exports.createQuestion = async (req, res) => {
 
 exports.questionList = async (req, res) => {
   try {
-    const listData = await helpSchema.find();
+    const listData = await questionSchema.find();
     res.status(200).json(success(res.statusCode, "Success", { listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -64,7 +65,7 @@ exports.questionList = async (req, res) => {
 exports.updateQuestion = async (req, res) => {
   try {
     const id = req.params.id;
-    const updateData = await helpSchema.findByIdAndUpdate(id, req.body, {
+    const updateData = await questionSchema.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updateData }));
