@@ -2,7 +2,7 @@ const cateSchema = require("../../../models/Admin_PanelSchema/categorySchema/cat
 const subCategorySchema = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
 const subcategory = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
 const subSubCategorySchema = require("../../../models/Admin_PanelSchema/categorySchema/subSubCategorySchema");
-const attributeSchema = require("../../../models/Admin_PanelSchema/categorySchema/subSubCategorySchema");
+const attributeSchema = require("../../../models/Admin_PanelSchema/categorySchema/attributeSchema");
 const valueSchema = require("../../../models/Admin_PanelSchema/categorySchema/valuesSchema");
 const { success, error } = require("../../../controllers/response");
 
@@ -40,6 +40,7 @@ exports.checkStatus = async (req, res) => {
         req.body,
         { new: true }
       );
+    
     const updateAttributeStatus = await attributeSchema.findOneAndUpdate(
       { category_Id: id },
       req.body,
@@ -101,7 +102,7 @@ exports.categoryUpdate = async (req, res) => {
     const data={
       categoryName_en:req.body.categoryName_en,
       categoryName_ar:req.body.categoryName_ar,
-      categoryPic:req.body.categoryPic,
+      categoryPic:req.file.location,
       shipmentService:req.body.shipmentService,
       status:req.body.status
     }

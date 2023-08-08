@@ -23,6 +23,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-validator": "^6.15.0",
+    "firebase-admin": "^11.10.1",
     "fs": "^0.0.1-security",
     "html-pdf": "^3.0.1",
     "jsonrawtoxlsx": "^1.0.8",

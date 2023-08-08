@@ -82,7 +82,7 @@ exports.updateProduct = async (req, res) => {
       brand_Id:req.body.brand_Id,
       category_Id:req.body.category_Id,
       Subcategory_Id:req.body.Subcategory_Id,
-      product_Pic:req.body.product_Pic
+      product_Pic:req.files.location
     }
     const updateData = await productSchema.findByIdAndUpdate(id,data , {
       new: true,

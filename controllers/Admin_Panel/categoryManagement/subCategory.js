@@ -89,7 +89,7 @@ exports.subCategoryUpdate = async (req, res) => {
     const data={
       subCategoryName_en:req.body.subCategoryName_en,
       subCategoryName_ar:req.body.subCategoryName_ar,
-      subCategoryPic:req.body.subCategoryPic,
+      subCategoryPic:req.file.location,
       shipmentService:req.body.shipmentService,
       status:req.body.status,
       category_Id:req.body.category_Id
