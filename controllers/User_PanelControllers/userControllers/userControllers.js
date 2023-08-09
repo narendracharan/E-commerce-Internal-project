@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.userSignup = async (req, res) => {
   try {
-    const {userEmail,userName,userName_ar,password,mobileNumber} =req.body
+    const {userEmail,userName,userName_ar,password,mobileNumber,longitude,latitude} =req.body
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -26,7 +26,9 @@ exports.userSignup = async (req, res) => {
       userName:userName,
       password:passwordHash,
       mobileNumber:mobileNumber,
-      userName_ar:userName_ar
+      userName_ar:userName_ar,
+      longitude:longitude,
+      latitude:latitude
     }).save()
     res
       .status(201)

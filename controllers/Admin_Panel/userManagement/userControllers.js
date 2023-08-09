@@ -11,6 +11,7 @@ const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const fs=require("fs");
 const { json } = require("body-parser");
 const mapSchema = require("../../../models/mapSchema");
+const addressSchema = require("../../../models/User_PanelSchema/addressSchema/addressSchema");
 
 exports.userSignup = async (req, res) => {
   const users = new userSchema(req.body);
@@ -129,7 +130,7 @@ exports.userList = async (req, res) => {
         from ?{createdAt:{$gte:new Date(from)}}:{},
         to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
       ]
-    }).sort({createdAt:-1})
+    }).sort({createdAt:-1}).populate("address_Id")
     res
       .status(200)
       .json(success(res.statusCode, "Success", { createData }));
@@ -175,6 +176,7 @@ exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
     const list = await Userschema.findById(id).populate("address_Id");
+    const address=await addressSchema.find({user_Id:id})
     const order = await orderSchema.find({ user_Id: id });
     var compltedOrder = 0;
     const status = order.map((x) => x.orderStatus == "Delivered");
@@ -191,6 +193,7 @@ exports.userDetails = async (req, res) => {
     res.status(200).json(
       success(res.statusCode, "Success", {
         list,
+        address,
         order,
         review,
         compltedOrder,

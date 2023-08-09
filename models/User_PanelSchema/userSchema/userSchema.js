@@ -67,6 +67,14 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  longitude: {
+    type: Number,
+    require: true,
+  },
+  latitude: {
+    type: Number,
+    require: true,
+  },
 });
 schema.set("timestamps", true);
 schema.methods.generateUserAuthToken = function () {
