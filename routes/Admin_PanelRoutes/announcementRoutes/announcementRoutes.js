@@ -5,6 +5,7 @@ const {
   createAnnouncement,
   searchAnnouncement,
   announcementList,
+  deleteAnnouncement,
 } = require("../../../controllers/Admin_Panel/announcementControllers/announcementControllers");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -16,4 +17,5 @@ router.post(
 );
 router.post("/search", tokenAuthorisationUser, searchAnnouncement);
 router.post("/list", tokenAuthorisationUser, announcementList);
+router.post("/delete-announcement/:id",tokenAuthorisationUser,deleteAnnouncement)
 module.exports = router;

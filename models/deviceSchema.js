@@ -24,4 +24,4 @@ const Schema = new mongoose.Schema({
   },
 });
 Schema.set("timestamps", true);
-module.exports = mongoose.model("language", Schema);
+module.exports = mongoose.model("device", Schema);

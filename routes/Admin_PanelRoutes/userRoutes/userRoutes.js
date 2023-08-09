@@ -7,17 +7,17 @@ const {
   userLogin,
   sendUserResetPassword,
   resetPassword,
-  createUser,
   userList,
   userDetails,
   OtpVerify,
   editProfile,
   checkStatus,
   userSerach,
-  downlod,
   downlaod,
+  userMap,
 } = require("../../../controllers/Admin_Panel/userManagement/userControllers");
 const { s3upload } = require("../../../middleware/multer");
+const { blockUser } = require("../../../controllers/User_PanelControllers/userControllers/userControllers");
 
 
 router.post("/signup", signupValidation, userSignup);
@@ -36,4 +36,6 @@ router.post(
 router.post("/user-search",tokenAuthorisationUser,userSerach)
 router.post("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
 router.post("/download",tokenAuthorisationUser,downlaod)
+router.post("/block-user/:id/:status",tokenAuthorisationUser,blockUser)
+router.post("/create-map",tokenAuthorisationUser,userMap)
 module.exports = router;

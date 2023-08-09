@@ -10,6 +10,7 @@ const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/revi
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const fs=require("fs");
 const { json } = require("body-parser");
+const mapSchema = require("../../../models/mapSchema");
 
 exports.userSignup = async (req, res) => {
   const users = new userSchema(req.body);
@@ -173,13 +174,7 @@ exports.userLogin = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const list = await Userschema.findById(id).populate("address_Id", {
-      address: 1,
-      pinCode: 1,
-      mobileNumber: 1,
-      city: 1,
-      country: 1,
-    });
+    const list = await Userschema.findById(id).populate("address_Id");
     const order = await orderSchema.find({ user_Id: id });
     var compltedOrder = 0;
     const status = order.map((x) => x.orderStatus == "Delivered");
@@ -287,3 +282,14 @@ exports.resetPassword = async (req, res) => {
     res.status(400).json(error("All filed are required", res.statusCode));
   }
 };
+
+
+exports.userMap=async(req,res)=>{
+  try{
+const createMap= new mapSchema(req.body)
+const saveMap=await createMap.save()
+res.status(200).json(success(res.statusCode,"Success",{saveMap}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
