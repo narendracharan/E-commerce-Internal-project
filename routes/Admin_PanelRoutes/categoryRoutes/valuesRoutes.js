@@ -11,6 +11,7 @@ const {
   selectSubSubCategory,
   checkStatus,
   selectAttribute,
+  deleteValues,
 } = require("../../../controllers/Admin_Panel/categoryManagement/valuesControllers");
 
 router.post("/createValues", tokenAuthorisationUser, createValues);
@@ -26,4 +27,5 @@ router.post(
 );
 router.post("/selectAttribute", tokenAuthorisationUser, selectAttribute);
 router.patch("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
+router.post("/delete-values/:id",tokenAuthorisationUser,deleteValues)
 module.exports = router;

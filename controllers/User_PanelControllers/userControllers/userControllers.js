@@ -131,6 +131,7 @@ exports.profilePic = async (req, res) => {
       .status(200)
       .json(success(res.statusCode, " updated profile", { profile }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -159,6 +160,7 @@ exports.updateProfile = async (req, res) => {
     });
     res.status(200).json(success(res.statusCode, " Success", { profile }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

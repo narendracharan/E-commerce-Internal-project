@@ -117,3 +117,18 @@ exports.attributeSearch = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.deleteAttribute=async(req,res)=>{
+  try{
+const id=req.params.id
+const deleteData=await cateSchema.findByIdAndDelete(id)
+if(!deleteData){
+  return res.status(400).json(error("Invalid Id",res.statusCode))
+}else{
+  return res.status(200).json(success(res.statusCode,"Success Deleted",{deleteData}))
+}
+  }catch(err){
+res.status(400).json(error("Failed",res.statusCode))
+  }
+}

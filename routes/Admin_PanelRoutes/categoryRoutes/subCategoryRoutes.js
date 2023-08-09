@@ -9,6 +9,7 @@ const {
   selectCategory,
   checkStatus,
   checkSubSubcategory,
+  deleteSubCategory,
 } = require("../../../controllers/Admin_Panel/categoryManagement/subCategory");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -32,4 +33,5 @@ router.post(
   checkSubSubcategory
 );
 router.post("/checkstatus/:id", tokenAuthorisationUser, checkStatus);
+router.post("/delete-SubCategory/:id",tokenAuthorisationUser,deleteSubCategory)
 module.exports = router;

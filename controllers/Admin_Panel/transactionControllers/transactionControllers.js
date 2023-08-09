@@ -3,7 +3,13 @@ const { error, success } = require("../../response");
 
 exports.transactionList = async (req, res) => {
   try {
-    const list = await orderSchema.find().populate("user_Id");
+    const {from,to}=req.body
+    const list = await orderSchema.find({
+      $and: [
+        from ? { createdAt: { $gte: new Date(from) } } : {},
+        to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+      ],
+    }).populate("user_Id");
     const statusData = list.filter((x) => x.orderStatus == "Delivered");
     res.status(200).json(success(res.statusCode, "Success", { statusData }));
   } catch (err) {

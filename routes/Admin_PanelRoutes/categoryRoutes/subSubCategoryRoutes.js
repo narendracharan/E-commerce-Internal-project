@@ -10,6 +10,7 @@ const {
   selectSubCategory,
   checkAttribute,
   checkStatus,
+  deleteSubSubCategory,
 } = require("../../../controllers/Admin_Panel/categoryManagement/subSubCategory");
 
 router.post("/createSubSubCategory", tokenAuthorisationUser, subSubCategory);
@@ -28,5 +29,5 @@ router.post("/selectCategory", tokenAuthorisationUser, selectCategory);
 router.post("/selectSubCategory", tokenAuthorisationUser, selectSubCategory);
 router.post("/checkAttribute/:id", tokenAuthorisationUser, checkAttribute);
 router.post("/checkstatus/:id", tokenAuthorisationUser, checkStatus);
-
+router.post("/delete-subSubCategory/:id",tokenAuthorisationUser,deleteSubSubCategory)
 module.exports = router;

@@ -8,6 +8,7 @@ const qrCode=require("qrcode")
 const path=require("path")
 
 const { error, success } = require("../../response");
+const { Notification } = require("../../notificationControllers");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -64,6 +65,17 @@ exports.createOrder = async (req, res) => {
       _id : newCarts._id,
      // user_Id:newCarts.user_Id
     }).populate("user_Id")
+
+  // const dd=  await Notification(
+  //     "ORDER PLACED",
+  //     `${updated.user_Id.userEmail} ${updated.user_Id.userEmail}`,
+  //     {
+  //       user: String(updated.user_Id._id),
+  //       type: "ORDER PLACED",
+  //     },
+  //    // sameOrder.userId.deviceId
+  //   );
+  //   console.log();
     var mailOptions = {
       from: "s04450647@gmail.com",
       to:updated.user_Id.userEmail,
@@ -77,6 +89,7 @@ exports.createOrder = async (req, res) => {
     await transporter.sendMail(mailOptions)
     res.status(200).json(success(res.statusCode, "Success", { newCarts }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

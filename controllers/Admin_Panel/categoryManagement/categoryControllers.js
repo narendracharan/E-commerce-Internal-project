@@ -11,13 +11,11 @@ exports.createCategory = async (req, res) => {
     const category = new cateSchema(req.body);
     category.categoryPic = req.file.location;
     const saveCategory = await category.save();
-    res
-      .status(201)
-      .json(
-        success(res.statusCode, "Category Create Successfully", {
-          saveCategory,
-        })
-      );
+    res.status(201).json(
+      success(res.statusCode, "Category Create Successfully", {
+        saveCategory,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -40,7 +38,7 @@ exports.checkStatus = async (req, res) => {
         req.body,
         { new: true }
       );
-    
+
     const updateAttributeStatus = await attributeSchema.findOneAndUpdate(
       { category_Id: id },
       req.body,
@@ -51,17 +49,15 @@ exports.checkStatus = async (req, res) => {
       req.body,
       { new: true }
     );
-    res
-      .status(200)
-      .json(
-        success(res.statusCode, "Success", {
-          updateStatus,
-          updateSubCategoryStatus,
-          updateSubSubCategoryStatus,
-          updateAttributeStatus,
-          updateValuesStatus,
-        })
-      );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        updateStatus,
+        updateSubCategoryStatus,
+        updateSubSubCategoryStatus,
+        updateAttributeStatus,
+        updateValuesStatus,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -74,14 +70,12 @@ exports.checkSubCategory = async (req, res) => {
     const subSubCategoryData = await subSubCategorySchema.find({
       category_Id: id,
     });
-    res
-      .status(200)
-      .json(
-        success(res.statusCode, "Success", {
-          subCategoryData,
-          subSubCategoryData,
-        })
-      );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        subCategoryData,
+        subSubCategoryData,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -99,14 +93,14 @@ exports.categoryList = async (req, res) => {
 exports.categoryUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const data={
-      categoryName_en:req.body.categoryName_en,
-      categoryName_ar:req.body.categoryName_ar,
-      categoryPic:req.file.location,
-      shipmentService:req.body.shipmentService,
-      status:req.body.status
-    }
-    const updated = await cateSchema.findByIdAndUpdate(id,data,{
+    const data = {
+      categoryName_en: req.body.categoryName_en,
+      categoryName_ar: req.body.categoryName_ar,
+      categoryPic: req.file.location,
+      shipmentService: req.body.shipmentService,
+      status: req.body.status,
+    };
+    const updated = await cateSchema.findByIdAndUpdate(id, data, {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updated }));
@@ -118,9 +112,9 @@ exports.categoryUpdate = async (req, res) => {
 
 exports.categorySearch = async (req, res) => {
   try {
-    const   categoryName_en = req.body.categoryName_en;
+    const categoryName_en = req.body.categoryName_en;
     const categoryData = await cateSchema.find({
-      categoryName_en: { $regex:  categoryName_en , $options: "i" },
+      categoryName_en: { $regex: categoryName_en, $options: "i" },
     });
     if (categoryData.length > 0) {
       return res
@@ -128,6 +122,22 @@ exports.categorySearch = async (req, res) => {
         .json(success(res.statusCode, "Success", { categoryData }));
     } else {
       res.status(200).json(error("Data are Not Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.deleteCategory = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteData = await cateSchema.findByIdAndDelete(id);
+    if (!deleteData) {
+      return res.status(400).json(error("Invalid Id",res.statusCode));
+    } else {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success Deleted", { deleteData }));
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

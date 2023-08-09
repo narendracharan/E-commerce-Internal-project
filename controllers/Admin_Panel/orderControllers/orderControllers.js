@@ -1,18 +1,20 @@
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const { transporter } = require("../../../service/mailService");
 const { success, error } = require("../../response");
-const fs=require("fs")
+const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 
 exports.orderList = async (req, res) => {
   try {
-    const {from ,to}=req.body
-    const list = await orderSchema.find({
-      $and:[
-        from ?{createdAt:{$gte:new Date(from)}}:{},
-        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
-      ]
-    }).populate("products.product_Id")
+    const { from, to } = req.body;
+    const list = await orderSchema
+      .find({
+        $and: [
+          from ? { createdAt: { $gte: new Date(from) } } : {},
+          to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+        ],
+      })
+      .populate("products.product_Id");
     console.log(list);
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
@@ -26,6 +28,7 @@ exports.orderSearch = async (req, res) => {
     const orderStatus = req.body.orderStatus;
     const orderData = await orderSchema.find({
       orderStatus: { $regex: orderStatus, $options: "i" },
+      paymentIntent: { $regex: orderStatus, $options: "i" },
     });
     if (orderData.length > 0) {
       return res
@@ -61,32 +64,33 @@ exports.deleteOrder = async (req, res) => {
   }
 };
 
-
-exports.orderUpdate=async(req,res)=>{
-  try{
-const id =req.params.id
-const updateOrder=await orderSchema.findByIdAndUpdate(id,req.body,{new:true}).populate("user_Id")
-var mailOptions = {
-  from: "s04450647@gmail.com",
-  to:updateOrder.user_Id.userEmail,
-  subject: "Order Successfully",
-  text: `Hello ${updateOrder.user_Id.userName}
+exports.orderUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateOrder = await orderSchema
+      .findByIdAndUpdate(id, req.body, { new: true })
+      .populate("user_Id");
+    var mailOptions = {
+      from: "s04450647@gmail.com",
+      to: updateOrder.user_Id.userEmail,
+      subject: "Order Successfully",
+      text: `Hello ${updateOrder.user_Id.userName}
   Your order has been successfully placed  and is being ${updateOrder.orderStatus}.
   Order Number: ${updateOrder._id}
   Date of Order: ${updateOrder.createdAt}
   Item(s) Ordered: ${updateOrder.products.length}
-  Thank you    `
-};
-await transporter.sendMail(mailOptions)
-res.status(200).json(success(res.statusCode,"Success",{updateOrder}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+  Thank you    `,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(200).json(success(res.statusCode, "Success", { updateOrder }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.orderExel=async(req,res)=>{
-  try{
-    const order = await orderSchema.find({}).populate(["products.product_Id"])
+exports.orderExel = async (req, res) => {
+  try {
+    const order = await orderSchema.find({}).populate(["products.product_Id"]);
     let allOrders = [];
     for (const exportOrder of order) {
       let date = String(exportOrder.createdAt).split(" ");
@@ -94,10 +98,10 @@ exports.orderExel=async(req,res)=>{
       let obj = {
         "Order Date": newDate,
         "order ID": `${exportOrder._id}`,
-        "Payment Method":` ${exportOrder.paymentIntent}`,
+        "Payment Method": ` ${exportOrder.paymentIntent}`,
         "Delivery Status": `${exportOrder.orderStatus}`,
-        "Total Amount":`${exportOrder.cartsTotal}`,
-       // "Image":`${exportOrder.products}`
+        "Total Amount": `${exportOrder.cartsTotal}`,
+        // "Image":`${exportOrder.products}`
       };
       allOrders.push(obj);
     }
@@ -109,8 +113,8 @@ exports.orderExel=async(req,res)=>{
         file: `${process.env.BASE_URL}/${filename}.xlsx`,
       })
     );
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed",res.statusCode))
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
