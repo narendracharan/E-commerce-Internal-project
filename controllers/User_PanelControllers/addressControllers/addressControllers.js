@@ -1,12 +1,28 @@
 const addressSchema = require("../../../models/User_PanelSchema/addressSchema/addressSchema");
+const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { error, success } = require("../../response");
 
 exports.createAddress = async (req, res) => {
   try {
-    const address = new addressSchema(req.body);
-    const addressData = await address.save();
+    const {title,address,locality,city,country,fullName,mobileNumber,Email,addressTwo,pinCode,user_Id} = new addressSchema(req.body);
+    const newAddress = new addressSchema({
+      title:title,
+      address:address,
+      locality:locality,
+      city:city,
+      country:country,
+      fullName:fullName,
+      mobileNumber:mobileNumber,
+      Email:Email,
+      addressTwo:addressTwo,
+      pinCode:pinCode,
+      user_Id:user_Id
+    })
+    const addressData=await newAddress.save()
+    const updte=await userSchema.findOneAndUpdate({_id:user_Id},{address_Id:newAddress._id},{new:true})
     res.status(201).json(success(res.statusCode, "Success", { addressData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

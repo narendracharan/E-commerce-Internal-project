@@ -296,3 +296,12 @@ res.status(200).json(success(res.statusCode,"Success",{saveMap}))
     res.status(400).json(error("Failed",res.statusCode))
   }
 }
+
+exports.allLocation=async(req,res)=>{
+  try{
+    const allData=await Userschema.find().select(["userName","longitude","latitude"])
+    res.status(200).json(success(res.statusCode,"Success",{allData}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}
