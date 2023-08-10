@@ -31,9 +31,28 @@ const schema = new mongoose.Schema({
       "Inprogress"
     ],
   },
+  orderStatus_ar: {
+    type: String,
+    default: "قيد الانتظار",
+    enum: [
+      "موافقة",
+      "معباه",
+      "شحنها",
+      "تم التوصيل",
+      "ألغيت",
+      "قيد الانتظار",
+      "يعالج",
+      "لا ترسل",
+      "في تَقَدم"
+    ],
+  },
   paymentIntent: {
     type: String,
     default: "Cash on Delivery",
+  },
+  paymentIntent_ar: {
+    type: String,
+    default: "الدفع عند الاستلام",
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,

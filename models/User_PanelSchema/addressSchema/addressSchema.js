@@ -5,7 +5,15 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  title_ar: {
+    type: String,
+    require: true,
+  },
   address: {
+    type: String,
+    require: true,
+  },
+  address_ar: {
     type: String,
     require: true,
   },
@@ -13,11 +21,23 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  locality_ar: {
+    type: String,
+    require: true,
+  },
   city: {
     type: String,
     require: true,
   },
+  city_ar: {
+    type: String,
+    require: true,
+  },
   country: {
+    type: String,
+    require: true,
+  },
+  country_ar: {
     type: String,
     require: true,
   },
@@ -34,6 +54,10 @@ const schema = new mongoose.Schema({
     require: true,
   },
   addressTwo: {
+    type: String,
+    require: true,
+  },
+  addressTwo_ar: {
     type: String,
     require: true,
   },

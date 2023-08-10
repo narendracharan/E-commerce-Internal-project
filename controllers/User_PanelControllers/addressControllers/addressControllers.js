@@ -4,7 +4,7 @@ const { error, success } = require("../../response");
 
 exports.createAddress = async (req, res) => {
   try {
-    const {title,address,locality,city,country,fullName,mobileNumber,Email,addressTwo,pinCode,user_Id} = new addressSchema(req.body);
+    const {title,title_ar,address,address_ar,locality,locality_ar,city,city_ar,country,country_ar,fullName,fullName_ar,mobileNumber,Email,addressTwo,addressTwo_ar,pinCode,user_Id} = new addressSchema(req.body);
     const newAddress = new addressSchema({
       title:title,
       address:address,
@@ -16,7 +16,14 @@ exports.createAddress = async (req, res) => {
       Email:Email,
       addressTwo:addressTwo,
       pinCode:pinCode,
-      user_Id:user_Id
+      user_Id:user_Id,
+      title_ar:title_ar,
+      address_ar:address_ar,
+      locality_ar:locality_ar,
+      city_ar:city_ar,
+      country_ar:country_ar,
+      fullName_ar:fullName_ar,
+      addressTwo_ar:addressTwo_ar
     })
     const addressData=await newAddress.save()
     const updte=await userSchema.findOneAndUpdate({_id:user_Id},{address_Id:newAddress._id},{new:true})
