@@ -7,7 +7,7 @@ const {
   userView,
   productView,
   reporterSearch,
-} = require("../../../controllers/Admin_Panel/reporterControllers/reporterControllers");
+} = require("../../../controllers/Admin_Panel/reporterControllers/reporterController");
 
 router.post("/createReporter", tokenAuthorisationUser, createReporter);
 router.post("/list", tokenAuthorisationUser, reporterList);

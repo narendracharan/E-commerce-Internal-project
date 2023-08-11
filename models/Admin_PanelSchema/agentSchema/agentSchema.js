@@ -54,6 +54,10 @@ const schema = new mongoose.Schema({
     type: String,
     default: "Online",
   },
+  onlineStatus_ar: {
+    type: String,
+    default: "متصل",
+  },
   status: {
     type: String,
     default: "Created",

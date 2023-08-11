@@ -109,6 +109,8 @@ exports.editProfile = async (req, res) => {
       userEmail: req.body.userEmail,
       profile_Pic: req.file.location,
     };
+    console.log(req.file);
+    
     const profileData = await userSchema.findByIdAndUpdate(
       req.params.id,
       data,

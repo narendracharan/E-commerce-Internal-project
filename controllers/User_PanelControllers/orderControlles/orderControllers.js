@@ -78,6 +78,7 @@ exports.createOrder = async (req, res) => {
   //    // sameOrder.userId.deviceId
   //   );
   //   console.log();
+  console.log(updated.user_Id.userEmail);
     var mailOptions = {
       from: "s04450647@gmail.com",
       to:updated.user_Id.userEmail,

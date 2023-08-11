@@ -13,6 +13,8 @@ const dashboardCommonRoutes = require("./dashboardRoutes/commonRoutes");
 const orderCommonRoutes = require("./orderRoutes/commonRoutes");
 const contactCommonRoutes = require("./contactRoutes/commonRoutes");
 const compareCommonRoutes = require("./compareRoutes/commonRoutes");
+const tokenAuthorisationUser = require("../../middleware/userAuth");
+const { reportsProduct } = require("../../controllers/User_PanelControllers/reportsControllers");
 
 router.use("/user", userRoutes);
 router.use("/product", productRoutes);
@@ -27,5 +29,6 @@ router.use("/dashboards", dashboardCommonRoutes);
 router.use("/order", orderCommonRoutes);
 router.use("/contact", contactCommonRoutes);
 router.use("/compare", compareCommonRoutes);
+router.post("/reports",tokenAuthorisationUser,reportsProduct)
 
 module.exports = router;

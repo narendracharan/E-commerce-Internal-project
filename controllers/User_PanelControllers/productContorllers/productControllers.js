@@ -201,17 +201,21 @@ exports.rating = async (req, res) => {
       for (let i = 0; i < ralatedProduct.ratings.length; i++) {
         totalRating = totalRating + ralatedProduct.ratings[i].star;
       }
-      let newrating = await productSchema({
-        totalRating,
-        ralatedProduct,
-      }).save();
+      console.log(totalRating);
+   const rating=   await productSchema.findByIdAndUpdate({_id:product_Id},{totalRating:totalRating},{new:true})
+   
+      // let newrating = await productSchema({
+      //   totalRating,
+      //   ralatedProduct,
+      // }).save();
       res
         .status(200)
         .json(
-          success(res.statusCode, "Success", { ralatedProduct, newrating })
+          success(res.statusCode, "Success", { ralatedProduct })
         );
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
