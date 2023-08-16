@@ -54,7 +54,8 @@ exports.createOrder = async (req, res) => {
       taxPrice,
       shippingPrice,
       orderStatus,
-      orderStatus_ar
+      orderStatus_ar,
+      status:[orderStatus]
     })
   //   const filename=Date.now()
   //   const json = JSON.stringify(newCarts);

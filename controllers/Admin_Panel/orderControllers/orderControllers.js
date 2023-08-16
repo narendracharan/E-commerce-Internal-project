@@ -67,44 +67,45 @@ exports.deleteOrder = async (req, res) => {
 exports.orderUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderStatus = req.body.orderStatus;
-    if (orderStatus == "Pending") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Pending", res.statusCode));
-    }
-    if (orderStatus == "Shipped") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Shipped", res.statusCode));
-    }
-    if (orderStatus == "Packed") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Packed", res.statusCode));
-    }
-    if (orderStatus == "Approved") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Approved", res.statusCode));
-    }
-    if (orderStatus == "Delivered") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Delivered", res.statusCode));
-    }
-    if (orderStatus == "Cancelled") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Cancelled", res.statusCode));
-    }
-    if (orderStatus == "Inprogress") {
-      return res
-        .status(201)
-        .json(error("This orderStatus are alredy Inprogress", res.statusCode));
-    }
+    const {orderStatus,orderStatus_ar} = req.body;
+    // const status=await orderSchema.findOne({_id:id})
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
+    // if (orderStatus == status.orderStatus) {
+    //   return res
+    //     .status(201)
+    //     .json(error("This orderStatus are alredy change", res.statusCode));
+    // }
     const updateOrder = await orderSchema
-      .findByIdAndUpdate(id, orderStatus, { new: true })
+      .findByIdAndUpdate(id, {orderStatus:orderStatus,orderStatus_ar:orderStatus_ar}, { new: true })
       .populate("user_Id");
     var mailOptions = {
       from: "s04450647@gmail.com",
@@ -115,7 +116,7 @@ exports.orderUpdate = async (req, res) => {
   Order Number: ${updateOrder._id}
   Date of Order: ${updateOrder.createdAt}
   Item(s) Ordered: ${updateOrder.products.length}
-  Thank you    `,
+  Thank you`,
     };
     await transporter.sendMail(mailOptions);
     res.status(200).json(success(res.statusCode, "Success", { updateOrder }));

@@ -6,6 +6,10 @@ const schema = new mongoose.Schema({
     ref: "product",
     required: true,
   },
+  like:{
+    type:String,
+    default:false
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("wishList", schema);
