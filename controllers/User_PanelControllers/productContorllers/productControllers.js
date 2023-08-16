@@ -7,7 +7,10 @@ const { error, success } = require("../../response");
 
 exports.productList = async (req, res) => {
   try {
-    const list = await productSchema.find({}).sort({ _id: -1 }).populate("brand_Id")
+    const list = await productSchema
+      .find({})
+      .sort({ _id: -1 })
+      .populate("brand_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -19,7 +22,8 @@ exports.productDetails = async (req, res) => {
     const id = req.params.id;
     const details = await productSchema.findById(id);
     const Discount = await offerSchema
-      .find({ product_Id: id }).populate("brand_Id")
+      .find({ product_Id: id })
+      .populate("brand_Id")
       .select("Discount");
     const discount = Discount.map((x) => x.Discount);
     const price = details.Price;
@@ -202,17 +206,19 @@ exports.rating = async (req, res) => {
         totalRating = totalRating + ralatedProduct.ratings[i].star;
       }
       console.log(totalRating);
-   const rating=   await productSchema.findByIdAndUpdate({_id:product_Id},{totalRating:totalRating},{new:true})
-   
+      const rating = await productSchema.findByIdAndUpdate(
+        { _id: product_Id },
+        { totalRating: totalRating },
+        { new: true }
+      );
+
       // let newrating = await productSchema({
       //   totalRating,
       //   ralatedProduct,
       // }).save();
       res
         .status(200)
-        .json(
-          success(res.statusCode, "Success", { ralatedProduct })
-        );
+        .json(success(res.statusCode, "Success", { ralatedProduct }));
     }
   } catch (err) {
     console.log(err);
@@ -222,8 +228,7 @@ exports.rating = async (req, res) => {
 
 exports.Brandlist = async (req, res) => {
   try {
-    const brandlist = await brandSchema
-      .find({})
+    const brandlist = await brandSchema.find({});
     res.status(200).json(success(res.statusCode, "Success", { brandlist }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

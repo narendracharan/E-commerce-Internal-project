@@ -136,3 +136,20 @@ exports.orderSummery = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+// exports.editCart=async(req,res)=>{
+//   try{
+// const id=req.params.id
+// const quantity=req.body.quantity
+// const product=await cartSchema.findById(id).populate("products.product_Id");
+// const update=await cartSchema.findByIdAndUpdate(id,,{new:true}).populate("products.product_Id");
+// console.log(update);
+// for(let i=0;i<product.products.length;i++){
+//   product.cartsTotal *quantity
+// }
+// console.log(product);
+//   }catch(err){
+//     res.status(400).json(error("Failed",res.statusCode))
+//   }
+// }

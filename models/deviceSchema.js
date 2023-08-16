@@ -20,7 +20,7 @@ const Schema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: "Rupee",
+   require:true
   },
 });
 Schema.set("timestamps", true);

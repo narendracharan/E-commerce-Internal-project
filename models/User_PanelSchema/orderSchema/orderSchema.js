@@ -18,16 +18,14 @@ const schema = new mongoose.Schema({
   cartsTotal: Number,
   orderStatus: {
     type: String,
-    default: "pending",
+    default: "Pending",
     enum: [
       "Approved",
       "Packed",
       "Shipped",
       "Delivered",
       "Cancelled",
-      "pending",
-      "Processing",
-      "NotSend",
+      "Pending",
       "Inprogress"
     ],
   },

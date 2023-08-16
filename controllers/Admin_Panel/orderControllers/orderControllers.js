@@ -67,8 +67,44 @@ exports.deleteOrder = async (req, res) => {
 exports.orderUpdate = async (req, res) => {
   try {
     const id = req.params.id;
+    const orderStatus = req.body.orderStatus;
+    if (orderStatus == "Pending") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Pending", res.statusCode));
+    }
+    if (orderStatus == "Shipped") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Shipped", res.statusCode));
+    }
+    if (orderStatus == "Packed") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Packed", res.statusCode));
+    }
+    if (orderStatus == "Approved") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Approved", res.statusCode));
+    }
+    if (orderStatus == "Delivered") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Delivered", res.statusCode));
+    }
+    if (orderStatus == "Cancelled") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Cancelled", res.statusCode));
+    }
+    if (orderStatus == "Inprogress") {
+      return res
+        .status(201)
+        .json(error("This orderStatus are alredy Inprogress", res.statusCode));
+    }
     const updateOrder = await orderSchema
-      .findByIdAndUpdate(id, req.body, { new: true })
+      .findByIdAndUpdate(id, orderStatus, { new: true })
       .populate("user_Id");
     var mailOptions = {
       from: "s04450647@gmail.com",
