@@ -24,6 +24,9 @@ const {
   updateOnline,
   verifyOtp,
   detailsUser,
+  addLanguage,
+  updateLanguage,
+  
 } = require("../../../controllers/Admin_Panel/agentControllers/agentControllers");
 const router = express.Router();
 
@@ -39,6 +42,7 @@ router.post(
   s3upload.single("profile_Pic"),
   editProfile
 );
+
 router.post("/changePassword", changePassword);
 router.post("/add-feedback", tokenAuthorisationUser, feedbackAdd);
 router.post("/order-list", tokenAuthorisationUser, orderList);
@@ -59,4 +63,6 @@ router.post("/job-status", tokenAuthorisationUser, agentDeatails);
 router.post("/update-status", tokenAuthorisationUser, updateStatus);
 router.post("/total-revenue/:id", tokenAuthorisationUser, totalRevenue);
 router.post("/online-status/:id", tokenAuthorisationUser, updateOnline);
+router.post("/add-language",tokenAuthorisationUser,addLanguage)
+router.post("/update-language/:id",tokenAuthorisationUser,updateLanguage)
 module.exports = router;

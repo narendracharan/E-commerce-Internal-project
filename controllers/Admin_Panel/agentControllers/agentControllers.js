@@ -6,6 +6,8 @@ const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema"
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
+const languageSchema=require("../../../models/Admin_PanelSchema/agentSchema/language")
+
 
 exports.addUser = async (req, res) => {
   try {
@@ -403,6 +405,31 @@ exports.detailsUser = async (req, res) => {
       profile_Pic: 1,
     });
     res.status(200).json(success(res.statusCode, "Success", { details }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.addLanguage = async (req, res) => {
+  try {
+    const language = new languageSchema(req.body);
+    const saveLanguage = await language.save();
+    res.status(201).json(success(res.statusCode, "Success", { saveLanguage }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.updateLanguage = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateData = await languageSchema.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res
+      .status(200)
+      .json(success(res.statusCode, "Updated Data", { updateData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
