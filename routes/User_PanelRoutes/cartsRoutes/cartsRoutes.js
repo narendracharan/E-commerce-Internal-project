@@ -19,5 +19,5 @@ router.post("/apply-coupan", tokenAuthorisationUser, applyCoupan);
 router.post("/carts-summery", tokenAuthorisationUser, orderSummery);
 router.post("/cart-count", tokenAuthorisationUser, cartCount);
 router.post("/coupan-details", tokenAuthorisationUser, coupanDetails);
-//router.post("/edit-card/:id",editCart)
+router.post("/edit-card/:id",tokenAuthorisationUser,editCart)
 module.exports = router;

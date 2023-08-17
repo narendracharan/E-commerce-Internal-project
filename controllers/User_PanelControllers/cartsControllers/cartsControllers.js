@@ -9,10 +9,14 @@ const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offer
 
 exports.addToCart = async (req, res) => {
   try {
-    const { carts } = req.body;
-    const { _id } = req.user;
+    const { carts ,user_Id} = req.body;
+    // const { _id } = req.user;
     let products = [];
-    const user = await userSchema.findById(_id);
+    const prod=await cartSchema.find({user_Id:user_Id})
+    if(prod){
+      res.status(201).json(error("this Product are already added",res.statusCode))
+    }
+   // const user = await userSchema.findById(_id);
     for (let i = 0; i < carts.length; i++) {
       let object = {};
       object.product_Id = carts[i].product_Id;
@@ -36,13 +40,15 @@ exports.addToCart = async (req, res) => {
     let newCarts = await new cartSchema({
       products,
       cartsTotal,
-      user_Id: user?._id,
+      user_Id: user_Id,
     }).save();
+    
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 
 exports.deleteProduct = async (req, res) => {
   try {
@@ -138,18 +144,24 @@ exports.orderSummery = async (req, res) => {
 };
 
 
-// exports.editCart=async(req,res)=>{
-//   try{
-// const id=req.params.id
-// const quantity=req.body.quantity
-// const product=await cartSchema.findById(id).populate("products.product_Id");
-// const update=await cartSchema.findByIdAndUpdate(id,,{new:true}).populate("products.product_Id");
-// console.log(update);
-// for(let i=0;i<product.products.length;i++){
-//   product.cartsTotal *quantity
-// }
-// console.log(product);
-//   }catch(err){
-//     res.status(400).json(error("Failed",res.statusCode))
-//   }
-// }
+exports.editCart=async(req,res)=>{
+  try{
+const id=req.params.id
+const quantity=req.body.quantity
+const product=await cartSchema.findOne({_id:id})
+for(let i=0;i<product.products.length;i++){
+  product.products[i].quantity= product.products[i].quantity+ +quantity
+  let getPrice = await productSchema
+        .findById(product.products[i].product_Id)
+        .select("Price")
+        .exec();
+    let total=getPrice.Price *quantity
+   product.cartsTotal =product.cartsTotal + +total
+}
+await product.save()
+res.status(200).json(success(success(res.statusCode,"Success",{product})))
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

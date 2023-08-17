@@ -64,7 +64,7 @@ exports.productSearch = async (req, res) => {
 exports.relatedProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const productData = await productSchema.find({ category_Id: id });
+    const productData = await productSchema.find({ Subcategory_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { productData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
