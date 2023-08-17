@@ -12,10 +12,6 @@ exports.addToCart = async (req, res) => {
     const { carts ,user_Id} = req.body;
     // const { _id } = req.user;
     let products = [];
-    const prod=await cartSchema.find({user_Id:user_Id})
-    if(prod){
-      res.status(201).json(error("this Product are already added",res.statusCode))
-    }
    // const user = await userSchema.findById(_id);
     for (let i = 0; i < carts.length; i++) {
       let object = {};
@@ -37,6 +33,12 @@ exports.addToCart = async (req, res) => {
         products[i].Price * products[i].quantity -
         products[i].Discount;
     }
+//     let prod = await cartSchema
+//     .findById(_id)
+// console.log(prod);
+//    if(prod){
+//       res.status(201).json(error("this Product are already added",res.statusCode))
+//    }
     let newCarts = await new cartSchema({
       products,
       cartsTotal,
@@ -45,6 +47,7 @@ exports.addToCart = async (req, res) => {
     
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
