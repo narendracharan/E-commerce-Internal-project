@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
   like:{
     type:String,
     default:false
+  },
+  user_Id:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "userpanel",
+    required: true,
   }
 });
 schema.set("timestamps", true);

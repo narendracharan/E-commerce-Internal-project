@@ -4,10 +4,11 @@ const productSchema=require("../../../models/Admin_PanelSchema/categorySchema/pr
 
 exports.createWish = async (req, res) => {
   try {
-    const {product_Id,like} = req.body
+    const {product_Id,like,userId} = req.body
     const wishsdata=new wishSchema({
       product_Id:product_Id,
-      like:like
+      like:like,
+      user_Id:userId
     })
     const wishs=await wishsdata.save()
     await productSchema.findByIdAndUpdate({_id:product_Id},{like:like},{new:true})
@@ -19,7 +20,8 @@ exports.createWish = async (req, res) => {
 
 exports.wishlist = async (req, res) => {
   try {
-    const list = await wishSchema.find().populate("product_Id");
+    const _id=req.params._id
+    const list = await wishSchema.find({user_Id:_id}).populate("product_Id");
     res.status(200).json(success(res.statusCode, "Wish List", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -29,8 +31,10 @@ exports.wishlist = async (req, res) => {
 exports.deleteWishList = async (req, res) => {
   try {
     const id = req.params.id;
-    const deleteDta = await wishSchema.findByIdAndDelete(id);
-    res
+    var like="false"
+    var deleteDta = await wishSchema.findByIdAndDelete(id);
+   await productSchema.findByIdAndUpdate({_id:deleteDta.product_Id},{like:like},{new:true})
+     res
       .status(200)
       .json(success(res.statusCode, "Wish List Deleted", { deleteDta }));
   } catch (err) {
