@@ -111,8 +111,9 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
+    const _id=req.params._id
     const orderList = await orderSchema
-      .find({})
+      .find({user_Id:_id})
       .populate("products.product_Id")
       .populate("user_Id");
     res.status(200).json(success(res.status, "Success", { orderList }));
@@ -176,7 +177,8 @@ exports.orderReview = async (req, res) => {
 
 exports.cancelledOrder = async (req, res) => {
   try {
-    const cancelled = await orderSchema.find().populate("products.product_Id");
+    const _id=req.params._id
+    const cancelled = await orderSchema.find({user_Id:_id}).populate("products.product_Id");
     const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -186,7 +188,8 @@ exports.cancelledOrder = async (req, res) => {
 
 exports.IndeliveryOrder = async (req, res) => {
   try {
-    const Delivered = await orderSchema.find().populate("products.product_Id");
+    const _id=req.params._id
+    const Delivered = await orderSchema.find({user_Id:_id}).populate("products.product_Id");
     const orderData = Delivered.filter((x) => x.orderStatus == "Processing" || "Packed"|| "Shipped" || "Inprogress"||"pending" );
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
@@ -197,7 +200,8 @@ exports.IndeliveryOrder = async (req, res) => {
 
 exports.orderShipped=async(req,res)=>{
   try{
-const shipped=await orderSchema.find().populate(["products.product_Id","user_Id","address_Id"]);
+    const _id=req.params._id
+const shipped=await orderSchema.find({user_Id:_id}).populate(["products.product_Id","user_Id","address_Id"]);
 const shippedData=shipped.filter((x)=>x.orderStatus == "Shipped" || x.orderStatus==  "Inprogress" || x.orderStatus==  "Delivered")
 res.status(200).json(success(res.statusCode,"Success",{shippedData}))
   }catch(err){
