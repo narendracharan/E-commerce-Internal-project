@@ -111,7 +111,7 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
-    const _id=req.params._id
+    const _id=req.params.id
     const orderList = await orderSchema
       .find({user_Id:_id})
       .populate("products.product_Id")

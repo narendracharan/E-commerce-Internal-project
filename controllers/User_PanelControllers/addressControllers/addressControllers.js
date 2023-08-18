@@ -36,7 +36,8 @@ exports.createAddress = async (req, res) => {
 
 exports.addressList = async (req, res) => {
   try {
-    const addressData = await addressSchema.find({user_Id:req.params._id});
+    const _id=req.params.id
+    const addressData = await addressSchema.find({user_Id:_id});
     res.status(200).json(success(res.statusCode, "Success", { addressData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
