@@ -1,10 +1,16 @@
 const wishSchema = require("../../../models/User_PanelSchema/wishListSchema/withlistSchema");
 const { error, success } = require("../../response");
+const productSchema=require("../../../models/Admin_PanelSchema/categorySchema/productSchema")
 
 exports.createWish = async (req, res) => {
   try {
-    const wish = new wishSchema(req.body);
-    const wishs = await wish.save();
+    const {product_Id,like} = req.body
+    const wishsdata=new wishSchema({
+      product_Id:product_Id,
+      like:like
+    })
+    const wishs=await wishsdata.save()
+    await productSchema.findByIdAndUpdate({_id:product_Id},{like:like},{new:true})
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
