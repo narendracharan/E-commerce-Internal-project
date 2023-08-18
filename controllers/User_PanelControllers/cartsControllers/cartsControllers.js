@@ -57,7 +57,7 @@ exports.deleteProduct = async (req, res) => {
 
 exports.cartsList = async (req, res) => {
   try {
-    const _id=req.params._id
+    const _id=req.params.id
     const list = await cartsSchema.find({user_Id:_id}).populate("products.product_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {

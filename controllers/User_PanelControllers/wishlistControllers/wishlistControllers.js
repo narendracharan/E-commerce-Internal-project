@@ -14,16 +14,19 @@ exports.createWish = async (req, res) => {
     await productSchema.findByIdAndUpdate({_id:product_Id},{like:like},{new:true})
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
+
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.wishlist = async (req, res) => {
   try {
-    const _id=req.params._id
+   const _id=req.params.id;
+   console.log(_id);
     const list = await wishSchema.find({user_Id:_id}).populate("product_Id");
     res.status(200).json(success(res.statusCode, "Wish List", { list }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
