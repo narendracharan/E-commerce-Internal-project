@@ -86,13 +86,15 @@ exports.applyCoupan = async (req, res) => {
     let carts = await cartSchema.find({user_Id:id});
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
+    console.log(cartsTotal);
     let subtotal = 0;
     for (let i = 0; i < cartsTotal.length; i++) {
       subtotal = subtotal + cartsTotal[i];
     }
-      console.log(DiscountType %100);
-    
+
     var cartsTotalSum = subtotal -subtotal *(DiscountType/100) 
+   const dd= await cartSchema.findOneAndUpdate({user_Id:id},{ totalAfterDiscount:cartsTotalSum},{new:true})
+   console.log(dd);
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
@@ -116,25 +118,19 @@ exports.coupanDetails = async (req, res) => {
 
 exports.orderSummery = async (req, res) => {
   try {
-    const val = await coupanSchema.find({});
-    let carts = await cartSchema.find({});
-    let DiscountType = val.map((x) => x.DiscountType);
-    const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
-    let subtotal = 0;
-    for (let i = 0; i < cartsTotal.length; i++) {
-      subtotal = subtotal + cartsTotal[i];
-    }
+    const id=req.params.id
+    let carts = await cartSchema.find({user_Id:id})
+    const cartsTotal = carts.map((cartsTotal) =>parseInt(cartsTotal.totalAfterDiscount));
     const shipping = 40;
     const Tax = 30;
-    var cartsTotalSum = subtotal - DiscountType / 100 + shipping + Tax;
-    const product = await cartSchema.find({}).populate("products.product_Id");
+    var cartsTotalSum = parseInt(cartsTotal)+ shipping + Tax;
+    const product = await cartSchema.find({user_Id:id}).populate("products.product_Id");
     res.status(200).json(
       success(res.statusCode, "Success", {
         product,
-        subtotal,
+        cartsTotal,
         shipping,
         Tax,
-        DiscountType,
         cartsTotalSum,
       })
     );
