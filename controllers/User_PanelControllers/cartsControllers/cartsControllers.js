@@ -19,7 +19,6 @@ exports.addToCart = async (req, res) => {
         .findById(carts[i].product_Id)
         .select("Price")
         .exec();
-        
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       object.Discount = dis.map((x) => x.Discount);
       object.Price = getPrice.Price;
@@ -83,7 +82,8 @@ exports.applyCoupan = async (req, res) => {
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    let carts = await cartSchema.find({user_Id:id});
+    let carts = await cartSchema.find({_id:id});
+    console.log(carts);
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
     console.log(cartsTotal);
