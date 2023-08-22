@@ -77,19 +77,22 @@ exports.cartCount = async (req, res) => {
 
 exports.applyCoupan = async (req, res) => {
   try {
+    const id=req.params.id
     const coupanCode = req.body.coupanCode;
     const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    let carts = await cartSchema.find({});
+    let carts = await cartSchema.find({user_Id:id});
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
     let subtotal = 0;
     for (let i = 0; i < cartsTotal.length; i++) {
       subtotal = subtotal + cartsTotal[i];
     }
-    var cartsTotalSum = subtotal - DiscountType / 10;
+      console.log(DiscountType %100);
+    
+    var cartsTotalSum = subtotal -subtotal *(DiscountType/100) 
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
