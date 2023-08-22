@@ -156,7 +156,8 @@ exports.orderList = async (req, res) => {
 
 exports.orderSuccessDetails = async (req, res) => {
   try {
-    const Delivered = await orderSchema.find().populate("products.product_Id");
+    const _id=req.params.id
+    const Delivered = await orderSchema.find({user_Id:_id}).populate("products.product_Id");
     console.log(Delivered);
     const orderData = Delivered.filter((x) => x.orderStatus ==  "Delivered");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));

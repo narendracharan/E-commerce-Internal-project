@@ -81,7 +81,25 @@ const schema = new mongoose.Schema({
   },
   status:{
     type:Array
+  },
+  statusTime:{
+    orderPlace:{
+      type:Date
+    },
+    processing:{
+      type:Date
+    },
+    Shipped:{
+      type:Date 
+    },
+    Delivered:{
+      type:Date 
+    },
+    Cancel:{
+      type:Date 
+    }
   }
+
   // qrCode:{
   //   type:Array
   // }

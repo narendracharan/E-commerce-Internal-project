@@ -17,7 +17,7 @@ router.delete("/delete-product/:id", tokenAuthorisationUser, deleteProduct);
 router.post("/carts-list/:id", tokenAuthorisationUser, cartsList);
 router.post("/apply-coupan", tokenAuthorisationUser, applyCoupan);
 router.post("/carts-summery", tokenAuthorisationUser, orderSummery);
-router.post("/cart-count", tokenAuthorisationUser, cartCount);
+router.post("/cart-count/:id", tokenAuthorisationUser, cartCount);
 router.post("/coupan-details", tokenAuthorisationUser, coupanDetails);
 router.post("/edit-card/:id",tokenAuthorisationUser,editCart)
 module.exports = router;

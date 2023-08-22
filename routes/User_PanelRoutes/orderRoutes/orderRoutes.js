@@ -17,7 +17,7 @@ router.post("/create-order", tokenAuthorisationUser, createOrder);
 router.post("/order-Details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-list/:id", tokenAuthorisationUser, orderList);
 router.post(
-  "/order-success-details",
+  "/order-success-details/:id",
   tokenAuthorisationUser,
   orderSuccessDetails
 );

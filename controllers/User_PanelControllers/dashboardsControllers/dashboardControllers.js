@@ -6,7 +6,8 @@ const { error, success } = require("../../response");
 
 exports.countWishList = async (req, res) => {
   try {
-    const count = await wishListShema.find({}).count();
+    const id=req.params.id
+    const count = await wishListShema.find({user_Id:id}).count();
     res.status(200).json(success(res.statusCode, "Success", { count }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -44,7 +45,8 @@ exports.allPendingOrder = async (req, res) => {
 
 exports.totalOrder = async (req, res) => {
   try {
-    const totalData = await orderSchema.find({}).count();
+    const id=req.params.id
+    const totalData = await orderSchema.find({user_Id:id}).count();
     res.status(200).json(success(res.statusCode, "Success", { totalData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

@@ -67,7 +67,8 @@ exports.cartsList = async (req, res) => {
 
 exports.cartCount = async (req, res) => {
   try {
-    const count = await cartSchema.find({}).count();
+    const id=req.params.id
+    const count = await cartSchema.find({user_Id:id}).count()
     res.status(200).json(success(res.statusCode, "Success", { count }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
