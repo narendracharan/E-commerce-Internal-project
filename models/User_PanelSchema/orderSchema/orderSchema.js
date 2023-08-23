@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  cartsTotal: Number,
+  cartsTotal: [],
   orderStatus: {
     type: String,
     default: "Pending",

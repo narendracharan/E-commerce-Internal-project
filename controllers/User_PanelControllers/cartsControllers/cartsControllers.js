@@ -112,7 +112,6 @@ exports.applyCoupan = async (req, res) => {
   }
 };
 
-
 exports.applyCoupanToAll = async (req, res) => {
   try {
     const id = req.params.id;
@@ -122,18 +121,18 @@ exports.applyCoupanToAll = async (req, res) => {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
     let carts = await cartSchema.find({ user_Id: id });
-   
+
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
-    
+
     let subtotal = 0;
     for (let i = 0; i < cartsTotal.length; i++) {
       subtotal = subtotal + cartsTotal[i];
     }
-console.log(subtotal);
+    console.log(subtotal);
     var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
     await cartSchema.findOneAndUpdate(
-      {user_Id:id},
+      { user_Id: id },
       { totalAfterDiscount: cartsTotalSum },
       { new: true }
     );

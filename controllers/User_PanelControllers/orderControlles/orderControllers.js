@@ -11,6 +11,7 @@ const path = require("path");
 
 const { error, success } = require("../../response");
 const { Notification } = require("../../notificationControllers");
+const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -24,6 +25,7 @@ exports.createOrder = async (req, res) => {
       orderStatus_ar,
     } = req.body;
     const { carts } = req.body;
+    const id=req.params.id
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
@@ -39,7 +41,9 @@ exports.createOrder = async (req, res) => {
       object.Price = getPrice.Price;
       products.push(object);
     }
-    let cartsTotal = 0;
+    const dd=await cartsSchema.find({_id:id})
+  const pp=  dd.filter((x)=>x.totalAfterDiscount)
+    let cartsTotal = [];
     for (let i = 0; i < products.length; i++) {
       cartsTotal =
         cartsTotal +
@@ -48,7 +52,7 @@ exports.createOrder = async (req, res) => {
     }
     let newCarts = new orderSchema({
       products,
-      cartsTotal,
+      cartsTotal:[pp],
       user_Id,
       address_Id,
       deliverdBy,
@@ -58,6 +62,7 @@ exports.createOrder = async (req, res) => {
       orderStatus_ar,
       status: [orderStatus],
     });
+    console.log(newCarts);
     //   const filename=Date.now()
     //   const json = JSON.stringify(newCarts);
     //   let qr=  qrCode.toFile(path.join(__dirname,`${filename}.png`),json,(err,code)=>{
