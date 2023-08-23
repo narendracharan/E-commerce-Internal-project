@@ -27,31 +27,31 @@ exports.createOrder = async (req, res) => {
     const { carts } = req.body;
     const id=req.params.id
     let products = [];
-    for (let i = 0; i < carts.length; i++) {
-      let object = {};
-      object.product_Id = carts[i].product_Id;
-      object.user_Id = carts[i].user_Id;
-      object.quantity = carts[i].quantity;
-      let getPrice = await productSchema
-        .findById(carts[i].product_Id)
-        .select("Price")
-        .exec();
-      const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
-      object.Disount = dis.map((x) => x.Discount);
-      object.Price = getPrice.Price;
-      products.push(object);
-    }
+    // for (let i = 0; i < carts.length; i++) {
+    //   let object = {};
+    //   object.product_Id = carts[i].product_Id;
+    //   object.user_Id = carts[i].user_Id;
+    //   object.quantity = carts[i].quantity;
+    //   let getPrice = await productSchema
+    //     .findById(carts[i].product_Id)
+    //     .select("Price")
+    //     .exec();
+    //   const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
+    //   object.Disount = dis.map((x) => x.Discount);
+    //   object.Price = getPrice.Price;
+    //   products.push(object);
+    // }
     const dd=await cartsSchema.find({_id:id})
-  const pp=  dd.filter((x)=>x.totalAfterDiscount)
+   const pp=  dd.filter((x)=>x.totalAfterDiscount)
     let cartsTotal = [];
-    for (let i = 0; i < products.length; i++) {
-      cartsTotal =
-        cartsTotal +
-        products[i].Price * products[i].quantity -
-        products[i].Disount;
-    }
+    // for (let i = 0; i < products.length; i++) {
+    //   cartsTotal =
+    //     cartsTotal +
+    //     products[i].Price * products[i].quantity -
+    //     products[i].Disount;
+    // }
     let newCarts = new orderSchema({
-      products,
+     // products,
       cartsTotal:[pp],
       user_Id,
       address_Id,
