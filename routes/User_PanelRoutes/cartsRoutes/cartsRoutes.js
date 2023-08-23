@@ -8,6 +8,7 @@ const {
   orderSummery,
   coupanDetails,
   editCart,
+  applyCoupanToAll,
 } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
@@ -20,4 +21,6 @@ router.post("/carts-summery/:id", tokenAuthorisationUser, orderSummery);
 router.post("/cart-count/:id", tokenAuthorisationUser, cartCount);
 router.post("/coupan-details", tokenAuthorisationUser, coupanDetails);
 router.post("/edit-card/:id",tokenAuthorisationUser,editCart)
+router.post("/apply-coupan-to-all/:id", tokenAuthorisationUser, applyCoupanToAll);
+
 module.exports = router;

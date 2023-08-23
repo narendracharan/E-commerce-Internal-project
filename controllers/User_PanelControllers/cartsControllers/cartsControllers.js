@@ -35,8 +35,8 @@ exports.addToCart = async (req, res) => {
       products,
       cartsTotal,
       user_Id: user_Id,
-    })
-    const newCarts=await newOne.save()
+    });
+    const newCarts = await newOne.save();
     res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
     console.log(err);
@@ -56,8 +56,10 @@ exports.deleteProduct = async (req, res) => {
 
 exports.cartsList = async (req, res) => {
   try {
-    const _id=req.params.id
-    const list = await cartsSchema.find({user_Id:_id}).populate("products.product_Id");
+    const _id = req.params.id;
+    const list = await cartsSchema
+      .find({ user_Id: _id })
+      .populate("products.product_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -66,8 +68,8 @@ exports.cartsList = async (req, res) => {
 
 exports.cartCount = async (req, res) => {
   try {
-    const id=req.params.id
-    const count = await cartSchema.find({user_Id:id}).count()
+    const id = req.params.id;
+    const count = await cartSchema.find({ user_Id: id }).count();
     res.status(200).json(success(res.statusCode, "Success", { count }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -76,13 +78,13 @@ exports.cartCount = async (req, res) => {
 
 exports.applyCoupan = async (req, res) => {
   try {
-    const id=req.params.id
+    const id = req.params.id;
     const coupanCode = req.body.coupanCode;
     const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    let carts = await cartSchema.find({_id:id});
+    let carts = await cartSchema.find({ _id: id });
     console.log(carts);
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
@@ -92,9 +94,49 @@ exports.applyCoupan = async (req, res) => {
       subtotal = subtotal + cartsTotal[i];
     }
 
-    var cartsTotalSum = subtotal -subtotal *(DiscountType/100) 
-   const dd= await cartSchema.findOneAndUpdate({user_Id:id},{ totalAfterDiscount:cartsTotalSum},{new:true})
-   console.log(dd);
+    var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
+    await cartSchema.findByIdAndUpdate(
+      id,
+      { totalAfterDiscount: cartsTotalSum },
+      { new: true }
+    );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        DiscountType,
+        subtotal,
+        cartsTotalSum,
+      })
+    );
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.applyCoupanToAll = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const coupanCode = req.body.coupanCode;
+    const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
+    if (validCoupan == null) {
+      return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
+    }
+    let carts = await cartSchema.find({ user_Id: id });
+   
+    let DiscountType = validCoupan.map((x) => x.DiscountType);
+    const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
+    
+    let subtotal = 0;
+    for (let i = 0; i < cartsTotal.length; i++) {
+      subtotal = subtotal + cartsTotal[i];
+    }
+console.log(subtotal);
+    var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
+    await cartSchema.findOneAndUpdate(
+      {user_Id:id},
+      { totalAfterDiscount: cartsTotalSum },
+      { new: true }
+    );
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
@@ -118,13 +160,17 @@ exports.coupanDetails = async (req, res) => {
 
 exports.orderSummery = async (req, res) => {
   try {
-    const id=req.params.id
-    let carts = await cartSchema.find({user_Id:id})
-    const cartsTotal = carts.map((cartsTotal) =>parseInt(cartsTotal.totalAfterDiscount));
+    const id = req.params.id;
+    let carts = await cartSchema.find({ user_Id: id });
+    const cartsTotal = carts.map((cartsTotal) =>
+      parseInt(cartsTotal.totalAfterDiscount)
+    );
     const shipping = 40;
     const Tax = 30;
-    var cartsTotalSum = parseInt(cartsTotal)+ shipping + Tax;
-    const product = await cartSchema.find({user_Id:id}).populate("products.product_Id");
+    var cartsTotalSum = parseInt(cartsTotal) + shipping + Tax;
+    const product = await cartSchema
+      .find({ user_Id: id })
+      .populate("products.product_Id");
     res.status(200).json(
       success(res.statusCode, "Success", {
         product,
@@ -152,9 +198,9 @@ exports.editCart = async (req, res) => {
         .select("Price")
         .exec();
       let total = getPrice.Price * quantity;
-    //let tol = getPrice.Price - quantity2;
+      //let tol = getPrice.Price - quantity2;
       product.cartsTotal = product.cartsTotal + +total;
-     // product.cartsTotal = product.cartsTotal -  -tol;
+      // product.cartsTotal = product.cartsTotal -  -tol;
     }
     await product.save();
     res
