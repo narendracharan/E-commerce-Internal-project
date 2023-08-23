@@ -190,6 +190,13 @@ exports.userDetails = async (req, res) => {
     for (let i = 0; i < price.length; i++) {
       totalSpent += price[i];
     }
+    for(let i=0;i<order.length;i++){
+      for(let j=0;j<order[i].cartsTotal.length;j++){
+        for(let k=0;k<order[i].cartsTotal[j];k++){
+     
+        }
+      }
+    }
     const orderValue = compltedOrder / totalSpent;
     const review = await reviewSchema.find({ user_Id: id });
     res.status(200).json(
