@@ -192,6 +192,7 @@ exports.userDetails = async (req, res) => {
     }
     for(let i=0;i<order.length;i++){
       for(let j=0;j<order[i].cartsTotal.length;j++){
+      
         for(let k=0;k<order[i].cartsTotal[j];k++){
      
         }

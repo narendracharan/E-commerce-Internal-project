@@ -44,6 +44,61 @@ exports.addToCart = async (req, res) => {
   }
 };
 
+// exports.addProducts = async (req, res) => {
+//   try {
+//     const { product_Id, quantity} = req.body;
+//     console.log(req.body);
+//     if (!pro) {
+//       return res
+//         .status(201)
+//         .json(error("Please provide productId!", res.statusCode));
+//     }
+//     if (!quantity) {
+//       return res
+//         .status(201)
+//         .json(error("Please provide quantity!", res.statusCode));
+//     }
+//     let cart;
+//     cart = await cartSchema.findOne({ userId: req.user._id });
+//     if (cart) {
+//       const newProduct = cart.products.filter(
+//         (product) =>
+//           String(product.product_Id) == String(productId)
+//       );
+//       if (newProduct.length) {
+//         newProduct[0].quantity = newProduct[0].quantity + +quantity;
+//         await cart.save();
+//         return res
+//           .status(201)
+//           .json(success(res.statusCode, "Product Added", { cart }));
+//       } else {
+//         cart.products.push({
+//           product_Id: productId,
+//           quantity: quantity,
+//         });
+//         await cart.save();
+//         return res
+//           .status(201)
+//           .json(success(res.statusCode, "Product Added", { cart }));
+//       }
+//     }
+//     cart = new cartSchema({
+//       userId: req.user._id,
+//       products: [
+//         {
+//           productId: productId,
+//           quantity: quantity,
+//         },
+//       ],
+//     });
+//     await cart.save();
+//     res.status(201).json(success(res.statusCode, "Product Added", { cart }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(401).json(error("error addProducts", res.statusCode));
+//   }
+// };
+
 exports.deleteProduct = async (req, res) => {
   try {
     const id = req.params.id;
@@ -78,28 +133,31 @@ exports.cartCount = async (req, res) => {
 
 exports.applyCoupan = async (req, res) => {
   try {
-    const id = req.params.id;
-    const coupanCode = req.body.coupanCode;
+    const { coupanCode, product_Id, quantity, user_Id } = req.body;
     const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    let carts = await cartSchema.find({ _id: id });
-    console.log(carts);
+    //let carts = await cartSchema.find({ _id: id });
+    // console.log(carts);
     let DiscountType = validCoupan.map((x) => x.DiscountType);
-    const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
-    console.log(cartsTotal);
+    let getPrice = await productSchema
+      .findById(product_Id)
+      .select("Price")
+      .exec();
+    //   const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
+    //   console.log(cartsTotal);
     let subtotal = 0;
-    for (let i = 0; i < cartsTotal.length; i++) {
-      subtotal = subtotal + cartsTotal[i];
-    }
-
+    // for (let i = 0; i < getPrice.length; i++) {
+    subtotal = subtotal + getPrice.Price * quantity;
+    //}
     var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
-    await cartSchema.findByIdAndUpdate(
-      id,
+    const dd = await userSchema.findByIdAndUpdate(
+      user_Id,
       { totalAfterDiscount: cartsTotalSum },
       { new: true }
     );
+    console.log(dd);
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
@@ -108,6 +166,7 @@ exports.applyCoupan = async (req, res) => {
       })
     );
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

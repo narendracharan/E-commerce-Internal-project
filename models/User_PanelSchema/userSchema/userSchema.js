@@ -75,6 +75,9 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  totalAfterDiscount:{
+    type:[]
+  }
 });
 schema.set("timestamps", true);
 schema.methods.generateUserAuthToken = function () {

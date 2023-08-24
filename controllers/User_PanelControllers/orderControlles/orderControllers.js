@@ -12,6 +12,7 @@ const path = require("path");
 const { error, success } = require("../../response");
 const { Notification } = require("../../notificationControllers");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
+const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -25,7 +26,7 @@ exports.createOrder = async (req, res) => {
       orderStatus_ar,
     } = req.body;
     const { carts } = req.body;
-    const id=req.params.id
+    // const id=req.params.id
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
@@ -41,8 +42,9 @@ exports.createOrder = async (req, res) => {
       object.Price = getPrice.Price;
       products.push(object);
     }
-    const dd=await cartsSchema.find({_id:id})
-   const pp=  dd.filter((x)=>x.totalAfterDiscount)
+    const dd = await userSchema.find({ _id: user_Id });
+    const pp = dd.filter((x) => x.totalAfterDiscount);
+    console.log(pp);
     let cartsTotal = [];
     for (let i = 0; i < products.length; i++) {
       cartsTotal =
@@ -52,7 +54,7 @@ exports.createOrder = async (req, res) => {
     }
     let newCarts = new orderSchema({
       products,
-      cartsTotal:[pp],
+      cartsTotal: [pp],
       user_Id,
       address_Id,
       deliverdBy,

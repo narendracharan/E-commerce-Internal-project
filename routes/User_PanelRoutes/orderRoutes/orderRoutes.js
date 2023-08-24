@@ -13,7 +13,7 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/create-order/:id", tokenAuthorisationUser, createOrder);
+router.post("/create-order", tokenAuthorisationUser, createOrder);
 router.post("/order-Details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-list/:id", tokenAuthorisationUser, orderList);
 router.post(
