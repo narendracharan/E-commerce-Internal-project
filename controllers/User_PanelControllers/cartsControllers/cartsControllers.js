@@ -19,6 +19,7 @@ exports.addToCart = async (req, res) => {
         .findById(carts[i].product_Id)
         .select("Price")
         .exec();
+       
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       object.Discount = dis.map((x) => x.Discount);
       object.Price = getPrice.Price;

@@ -13,29 +13,10 @@ exports.Notification = async (type, name, data, deviceId) => {
     };
     let title = "";
     let body = "";
-    if (type === "login") {
-      body = `Dear ${name} Logged In`;
-      title = "Login Successful";
-    } else if (type === "Signup") {
-      body = `Dear ${name} SignUp In`;
-      title = "SignUp Successful";
-    } else if (type === "pending") {
-      //Orders   "DELIVERED", "CANCEL"
-      body = `Dear ${name} your order is Placed`;
-      title = "Order Placed Successful";
-    } else if (type === "Approved") {
-      body = `Dear ${name} your order is dispatched`;
-      title = "Order Dispatched";
-    } else if (type === "SHIPPED") {
-      body = `Dear ${name} your order is shipped`;
-      title = "Order shipped";
-    } else if (type === "DELIVERED") {
-      body = `Dear ${name} your order has been delivered successfully`;
-      title = "Order Delivered Successfully";
-    } else if (type === "CANCEL") {
-      body = `Dear ${name} your order has been cancelled`;
-      title = "Order Cancelled";
-    }
+    if (type === "Assign Order") {
+      body = `Dear ${name} Assign In`;
+      title = "Assign Order";
+    } 
     const payload = {
       notification: {
         title: title,
@@ -46,8 +27,8 @@ exports.Notification = async (type, name, data, deviceId) => {
     };
     admin
       .messaging()
-      .send(deviceId, payload, notification_options)
-      //  .sendToDevice(deviceId, payload, notification_options)
+     // .send(deviceId, payload, notification_options)
+       .sendToDevice(deviceId, payload, notification_options)
       .then((response) => {
         console.log(response.results);
       })

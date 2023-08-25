@@ -6,8 +6,8 @@ const User = require("../../../models/Admin_PanelSchema/agentSchema/agentSchema"
 const feedbackSchema = require("../../../models/Admin_PanelSchema/agentSchema/feedbackSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
-const languageSchema=require("../../../models/Admin_PanelSchema/agentSchema/language")
-
+const languageSchema = require("../../../models/Admin_PanelSchema/agentSchema/language");
+const { Notification } = require("../../notificationControllers");
 
 exports.addUser = async (req, res) => {
   try {
@@ -108,12 +108,12 @@ exports.verifyOtp = async (req, res) => {
 
 exports.userList = async (req, res) => {
   try {
-    const {from,to}=req.body
+    const { from, to } = req.body;
     const list = await agentSchema.find({
-      $and:[
-        from ?{createdAt:{$gte:new Date(from)}}:{},
-        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
-      ]
+      $and: [
+        from ? { createdAt: { $gte: new Date(from) } } : {},
+        to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+      ],
     });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
@@ -243,12 +243,19 @@ exports.feedbackAdd = async (req, res) => {
 
 exports.orderList = async (req, res) => {
   try {
+    const id = req.params.id;
     const orderList = await orderSchema
-      .find({})
+      .find({ deliverdBy: id })
       .populate("user_Id")
       .populate("address_Id")
       .populate("deliverdBy", { name: 1, address: 1 });
-    res.status(200).json(success(res.statusCode, "Success", { orderList }));
+    const shippedData = orderList.filter(
+      (x) =>
+        x.orderStatus == "Shipped" ||
+        x.orderStatus == "Inprogress" ||
+        x.orderStatus == "Delivered"
+    );
+    res.status(200).json(success(res.statusCode, "Success", { shippedData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -271,8 +278,9 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderHistory = async (req, res) => {
   try {
+    const id=req.params.id
     const orderdata = await orderSchema
-      .find()
+      .find({deliverdBy:id})
       .populate("address_Id")
       .populate("deliverdBy")
       .populate("user_Id");
@@ -345,21 +353,23 @@ exports.updateStatus = async (req, res) => {
   try {
     const { _id } = req.query;
     const orderStatus = req.body;
-    const updateData = await orderSchema.findByIdAndUpdate(_id, orderStatus, {
-      new: true,
-    }).populate("user_Id")
+    const updateData = await orderSchema
+      .findByIdAndUpdate(_id, orderStatus, {
+        new: true,
+      })
+      .populate("user_Id");
     var mailOptions = {
       from: "s04450647@gmail.com",
-      to:updateData.user_Id.userEmail,
+      to: updateData.user_Id.userEmail,
       subject: "Order Successfully",
       text: `Hello ${updateData.user_Id.userName}
       Your order has been successfully placed  and is being ${updateData.orderStatus}.
       Order Number: ${updateData._id}
       Date of Order: ${updateData.createdAt}
       Item(s) Ordered: ${updateData.products.length}
-      Thank you    `
+      Thank you    `,
     };
-    await transporter.sendMail(mailOptions)
+    await transporter.sendMail(mailOptions);
     res.status(200).json(success(res.statusCode, "Success", updateData));
   } catch (err) {
     console.log(err);
@@ -388,7 +398,7 @@ exports.updateOnline = async (req, res) => {
     const onlineStatus = req.body;
     const updateData = await agentSchema.findByIdAndUpdate(id, onlineStatus, {
       new: true,
-    })
+    });
     res.status(200).json(success(res.statusCode, "Success", { updateData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -410,7 +420,6 @@ exports.detailsUser = async (req, res) => {
   }
 };
 
-
 exports.addLanguage = async (req, res) => {
   try {
     const language = new languageSchema(req.body);
@@ -430,6 +439,53 @@ exports.updateLanguage = async (req, res) => {
     res
       .status(200)
       .json(success(res.statusCode, "Updated Data", { updateData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.AssignToOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deliverdBy = req.body.deliverdBy;
+    let status = "Assign";
+    const orderAssign = await orderSchema
+      .findByIdAndUpdate(
+        id,
+        { deliverdBy: deliverdBy, assignStatus: status },
+        { new: true }
+      )
+      .populate("deliverdBy");
+    await Notification(
+      "Assign Order",
+      `${orderAssign.deliverdBy.name}`,
+      {
+        user: String(orderAssign.deliverdBy._id),
+        type: "Assign Order",
+        url: "url",
+      }
+      // registerd.deviceId
+    );
+    console.log(dd);
+    res
+      .status(200)
+      .json(success(res.statusCode, "Assign Order", { orderAssign }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.DeclineReasone = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let reason = req.body.reason;
+    let status="Decline"
+    const addReason = await orderSchema.findByIdAndUpdate(
+      id,
+      { declineReason: reason, assignStatus:status },
+      { new: true }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { addReason }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

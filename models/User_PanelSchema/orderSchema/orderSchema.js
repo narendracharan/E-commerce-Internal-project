@@ -79,6 +79,20 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "agent",
   },
+  assignStatus:{
+    type:String,
+    default:"UnAssign",
+    enum:[
+     "Assign",
+     "UnAssign",
+     "Confirm",
+     "Rejected",
+     "Decline"
+    ]
+  },
+  declineReason:{
+    type:String
+  },
   status:{
     type:Array
   },

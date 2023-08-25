@@ -26,6 +26,8 @@ const {
   detailsUser,
   addLanguage,
   updateLanguage,
+  AssignToOrder,
+  DeclineReasone,
   
 } = require("../../../controllers/Admin_Panel/agentControllers/agentControllers");
 const router = express.Router();
@@ -45,9 +47,9 @@ router.post(
 
 router.post("/changePassword", changePassword);
 router.post("/add-feedback", tokenAuthorisationUser, feedbackAdd);
-router.post("/order-list", tokenAuthorisationUser, orderList);
+router.post("/order-list/:id", tokenAuthorisationUser, orderList);
 router.post("/order-Details/:id", tokenAuthorisationUser, orderDetails);
-router.post("/order-history", tokenAuthorisationUser, orderHistory);
+router.post("/order-history/:id", tokenAuthorisationUser, orderHistory);
 router.post("/user-details/:id", tokenAuthorisationUser, userDetails);
 router.delete("/delete-user/:id", tokenAuthorisationUser, deleteUser);
 router.post("/search-user", tokenAuthorisationUser, userSerach);
@@ -65,4 +67,6 @@ router.post("/total-revenue/:id", tokenAuthorisationUser, totalRevenue);
 router.post("/online-status/:id", tokenAuthorisationUser, updateOnline);
 router.post("/add-language",tokenAuthorisationUser,addLanguage)
 router.post("/update-language/:id",tokenAuthorisationUser,updateLanguage)
+router.post("/order-assign/:id",tokenAuthorisationUser,AssignToOrder)
+router.post("/decline-reason/:id",tokenAuthorisationUser,DeclineReasone)
 module.exports = router;
