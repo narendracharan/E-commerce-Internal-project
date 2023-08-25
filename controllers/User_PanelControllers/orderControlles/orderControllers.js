@@ -44,7 +44,6 @@ exports.createOrder = async (req, res) => {
     }
     const dd = await userSchema.find({ _id: user_Id });
     const pp = dd.filter((x) => x.totalAfterDiscount);
-    console.log(pp);
     let cartsTotal = [];
     for (let i = 0; i < products.length; i++) {
       cartsTotal =
@@ -64,7 +63,6 @@ exports.createOrder = async (req, res) => {
       orderStatus_ar,
       status: [orderStatus],
     });
-    console.log(newCarts);
     //   const filename=Date.now()
     //   const json = JSON.stringify(newCarts);
     //   let qr=  qrCode.toFile(path.join(__dirname,`${filename}.png`),json,(err,code)=>{

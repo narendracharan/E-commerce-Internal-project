@@ -187,17 +187,19 @@ exports.userDetails = async (req, res) => {
       compltedOrder += status[i];
     }
     var totalSpent = 0;
-    for (let i = 0; i < price.length; i++) {
-      totalSpent += price[i];
-    }
-    for(let i=0;i<order.length;i++){
-      for(let j=0;j<order[i].cartsTotal.length;j++){
+    // for (let i = 0; i < price.length; i++) {
+    //   totalSpent += price[i];
+    // }
+    for(let i=0;i<list.totalAfterDiscount.length;i++){
+   totalSpent+=list.totalAfterDiscount[i]
+      // for(let j=0;j<list[i]..length;j++){
       
-        for(let k=0;k<order[i].cartsTotal[j];k++){
+      //   for(let k=0;k<order[i].cartsTotal[j];k++){
      
-        }
-      }
+      //   }
+      // }
     }
+    console.log(totalSpent);
     const orderValue = compltedOrder / totalSpent;
     const review = await reviewSchema.find({ user_Id: id });
     res.status(200).json(

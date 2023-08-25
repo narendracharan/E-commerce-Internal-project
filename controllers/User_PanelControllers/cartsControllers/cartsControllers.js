@@ -133,23 +133,39 @@ exports.cartCount = async (req, res) => {
 
 exports.applyCoupan = async (req, res) => {
   try {
-    const { coupanCode, product_Id, quantity, user_Id } = req.body;
+    const { coupanCode, carts, user_Id } = req.body;
+    let product = [];
     const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
     //let carts = await cartSchema.find({ _id: id });
     // console.log(carts);
+
+    for (let i = 0; i < carts.length; i++) {
+      let object = {};
+      object.product_Id = carts[i].product_Id;
+      object.quantity = carts[i].quantity;
+      let getPrice = await productSchema
+        .findById(carts[i].product_Id)
+        .select("Price")
+        .exec();
+      // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
+      // object.Discount = dis.map((x) => x.Discount);
+      object.Price = getPrice.Price;
+      product.push(object);
+    }
     let DiscountType = validCoupan.map((x) => x.DiscountType);
-    let getPrice = await productSchema
-      .findById(product_Id)
-      .select("Price")
-      .exec();
     //   const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
     //   console.log(cartsTotal);
+    console.log(DiscountType);
     let subtotal = 0;
     // for (let i = 0; i < getPrice.length; i++) {
-    subtotal = subtotal + getPrice.Price * quantity;
+    for (let i = 0; i < product.length; i++) {
+      subtotal = subtotal + product[i].Price * product[i].quantity;
+    }
+    console.log(subtotal);
+    //  subtotal = subtotal +  * quantity;
     //}
     var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
     const dd = await userSchema.findByIdAndUpdate(
