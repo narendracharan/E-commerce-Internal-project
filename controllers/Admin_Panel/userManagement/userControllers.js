@@ -8,7 +8,7 @@ const Userschema = require("../../../models/User_PanelSchema/userSchema/userSche
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
-const fs=require("fs");
+const fs = require("fs");
 const { json } = require("body-parser");
 const mapSchema = require("../../../models/mapSchema");
 const addressSchema = require("../../../models/User_PanelSchema/addressSchema/addressSchema");
@@ -72,9 +72,9 @@ exports.OtpVerify = async (req, res) => {
   }
 };
 
-exports.downlaod=async(req,res)=>{
-  try{
-    const user = await Userschema.find({})
+exports.downlaod = async (req, res) => {
+  try {
+    const user = await Userschema.find({});
     let allOrders = [];
     for (const exportOrder of user) {
       let date = String(exportOrder.createdAt).split(" ");
@@ -82,7 +82,7 @@ exports.downlaod=async(req,res)=>{
       let obj = {
         "user Date": newDate,
         "User Name": `${exportOrder.userName}`,
-        "Mobile Number":` ${exportOrder.mobileNumber}`,
+        "Mobile Number": ` ${exportOrder.mobileNumber}`,
         "User Status": `${exportOrder.status}`,
       };
       allOrders.push(obj);
@@ -101,7 +101,6 @@ exports.downlaod=async(req,res)=>{
   }
 };
 
-
 exports.editProfile = async (req, res) => {
   try {
     const data = {
@@ -110,7 +109,7 @@ exports.editProfile = async (req, res) => {
       profile_Pic: req.file.location,
     };
     console.log(req.file);
-    
+
     const profileData = await userSchema.findByIdAndUpdate(
       req.params.id,
       data,
@@ -126,16 +125,16 @@ exports.editProfile = async (req, res) => {
 
 exports.userList = async (req, res) => {
   try {
-    const {from,to}=req.body
+    const { from, to } = req.body;
     const createData = await Userschema.find({
-      $and:[
-        from ?{createdAt:{$gte:new Date(from)}}:{},
-        to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
-      ]
-    }).sort({createdAt:-1}).populate("address_Id")
-    res
-      .status(200)
-      .json(success(res.statusCode, "Success", { createData }));
+      $and: [
+        from ? { createdAt: { $gte: new Date(from) } } : {},
+        to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+      ],
+    })
+      .sort({ createdAt: -1 })
+      .populate("address_Id");
+    res.status(200).json(success(res.statusCode, "Success", { createData }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -178,7 +177,7 @@ exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
     const list = await Userschema.findById(id).populate("address_Id");
-    const address=await addressSchema.find({user_Id:id})
+    const address = await addressSchema.find({ user_Id: id });
     const order = await orderSchema.find({ user_Id: id });
     var compltedOrder = 0;
     const status = order.map((x) => x.orderStatus == "Delivered");
@@ -190,12 +189,12 @@ exports.userDetails = async (req, res) => {
     // for (let i = 0; i < price.length; i++) {
     //   totalSpent += price[i];
     // }
-    for(let i=0;i<list.totalAfterDiscount.length;i++){
-   totalSpent+=list.totalAfterDiscount[i]
+    for (let i = 0; i < list.totalAfterDiscount.length; i++) {
+      totalSpent += list.totalAfterDiscount[i];
       // for(let j=0;j<list[i]..length;j++){
-      
+
       //   for(let k=0;k<order[i].cartsTotal[j];k++){
-     
+
       //   }
       // }
     }
@@ -240,23 +239,21 @@ exports.sendUserResetPassword = async (req, res) => {
   }
 };
 
-exports.userSerach=async(req,res)=>{
-  const userName=req.body.userName
-  try{
+exports.userSerach = async (req, res) => {
+  const userName = req.body.userName;
+  try {
     const userData = await Userschema.find({
-      userName: { $regex:userName, $options: "i" },
+      userName: { $regex: userName, $options: "i" },
     });
     if (userData.length > 0) {
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { userData }));
+      res.status(200).json(success(res.statusCode, "Success", { userData }));
     } else {
       res.status(200).json(error("Data are Not Found", res.statusCode));
     }
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
 exports.resetPassword = async (req, res) => {
   const { password, confirmPassword, userEmail } = req.body;
@@ -298,22 +295,25 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-
-exports.userMap=async(req,res)=>{
-  try{
-const createMap= new mapSchema(req.body)
-const saveMap=await createMap.save()
-res.status(200).json(success(res.statusCode,"Success",{saveMap}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.userMap = async (req, res) => {
+  try {
+    const createMap = new mapSchema(req.body);
+    const saveMap = await createMap.save();
+    res.status(200).json(success(res.statusCode, "Success", { saveMap }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
-exports.allLocation=async(req,res)=>{
-  try{
-    const allData=await Userschema.find().select(["userName","longitude","latitude"])
-    res.status(200).json(success(res.statusCode,"Success",{allData}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+exports.allLocation = async (req, res) => {
+  try {
+    const allData = await Userschema.find().select([
+      "userName",
+      "longitude",
+      "latitude",
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { allData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};

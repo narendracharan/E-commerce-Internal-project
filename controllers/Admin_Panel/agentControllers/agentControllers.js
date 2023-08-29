@@ -8,7 +8,13 @@ const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderS
 const userLocationSchema = require("../../../models/Admin_PanelSchema/agentSchema/userLocationSchema");
 const languageSchema = require("../../../models/Admin_PanelSchema/agentSchema/language");
 const { Notification } = require("../../notificationControllers");
+const FCM = require("fcm-node");
+const admin = require("firebase-admin");
+const service = require("../../../config/firebase.json");
 
+admin.initializeApp({
+  credential: admin.credential.cert(service),
+});
 exports.addUser = async (req, res) => {
   try {
     const user = new agentSchema(req.body);
@@ -278,9 +284,9 @@ exports.orderDetails = async (req, res) => {
 
 exports.orderHistory = async (req, res) => {
   try {
-    const id=req.params.id
+    const id = req.params.id;
     const orderdata = await orderSchema
-      .find({deliverdBy:id})
+      .find({ deliverdBy: id })
       .populate("address_Id")
       .populate("deliverdBy")
       .populate("user_Id");
@@ -447,7 +453,7 @@ exports.updateLanguage = async (req, res) => {
 exports.AssignToOrder = async (req, res) => {
   try {
     const id = req.params.id;
-    const deliverdBy = req.body.deliverdBy;
+    const { deliverdBy, deviceId } = req.body;
     let status = "Assign";
     const orderAssign = await orderSchema
       .findByIdAndUpdate(
@@ -456,21 +462,45 @@ exports.AssignToOrder = async (req, res) => {
         { new: true }
       )
       .populate("deliverdBy");
-    await Notification(
-      "Assign Order",
-      `${orderAssign.deliverdBy.name}`,
-      {
-        user: String(orderAssign.deliverdBy._id),
-        type: "Assign Order",
-        url: "url",
-      }
-      // registerd.deviceId
-    );
-    console.log(dd);
+    // console.log(orderAssign.deliverdBy.name);
+    //    var serverKey = 'AAAAjF33UiM:APA91bFj7u-EFQOMzn56copvP-3Z4uPWR_xJwnVXXcoAe3rd0DqesSL_Urwtic-HugXVHyCxV7KnDrxuZBgUTbwDy9oWw1XR_0E4ihuHCNtYltj6OwMidBcYkwIO40NZ7S2j7TgxE4JO';
+    //    var fcm = new FCM(serverKey);
+    //    var token = "AAAAjF33UiM:APA91bFj7u-EFQOMzn56copvP-3Z4uPWR_xJwnVXXcoAe3rd0DqesSL_Urwtic-HugXVHyCxV7KnDrxuZBgUTbwDy9oWw1XR_0E4ihuHCNtYltj6OwMidBcYkwIO40NZ7S2j7TgxE4JO";
+    //  // Sending a push notification
+    const message = {
+      notification: {
+        title: "Order Shippment",
+        body: `Order Assign To ${orderAssign._id}`,
+      },
+      token:
+        "f3WgG9PDRx20jjwE-wF5Og:APA91bGYh30JnYH2rFueqEH7AuSGvQEo3xYz2uId4O4TBRBwR_zSclxd9MgawnPj74YFBCHRQrIDiwQnHzU-lhUNMeO7MG-1GX7IODfmrrYotKcuIkDuS9jZlwBp3Pk5himQV08NQvLE",
+    };
+    admin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.log("Successfully sent notification:", response);
+      })
+      .catch((error) => {
+        console.log("Error sending notification:", error);
+      });
+    // const dd= await Notification(
+    //     "Assign Order",
+    //     `${orderAssign.deliverdBy.name}`,
+    //     {
+    //       user: String(orderAssign.deliverdBy._id),
+    //       type: "Assign Order",
+    //       url: "url",
+    //     },
+    //     deviceId,
+    //     orderAssign.token
+    //   );
+    //   console.log(dd);
     res
       .status(200)
       .json(success(res.statusCode, "Assign Order", { orderAssign }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -479,10 +509,10 @@ exports.DeclineReasone = async (req, res) => {
   try {
     const id = req.params.id;
     let reason = req.body.reason;
-    let status="Decline"
+    let status = "Decline";
     const addReason = await orderSchema.findByIdAndUpdate(
       id,
-      { declineReason: reason, assignStatus:status },
+      { declineReason: reason, assignStatus: status },
       { new: true }
     );
     res.status(200).json(success(res.statusCode, "Success", { addReason }));

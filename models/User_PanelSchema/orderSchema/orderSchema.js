@@ -112,11 +112,15 @@ const schema = new mongoose.Schema({
     Cancel:{
       type:Date 
     }
-  }
+  },
+  device_Id:{
+    type:String
+  },
+  token:{
+    type:String,
+    default:"f3WgG9PDRx20jjwE-wF5Og:APA91bGYh30JnYH2rFueqEH7AuSGvQEo3xYz2uId4O4TBRBwR_zSclxd9MgawnPj74YFBCHRQrIDiwQnHzU-lhUNMeO7MG-1GX7IODfmrrYotKcuIkDuS9jZlwBp3Pk5himQV08NQvLE"
 
-  // qrCode:{
-  //   type:Array
-  // }
+    }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("userOrder", schema);

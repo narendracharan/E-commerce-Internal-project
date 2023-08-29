@@ -13,6 +13,12 @@ const { error, success } = require("../../response");
 const { Notification } = require("../../notificationControllers");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
+// const admin = require("firebase-admin");
+// const service = require("../../../config/userfirebase.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(service),
+// });
 
 exports.createOrder = async (req, res) => {
   try {
@@ -38,10 +44,12 @@ exports.createOrder = async (req, res) => {
         .select("Price")
         .exec();
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
+      var deletQuatity = await productSchema.findById({ _id: carts[i].product_Id });
       object.Disount = dis.map((x) => x.Discount);
       object.Price = getPrice.Price;
       products.push(object);
     }
+    console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
     const pp = dd.filter((x) => x.totalAfterDiscount);
     let cartsTotal = [];
@@ -50,6 +58,8 @@ exports.createOrder = async (req, res) => {
         cartsTotal +
         products[i].Price * products[i].quantity -
         products[i].Disount;
+    const dd=   deletQuatity.stockQuantity - products[i].quantity
+     await productSchema.findByIdAndUpdate({_id:products[i].product_Id},{stockQuantity:dd},{new:true})
     }
     let newCarts = new orderSchema({
       products,
@@ -99,6 +109,21 @@ exports.createOrder = async (req, res) => {
     //   Item(s) Ordered: ${newCarts.products.length}`,
     // };
     // await transporter.sendMail(mailOptions);
+    // const message = {
+    //   notification: {
+    //     title:"Order Shippment",
+    //     body: `Order Assign To`,
+    //   },
+    //   token:"fAXw6SU2TEqiIY_eoKwNP2:APA91bGBhA0B-erUI_wcKFWIoqjvk3mSw9G0eoa2dUP5PzZAamTnzJ9TuxsyKQKWHZBghk-nIAtj1JKxqnv1LyDZm0eNC-BBfv8GI5i6yqqNVF7Fy2OBTw8pm2W5Xvfg7hcbR1p1Qr2j"};
+    // admin
+    //   .messaging()
+    //   .send(message)
+    //   .then((response) => {
+    //     console.log("Successfully sent notification:", response);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error sending notification:", error);
+    //   });
     res.status(200).json(success(res.statusCode, "Success", { newCarts }));
   } catch (err) {
     console.log(err);
