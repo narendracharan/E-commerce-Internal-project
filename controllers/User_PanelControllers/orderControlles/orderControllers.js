@@ -80,6 +80,9 @@ exports.createOrder = async (req, res) => {
     //   })
     //newCarts.qrCode.push(qr)
     await newCarts.save();
+    console.log(newCarts);
+    const deleteCard=await cartsSchema.findOneAndDelete({user_Id:user_Id})
+    console.log(deleteCard);
     const updated = await orderSchema
       .findOne({
         _id: newCarts._id,
@@ -151,7 +154,9 @@ exports.orderList = async (req, res) => {
     const orderList = await orderSchema
       .find({ user_Id: _id })
       .populate("products.product_Id")
-      .populate("user_Id");
+      .populate("user_Id").sort({
+        createdAt:-1
+        })
     res.status(200).json(success(res.status, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

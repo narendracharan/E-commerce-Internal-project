@@ -14,8 +14,9 @@ exports.orderList = async (req, res) => {
           to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
         ],
       })
-      .populate("products.product_Id");
-    console.log(list);
+      .populate("products.product_Id").sort({
+        createdAt:-1
+        }).populate("deliverdBy")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
@@ -45,7 +46,9 @@ exports.orderSearch = async (req, res) => {
 exports.orderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderDetails = await orderSchema.findById(id).populate("products.product_Id")
+    const orderDetails = await orderSchema
+      .findById(id)
+      .populate("products.product_Id").populate("address_Id")
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -67,7 +70,7 @@ exports.deleteOrder = async (req, res) => {
 exports.orderUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const {orderStatus,orderStatus_ar} = req.body;
+    const { orderStatus, orderStatus_ar } = req.body;
     // const status=await orderSchema.findOne({_id:id})
     // if (orderStatus == status.orderStatus) {
     //   return res
@@ -105,7 +108,11 @@ exports.orderUpdate = async (req, res) => {
     //     .json(error("This orderStatus are alredy change", res.statusCode));
     // }
     const updateOrder = await orderSchema
-      .findByIdAndUpdate(id, {orderStatus:orderStatus,orderStatus_ar:orderStatus_ar}, { new: true })
+      .findByIdAndUpdate(
+        id,
+        { orderStatus: orderStatus, orderStatus_ar: orderStatus_ar },
+        { new: true }
+      )
       .populate("user_Id");
     var mailOptions = {
       from: "s04450647@gmail.com",

@@ -75,10 +75,6 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  deliverdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "agent",
-  },
   assignStatus:{
     type:String,
     default:"UnAssign",
