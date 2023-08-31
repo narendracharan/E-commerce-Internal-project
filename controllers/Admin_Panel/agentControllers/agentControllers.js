@@ -349,6 +349,7 @@ exports.agentDeatails = async (req, res) => {
   try {
     const { _id } = req.query;
     const agentData = await agentSchema.findById(_id, { jobStatus: 1 });
+  //  const orderDetails = await orderSchema.find(_id, { jobStatus: 1 });
     res.status(200).json(success(res.statusCode, "Success", { agentData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

@@ -8,6 +8,7 @@ const {
   createBannerFour,
   createBannerFive,
   DisplayOne,
+  updateStatus,
 } = require("../../../controllers/Admin_Panel/homeScreenControllers/homeScreenControllers");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -42,4 +43,5 @@ router.post(
   createBannerFive
 );
 router.get("/display/:id", DisplayOne);
+router.post("/update-status/:id",tokenAuthorisationUser,updateStatus)
 module.exports = router;

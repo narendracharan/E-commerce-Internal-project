@@ -81,7 +81,7 @@ exports.createOrder = async (req, res) => {
     //newCarts.qrCode.push(qr)
     await newCarts.save();
     console.log(newCarts);
-    const deleteCard=await cartsSchema.findOneAndDelete({user_Id:user_Id})
+    const deleteCard=await cartsSchema.deleteMany({user_Id:user_Id})
     console.log(deleteCard);
     const updated = await orderSchema
       .findOne({

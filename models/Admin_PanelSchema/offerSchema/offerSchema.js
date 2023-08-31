@@ -13,11 +13,21 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  product_Id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "product",
-    require: true,
+  startDate: {
+    type: Date,
   },
+  endDate: {
+    type: Date,
+  },
+  products: [
+    {
+      product_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product",
+        require: true,
+      },
+    },
+  ],
 });
 
 schema.set("timestamps", true);

@@ -3,9 +3,26 @@ const { error, success } = require("../../response");
 
 exports.addOffer = async (req, res) => {
   try {
-    const offer = new offerSchema(req.body);
-    const saveData = await offer.save();
-    res.status(201).json(success(res.statusCode, "Success", { saveData }));
+
+    const {carts,title,code,Discount,startDate,endDate} = req.body;
+    let products=[]
+    for (let i = 0; i < carts.length; i++) {
+      let object = {};
+      object.product_Id = carts[i].product_Id;
+       
+      products.push(object);
+    }
+    const newOffer=new offerSchema({
+      products,
+      Discount:Discount,
+      title:title,
+      code :code ,
+      startDate:startDate,
+     endDate:endDate
+
+    })
+    const saveData = await newOffer.save();
+    res.status(201).json(success(res.statusCode, "Success", { newOffer }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

@@ -21,6 +21,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  status:{
+    type : Boolean ,
+    default:true
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("Banners", schema);
