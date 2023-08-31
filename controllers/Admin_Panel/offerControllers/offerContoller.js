@@ -38,9 +38,10 @@ exports.offerList = async (req, res) => {
           to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
         ]
       })
-      .populate("product_Id",{productName_en:1});
+      .populate("products.product_Id",{productName_en:1});
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
+  console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
