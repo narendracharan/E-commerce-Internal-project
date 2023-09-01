@@ -142,6 +142,12 @@ const schema = new mongoose.Schema({
     ref: "subCategory",
     require: true,
   },
+  values:{
+    type:Array,
+  },
+  attribute:{
+    type:Array, 
+  },
   like:{
     type:String,
     default:false
