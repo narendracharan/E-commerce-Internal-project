@@ -29,7 +29,8 @@ exports.checkStatus = async (req, res) => {
 
 exports.selectCategory = async (req, res) => {
   try {
-    const categoryData = await category.find();
+    const id=req.params.id
+    const categoryData = await valueSchema.find({category_Id:id});
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -38,7 +39,8 @@ exports.selectCategory = async (req, res) => {
 
 exports.selectSubCategory = async (req, res) => {
   try {
-    const subCategoryData = await subCategory.find();
+    const id=req.params.id
+    const subCategoryData = await valueSchema.find({subCategory_Id:id});
     res
       .status(200)
       .json(success(res.statusCode, "Success", { subCategoryData }));
@@ -49,7 +51,8 @@ exports.selectSubCategory = async (req, res) => {
 
 exports.selectSubSubCategory = async (req, res) => {
   try {
-    const subSubCategoryData = await subSubCategory.find();
+    const id=req.params.id
+    const subSubCategoryData = await valueSchema.find({subSubCategory_Id:id});
     res
       .status(200)
       .json(success(res.statusCode, "Success", { subSubCategoryData }));
@@ -60,7 +63,8 @@ exports.selectSubSubCategory = async (req, res) => {
 
 exports.selectAttribute = async (req, res) => {
   try {
-    const attributeCategoryData = await attribute.find();
+    const id=req.params.id
+    const attributeCategoryData = await valueSchema.find({attribute_Id:id});
     res
       .status(200)
       .json(success(res.statusCode, "Success", { attributeCategoryData }));

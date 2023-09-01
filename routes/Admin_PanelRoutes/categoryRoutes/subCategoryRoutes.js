@@ -26,7 +26,7 @@ router.patch(
   subCategoryUpdate
 );
 router.post("/subCategorySearch", tokenAuthorisationUser, subCategorySearch);
-router.post("/selectCategory", tokenAuthorisationUser, selectCategory);
+router.post("/selectCategory/:id", tokenAuthorisationUser, selectCategory);
 router.post(
   "/checkSubSubCategory/:id",
   tokenAuthorisationUser,

@@ -63,7 +63,8 @@ exports.checkAttribute = async (req, res) => {
 
 exports.selectCategory = async (req, res) => {
   try {
-    const categoryData = await category.find({});
+    const id=req.params.id
+    const categoryData = await cateSchema.find({category_Id:id});
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -72,7 +73,8 @@ exports.selectCategory = async (req, res) => {
 
 exports.selectSubCategory = async (req, res) => {
   try {
-    const subCategoryData = await subCategory.find();
+    const id=req.params.id
+    const subCategoryData = await cateSchema.find({subCategory_Id:id});
     res
       .status(200)
       .json(success(res.statusCode, "Success", { subCategoryData }));
