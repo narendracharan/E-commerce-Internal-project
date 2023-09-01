@@ -80,3 +80,12 @@ exports.updateStatus = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.homeScreenList=async(req,res)=>{
+  try{
+    const list = await homeSchema.find({})
+    res.status(200).json(success(res.statusCode, "Success", {list }));
+  }catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+}
