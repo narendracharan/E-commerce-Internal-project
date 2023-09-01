@@ -28,6 +28,7 @@ const {
   updateLanguage,
   AssignToOrder,
   DeclineReasone,
+  orderAccepted,
   
 } = require("../../../controllers/Admin_Panel/agentControllers/agentControllers");
 const router = express.Router();
@@ -69,4 +70,5 @@ router.post("/add-language",tokenAuthorisationUser,addLanguage)
 router.post("/update-language/:id",tokenAuthorisationUser,updateLanguage)
 router.post("/order-assign/:id",tokenAuthorisationUser,AssignToOrder)
 router.post("/decline-reason/:id",tokenAuthorisationUser,DeclineReasone)
+router.post("/accepted-order/:id",tokenAuthorisationUser,orderAccepted)
 module.exports = router;

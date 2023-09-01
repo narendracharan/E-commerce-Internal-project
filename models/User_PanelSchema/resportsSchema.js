@@ -9,6 +9,17 @@ const schema=new mongoose.Schema({
         type:String,
         require:true,
     },
+    reporterName:{
+        type:String,
+        require:true,
+    },
+    reporterNumber:{
+        type:String,
+        require:true,
+    },
+    reporterEmail:{
+        type:String,
+    },
     user_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userPanel",

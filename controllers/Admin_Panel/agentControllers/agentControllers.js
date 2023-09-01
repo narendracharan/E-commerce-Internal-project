@@ -499,7 +499,7 @@ exports.AssignToOrder = async (req, res) => {
     //   console.log(dd);
     res
       .status(200)
-      .json(success(res.statusCode, "Assign Order", { orderAssign }));
+      .json(success(res.statusCode, "Assign Order", { orderAssign,message }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -514,6 +514,22 @@ exports.DeclineReasone = async (req, res) => {
     const addReason = await orderSchema.findByIdAndUpdate(
       id,
       { declineReason: reason, assignStatus: status },
+      { new: true }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { addReason }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.orderAccepted = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let status = "Accepted";
+    const addReason = await orderSchema.findByIdAndUpdate(
+      id,
+      {assignStatus: status },
       { new: true }
     );
     res.status(200).json(success(res.statusCode, "Success", { addReason }));

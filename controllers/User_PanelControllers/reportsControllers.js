@@ -1,15 +1,18 @@
 const reportsSchema = require("../../models/User_PanelSchema/resportsSchema");
-const { error } = require("../response");
+const { error, success } = require("../response");
 
 exports.reportsProduct = async (req, res) => {
   try {
-    const { user_Id, reason, product_Id, description } = req.body;
+    const { user_Id, reason, product_Id, description,reporterName ,reporterEmail,reporterNumber} = req.body;
     if (user_Id && reason && product_Id) {
       const newReports = new reportsSchema({
         user_Id: user_Id,
         product_Id: product_Id,
         reason: reason,
         description: description,
+        reporterName:reporterName,
+        reporterEmail:reporterEmail,
+        reporterNumber:reporterNumber
       });
       const reports = await newReports.save();
       res.status(200).json(success(res.statusCode, "Success", { reports }));
@@ -17,6 +20,7 @@ exports.reportsProduct = async (req, res) => {
       return res.status(201).json(error("All filed are required"));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
