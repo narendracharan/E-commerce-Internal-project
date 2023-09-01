@@ -18,7 +18,12 @@ exports.subCatagoryList = async (req, res) => {
     const listData = await subCategorySchema
       .find({ category_Id: id })
       .sort({ _id: -1 });
-    res.status(200).json(success(res.statusCode, "Success", { listData }));
+      if(listData){
+        res.status(200).json(success(res.statusCode, "Success", { listData }));
+      }else{
+        res.status(200).json(error("subCatgory not found",res.statusCode));
+      }
+  
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -30,7 +35,12 @@ exports.checkSubCategoryProduct = async (req, res) => {
     const listData = await productSchema
       .find({ Subcategory_Id: id })
       .sort({ _id: -1 });
-    res.status(200).json(success(res.statusCode, "Success", { listData }));
+      if(listData){
+        res.status(200).json(success(res.statusCode, "Success", { listData }));
+      }else{
+        res.status(200).json(error("category not Found",res.statusCode));
+      }
+    
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

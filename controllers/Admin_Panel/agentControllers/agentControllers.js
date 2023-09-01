@@ -473,9 +473,14 @@ exports.AssignToOrder = async (req, res) => {
         title: "Order Shippment",
         body: `Order Assign To ${orderAssign._id}`,
       },
-      token:
+           token:
         "f3WgG9PDRx20jjwE-wF5Og:APA91bGYh30JnYH2rFueqEH7AuSGvQEo3xYz2uId4O4TBRBwR_zSclxd9MgawnPj74YFBCHRQrIDiwQnHzU-lhUNMeO7MG-1GX7IODfmrrYotKcuIkDuS9jZlwBp3Pk5himQV08NQvLE",
+         data:{
+          orderKey: `${orderAssign._id}`,
+          redirect_to: "Notification"
+        }
     };
+ 
     admin
       .messaging()
       .send(message)
@@ -499,7 +504,7 @@ exports.AssignToOrder = async (req, res) => {
     //   console.log(dd);
     res
       .status(200)
-      .json(success(res.statusCode, "Assign Order", { orderAssign,message }));
+      .json(success(res.statusCode, "Assign Order", { orderAssign }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
