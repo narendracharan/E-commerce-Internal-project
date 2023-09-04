@@ -142,11 +142,20 @@ const schema = new mongoose.Schema({
     ref: "subCategory",
     require: true,
   },
-  values:{
-    type:Array,
+  subSubcategory_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "subSubCategory",
+    require: true,
   },
-  attribute:{
-    type:Array, 
+  values_Id:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "values",
+    require: true,
+  },
+  attribute_Id:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "attributes",
+    require: true
   },
   like:{
     type:String,

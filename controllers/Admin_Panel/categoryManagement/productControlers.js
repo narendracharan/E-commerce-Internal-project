@@ -25,7 +25,10 @@ exports.productList = async (req, res) => {
       .find()
       .populate("Subcategory_Id")
       .populate("category_Id")
-      .populate("brand_Id");
+      .populate("brand_Id")
+      .populate("values_Id")
+      .populate("attribute_Id")
+      .populate("subSubcategory_Id");
     // .populate(["Subcategory_Id","category_Id","brand_Id"])
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
@@ -143,6 +146,7 @@ exports.editBrand = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 exports.deleteBrand = async (req, res) => {
   try {
     const deleteBrand = await brandSchema.findByIdAndDelete(req.params.id);

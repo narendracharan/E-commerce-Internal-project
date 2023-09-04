@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
   attributeName_en: {
-    type: String,
+    type: Array,
     require: true,
   },
   attributeName_ar: {
-    type: String,
+    type: Array,
     require: true,
   },
   shipmentService: {
