@@ -70,7 +70,7 @@ exports.selectSubCategory = async (req, res) => {
 exports.selectSubSubCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    const subSubCategoryData = await cateSchema.find({ subCategory_Id: id });
+    const subSubCategoryData = await cateSchema.find({ category_Id: id });
     res
       .status(200)
       .json(success(res.statusCode, "Success", { subSubCategoryData }));
