@@ -1,5 +1,6 @@
 const cateSchema = require("../../../models/Admin_PanelSchema/categorySchema/attributeSchema");
 const category = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
+const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const subCategory = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
 const subSubCategory = require("../../../models/Admin_PanelSchema/categorySchema/subSubCategorySchema");
 const values = require("../../../models/Admin_PanelSchema/categorySchema/valuesSchema");
@@ -133,5 +134,52 @@ if(!deleteData){
 }
   }catch(err){
 res.status(400).json(error("Failed",res.statusCode))
+  }
+}
+
+exports.multiPleAttribute=async(req,res)=>{
+  try{
+const id=req.params.id
+const product=await productSchema.findById(id)
+const { attribute_Id,
+  values_Id}=req.body
+const newProduct=new productSchema({
+  productName_en:product.productName_en,
+    productName_ar:product.productName_ar,
+   slug: product.slug,
+      Description_ar:product.Description_ar,
+      careInstuctions:product.careInstuctions,
+      careInstuctions_ar:product.careInstuctions_ar,
+      Price:product.Price,
+      oldPrice:product.oldPrice,
+      dollarPrice:product.dollarPrice,
+      SKU:product.SKU,
+      SKU_ar:product.SKU_ar,
+      stockQuantity:product.stockQuantity,
+      pageTitle:product.pageTitle,
+      pageTitle_ar:product.pageTitle_ar,
+      metaDescription:product.metaDescription,
+      metaDescription_ar:product.metaDescription_ar,
+      visibility:product.visibility,
+      visibility_ar:product.visibility_ar,
+      Discount:product.Discount,
+      Tags:product.Tags,
+      Tags_ar:product.Tags_ar,
+      weight:product.weight,
+      weight_ar:product.weight_ar,
+      productColor:product.productColor,
+      productColor_ar:product.productColor_ar,
+      brand_Id:product.brand_Id,
+      category_Id:product.category_Id,
+      Subcategory_Id:product.Subcategory_Id,
+      product_Pic:product.product_Pic,
+      attribute_Id:attribute_Id,
+      values_Id:values_Id
+})
+const productSave=await newProduct.save()
+res.status(200).json(success(res.statusCode,"Success",{productSave}))
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed",res.statusCode))
   }
 }

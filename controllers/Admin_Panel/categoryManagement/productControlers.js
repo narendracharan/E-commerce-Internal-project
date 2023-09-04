@@ -6,6 +6,7 @@ exports.createProduct = async (req, res) => {
   try {
     const product = new productSchema(req.body);
     if (req.files) {
+      
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "product_Pic") {
           product.product_Pic.push(req.files[i].location);
@@ -15,6 +16,7 @@ exports.createProduct = async (req, res) => {
     const saveProduct = await product.save();
     res.status(201).json(success(res.statusCode, "Success", { saveProduct }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
