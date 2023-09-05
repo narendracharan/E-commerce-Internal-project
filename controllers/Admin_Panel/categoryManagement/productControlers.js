@@ -28,8 +28,8 @@ exports.productList = async (req, res) => {
       .populate("Subcategory_Id")
       .populate("category_Id")
       .populate("brand_Id")
-      .populate("values_Id")
-      .populate("attribute_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
       .populate("subSubcategory_Id");
     // .populate(["Subcategory_Id","category_Id","brand_Id"])
     res.status(200).json(success(res.statusCode, "Success", { list }));
