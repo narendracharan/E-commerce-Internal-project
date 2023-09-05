@@ -175,3 +175,33 @@ exports.searchBrand = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.addVarient=async(req,res)=>{
+  try{
+const id=req.params.id
+const {Price,oldPrice,dollarPrice,stockQuantity,SKU_ar,SKU,attribute_Id,values_Id,retanable}=req.body
+const newVarient=await productSchema.findById({_id:id})
+console.log(req.files);
+if(req.files.length){
+  const data=newVarient.
+  addVarient.push({
+    Price:Price,
+    oldPrice:oldPrice,
+    dollarPrice:dollarPrice,
+    stockQuantity:stockQuantity,
+    SKU:SKU,
+    SKU_ar:SKU_ar,
+    attribute_Id:attribute_Id,
+    values_Id:values_Id,
+    product_Pic:req.files[0].location,
+    retanable:retanable
+  })
+}
+const saveVarient= await newVarient.save()
+res.status(200).json(success(res.statusCode,"Success",{saveVarient}))
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

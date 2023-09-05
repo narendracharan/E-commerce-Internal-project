@@ -12,6 +12,7 @@ const {
   editBrand,
   deleteBrand,
   searchBrand,
+  addVarient,
 } = require("../../../controllers/Admin_Panel/categoryManagement/productControlers");
 const { s3upload } = require("../../../middleware/multer");
 const { multiPleAttribute } = require("../../../controllers/Admin_Panel/categoryManagement/attributeControllers");
@@ -32,4 +33,5 @@ router.post("/edit-brand/:id",tokenAuthorisationUser,s3upload.single("brandPic")
 router.post("/delete-brand/:id",tokenAuthorisationUser,deleteBrand)
 router.post("/search-brand",tokenAuthorisationUser,searchBrand)
 router.post("/product-save-multi/:id",multiPleAttribute)
+router.post("/new-varient/:id",tokenAuthorisationUser,s3upload.any(),addVarient)
 module.exports = router;

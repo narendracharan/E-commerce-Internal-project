@@ -29,18 +29,6 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  Price: {
-    type: Number,
-    require: true,
-  },
-  oldPrice: {
-    type: Number,
-    require: true,
-  },
-  dollarPrice:{
-    type:Number,
-    require:true
-  },
   totalRating: {
     type: String,
     default: 0,
@@ -55,22 +43,7 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  SKU: {
-    type: String,
-    require: true,
-  },
-  SKU_ar: {
-    type: String,
-    require: true,
-  },
-  stockQuantity: {
-    type: Number,
-    require: true,
-  },
-  product_Pic: {
-    type: [],
-    require: true,
-  },
+ 
   pageTitle: {
     type: String,
     require: true,
@@ -147,16 +120,53 @@ const schema = new mongoose.Schema({
     ref: "subSubCategory",
     require: true,
   },
-  values_Id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "values",
-    require: true,
-  },
-  attribute_Id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "attributes",
-    require: true
-  },
+ 
+  addVarient:[
+    {
+    values_Id:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "values",
+      require: true,
+    },
+    attribute_Id:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "attributes",
+      require: true
+    },
+    SKU: {
+      type: String,
+      require: true,
+    },
+    SKU_ar: {
+      type: String,
+      require: true,
+    },
+    stockQuantity: {
+      type: Number,
+      require: true,
+    },
+    product_Pic: {
+      type: [],
+      require: true,
+    },
+    Price: {
+      type: Number,
+      require: true,
+    },
+    oldPrice: {
+      type: Number,
+      require: true,
+    },
+    dollarPrice:{
+      type:Number,
+      require:true
+    },
+    retanable:{
+      type: String,
+      require: true,
+    }
+  }
+  ],
   like:{
     type:String,
     default:false
