@@ -17,20 +17,24 @@ exports.addToCart = async (req, res) => {
       object.quantity = carts[i].quantity;
       let getPrice = await productSchema
         .findById(carts[i].product_Id)
-        .select("Price")
+        .select("addVarient.Price")
         .exec();
-       
+       console.log(getPrice);
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       object.Discount = dis.map((x) => x.Discount);
-      object.Price = getPrice.Price;
+      object.Price = getPrice.addVarient.filter((x)=>x.Price)
       products.push(object);
     }
+    console.log(products);
     let cartsTotal = 0;
     for (let i = 0; i < products.length; i++) {
-      cartsTotal =
+      if(products[i].Price.length){
+        cartsTotal =
         cartsTotal +
-        products[i].Price * products[i].quantity -
+        products[i].Price[0].Price * products[i].quantity -
         products[i].Discount;
+      }
+     
     }
     var newOne = await new cartSchema({
       products,
@@ -149,11 +153,11 @@ exports.applyCoupan = async (req, res) => {
       object.quantity = carts[i].quantity;
       let getPrice = await productSchema
         .findById(carts[i].product_Id)
-        .select("Price")
+        .select("addVarient.Price")
         .exec();
       // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       // object.Discount = dis.map((x) => x.Discount);
-      object.Price = getPrice.Price;
+      object.Price = getPrice.addVarient.filter((x)=>x.Price)
       product.push(object);
     }
     let DiscountType = validCoupan.map((x) => x.DiscountType);
@@ -163,8 +167,11 @@ exports.applyCoupan = async (req, res) => {
     let subtotal = 0;
     // for (let i = 0; i < getPrice.length; i++) {
     for (let i = 0; i < product.length; i++) {
-      subtotal = subtotal + product[i].Price * product[i].quantity;
-    }
+      if(product[i].Price.length){
+        subtotal = subtotal + product[i].Price[0].Price * product[i].quantity;
+   
+      }
+      }
     console.log(subtotal);
     //  subtotal = subtotal +  * quantity;
     //}

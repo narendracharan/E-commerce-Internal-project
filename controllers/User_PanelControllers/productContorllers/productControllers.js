@@ -10,7 +10,12 @@ exports.productList = async (req, res) => {
     const list = await productSchema
       .find({})
       .sort({ _id: -1 })
-      .populate("brand_Id");
+      .populate("brand_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

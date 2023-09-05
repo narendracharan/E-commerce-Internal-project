@@ -41,12 +41,12 @@ exports.createOrder = async (req, res) => {
       object.quantity = carts[i].quantity;
       let getPrice = await productSchema
         .findById(carts[i].product_Id)
-        .select("Price")
+        .select("addVarient.Price")
         .exec();
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({ _id: carts[i].product_Id });
       object.Disount = dis.map((x) => x.Discount);
-      object.Price = getPrice.Price;
+      object.Price = getPrice.addVarient.filter((x)=>x.Price)
       products.push(object);
     }
     console.log(products);
@@ -54,13 +54,15 @@ exports.createOrder = async (req, res) => {
     const pp = dd.filter((x) => x.totalAfterDiscount);
     let cartsTotal = [];
     for (let i = 0; i < products.length; i++) {
-      cartsTotal =
+      if(products[i].Price.length){
+        cartsTotal =
         cartsTotal +
-        products[i].Price * products[i].quantity -
+        products[i].Price[0].Price * products[i].quantity -
         products[i].Disount;
-    const dd=   deletQuatity.stockQuantity - products[i].quantity
+    const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
      await productSchema.findByIdAndUpdate({_id:products[i].product_Id},{stockQuantity:dd},{new:true})
-    }
+      }
+      }
     let newCarts = new orderSchema({
       products,
       cartsTotal: [pp],
