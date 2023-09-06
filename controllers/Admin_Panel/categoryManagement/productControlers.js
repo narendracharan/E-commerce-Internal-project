@@ -230,14 +230,16 @@ exports.addVarient = async (req, res) => {
     if (!values_Id) {
       res.status(400).json(error("please provide values_Id", res.statusCode));
     }
+    console.log(req.files);
     let pic = [];
-    if (newVarient.addVarient.length) {
+   // if (newVarient.addVarient.length) {
       for (let i = 0; i < req.files.length; i++) {
         // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
         pic.push(req.files[i].location);
       }
-    }
-    console.log(pic);
+   // }
+    
+
     newVarient.addVarient.push({
       Price: Price,
       oldPrice: oldPrice,
