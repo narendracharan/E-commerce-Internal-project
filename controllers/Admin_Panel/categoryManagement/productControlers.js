@@ -124,7 +124,7 @@ exports.addBrand = async (req, res) => {
 
 exports.brandList = async (req, res) => {
   try {
-    const list = await brandSchema.find({});
+    const list = await brandSchema.find({}).populate("category_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

@@ -29,6 +29,11 @@ exports.productDetails = async (req, res) => {
     const Discount = await offerSchema
       .find({ product_Id: id })
       .populate("brand_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id")
       .select("Discount");
     const discount = Discount.map((x) => x.Discount);
     const price = details.Price;
