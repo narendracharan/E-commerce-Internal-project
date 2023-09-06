@@ -124,7 +124,7 @@ exports.addBrand = async (req, res) => {
 
 exports.brandList = async (req, res) => {
   try {
-    const list = await brandSchema.find({}).populate("category_Id")
+    const list = await brandSchema.find({}).populate("category_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -204,15 +204,40 @@ exports.addVarient = async (req, res) => {
       retanable,
     } = req.body;
     const newVarient = await productSchema.findById({ _id: id });
-   // console.log(req.files);
-   let pic=[]
+    // console.log(req.files);
+    if (!Price) {
+      res.status(400).json(error("please provide Price", res.statusCode));
+    }
+    if (!oldPrice) {
+      res.status(400).json(error("please provide oldPrice", res.statusCode));
+    }
+    if (!dollarPrice) {
+      res.status(400).json(error("please provide dollarPrice", res.statusCode));
+    }
+    if (!stockQuantity) {
+      res
+        .status(400)
+        .json(error("please provide stockQuantity", res.statusCode));
+    }
+    if (!SKU_ar) {
+      res.status(400).json(error("please provide SKU_ar", res.statusCode));
+    }
+    if (!attribute_Id) {
+      res
+        .status(400)
+        .json(error("please provide attribute_Id", res.statusCode));
+    }
+    if (!values_Id) {
+      res.status(400).json(error("please provide values_Id", res.statusCode));
+    }
+    let pic = [];
     if (newVarient.addVarient.length) {
-    
       for (let i = 0; i < req.files.length; i++) {
-       // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
-        pic.push(req.files[i].location)
+        // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
+        pic.push(req.files[i].location);
       }
     }
+    console.log(pic);
     newVarient.addVarient.push({
       Price: Price,
       oldPrice: oldPrice,
@@ -220,12 +245,12 @@ exports.addVarient = async (req, res) => {
       stockQuantity: stockQuantity,
       SKU: SKU,
       SKU_ar: SKU_ar,
-      product_Pic:pic,
+      product_Pic: pic,
       attribute_Id: attribute_Id,
       values_Id: values_Id,
       retanable: retanable,
     });
-console.log(newVarient);
+    console.log(newVarient);
     const saveVarient = await newVarient.save();
     res.status(200).json(success(res.statusCode, "Success", { saveVarient }));
   } catch (err) {
