@@ -204,21 +204,28 @@ exports.addVarient = async (req, res) => {
       retanable,
     } = req.body;
     const newVarient = await productSchema.findById({ _id: id });
-    console.log(req.files);
-    if (req.files.length) {
-      const data = newVarient.addVarient.push({
-        Price: Price,
-        oldPrice: oldPrice,
-        dollarPrice: dollarPrice,
-        stockQuantity: stockQuantity,
-        SKU: SKU,
-        SKU_ar: SKU_ar,
-        attribute_Id: attribute_Id,
-        values_Id: values_Id,
-        product_Pic: req.files[0].location,
-        retanable: retanable,
-      });
+   // console.log(req.files);
+   let pic=[]
+    if (newVarient.addVarient.length) {
+    
+      for (let i = 0; i < req.files.length; i++) {
+       // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
+        pic.push(req.files[i].location)
+      }
     }
+    newVarient.addVarient.push({
+      Price: Price,
+      oldPrice: oldPrice,
+      dollarPrice: dollarPrice,
+      stockQuantity: stockQuantity,
+      SKU: SKU,
+      SKU_ar: SKU_ar,
+      product_Pic:pic,
+      attribute_Id: attribute_Id,
+      values_Id: values_Id,
+      retanable: retanable,
+    });
+console.log(newVarient);
     const saveVarient = await newVarient.save();
     res.status(200).json(success(res.statusCode, "Success", { saveVarient }));
   } catch (err) {

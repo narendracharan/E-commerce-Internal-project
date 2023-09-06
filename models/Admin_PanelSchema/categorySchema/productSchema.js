@@ -101,6 +101,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  productType:{
+    type: String,
+    require: true,
+  },
   productColor_ar: {
     type: String,
     require: true,
@@ -146,7 +150,7 @@ const schema = new mongoose.Schema({
       require: true,
     },
     product_Pic: {
-      type: [],
+      type: Array,
       require: true,
     },
     Price: {
