@@ -12,7 +12,12 @@ const schema=new mongoose.Schema({
     brandPic:{
         type:String,
         require:true
-    }
+    },
+    category_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "category",
+        require: true,
+      },
 })
 schema.set("timestamps",true)
 module.exports=mongoose.model("brand",schema)
