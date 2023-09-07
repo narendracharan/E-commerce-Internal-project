@@ -1,4 +1,5 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const UserorderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { success, error } = require("../../response");
@@ -56,3 +57,35 @@ exports.orderDetails = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+
+exports.homeDashBoards=async(req,res)=>{
+  try{
+const orderMonth=await orderSchema.aggregate([
+  { $group: {
+    _id: { month: { $month: { $toDate: "$createdAt" } } },
+    orderOfMonth: { $sum: 1 }
+  }
+}
+])
+const customerMonth=await userSchema.aggregate([
+  { $group: {
+    _id: { month: { $month: { $toDate: "$createdAt" } } },
+    orderOfMonth: { $sum: 1 }
+  }
+}
+])
+const exapactedEarning=await orderSchema.find().populate("products.product_Id")
+const order=exapactedEarning.filter(
+  (x) =>
+    x.orderStatus == "Shipped" ||
+    x.orderStatus == "Inprogress" ||
+    x.orderStatus == "Delivered"
+);
+
+res.status(200).json(success(res.statusCode,"Succcess",{orderMonth,customerMonth}))
+  }catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

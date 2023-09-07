@@ -238,8 +238,6 @@ exports.addVarient = async (req, res) => {
         pic.push(req.files[i].location);
       }
    // }
-    
-
     newVarient.addVarient.push({
       Price: Price,
       oldPrice: oldPrice,

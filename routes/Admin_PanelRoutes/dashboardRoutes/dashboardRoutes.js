@@ -6,10 +6,12 @@ const {
   recentOrderSearch,
   orderDetails,
   recentOrderList,
+  homeDashBoards,
 } = require("../../../controllers/Admin_Panel/dashboardsControllers/dashboardsControllers");
 
 router.post("/userCount", tokenAuthorisationUser, userCount);
 router.post("/list", tokenAuthorisationUser, recentOrderList);
 router.post("/search", tokenAuthorisationUser, recentOrderSearch);
 router.post("/orderDetails/:id", tokenAuthorisationUser, orderDetails);
+router.post("/order-dashboards",homeDashBoards)
 module.exports = router;

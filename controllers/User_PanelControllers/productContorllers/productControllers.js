@@ -25,15 +25,14 @@ exports.productList = async (req, res) => {
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await productSchema.findById(id);
+    const details = await productSchema.findById(id).populate("brand_Id")
+    .populate("addVarient.values_Id")
+    .populate("addVarient.attribute_Id")
+    .populate("subSubcategory_Id")
+    .populate("Subcategory_Id")
+    .populate("category_Id")
     const Discount = await offerSchema
       .find({ product_Id: id })
-      .populate("brand_Id")
-      .populate("addVarient.values_Id")
-      .populate("addVarient.attribute_Id")
-      .populate("subSubcategory_Id")
-      .populate("Subcategory_Id")
-      .populate("category_Id")
       .select("Discount");
     const discount = Discount.map((x) => x.Discount);
     const price = details.Price;
@@ -141,6 +140,11 @@ exports.trandingProduct = async (req, res) => {
   try {
     const productlist = await productSchema
       .find({})
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id")
       .sort({ productName: -1 })
       .limit(4);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
