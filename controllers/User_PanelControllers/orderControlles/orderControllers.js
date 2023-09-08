@@ -51,7 +51,7 @@ exports.createOrder = async (req, res) => {
     }
     console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
-    const pp = dd.filter((x) => x.totalAfterDiscount);
+    const pp = dd.map((x) => x.totalAfterDiscount);
     let cartsTotal = [];
     for (let i = 0; i < products.length; i++) {
       if(products[i].Price.length){
@@ -65,7 +65,7 @@ exports.createOrder = async (req, res) => {
       }
     let newCarts = new orderSchema({
       products,
-      cartsTotal: [pp],
+      cartsTotal: pp,
       user_Id,
       address_Id,
       deliverdBy,
