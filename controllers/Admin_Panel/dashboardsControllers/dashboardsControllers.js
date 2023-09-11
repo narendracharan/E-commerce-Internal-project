@@ -80,15 +80,23 @@ exports.homeDashBoards = async (req, res) => {
       {
         $match: {
           createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
-          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) }
         },
       },
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 },
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: "user",
+      //     foreignField: "_id",
+      //     localField: "_id",
+      //     as: "userorders",
+      //   },
+      // },
+      // {
+      //   $group: {
+      //     _id: null,
+      //     count: { $sum: 1 },
+      //   },
+      // },
     ]);
     const deliverOrderMonth = await orderSchema.aggregate([
       {
@@ -155,3 +163,12 @@ exports.deliveryOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+// exports.salesthisMonth=async(req,res)=>{
+//   try{
+
+//   }catch(err){
+//     res.status(400).json(error("Failed",res.statusCode))
+//   }
+// }
