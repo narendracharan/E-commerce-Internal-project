@@ -113,20 +113,30 @@ exports.homeDashBoards = async (req, res) => {
         },
       },
     ]);
-    const deliverOrderday = await orderSchema.aggregate([
+    const salesDAy = await orderSchema.aggregate([
       {
         $match: {
-          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
           createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
+          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) }
+          
         },
       },
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 },
-        },
-      },
+    //   // {
+    //   //   $lookup: {
+    //   //     from: "user",
+    //   //     foreignField: "_id",
+    //   //     localField: "_id",
+    //   //     as: "userorders",
+    //   //   },
+    //   // },
+    //   // {
+    //   //   $group: {
+    //   //     _id: null,
+    //   //     count: { $sum: 1 },
+    //   //   },
+    //   // },
     ]);
+    
     // let totalAfterDiscount = 0;
     // let carts = await orderSchema.find({});
     // console.log(carts);
@@ -146,6 +156,7 @@ exports.homeDashBoards = async (req, res) => {
         orderMonth,
         customerMonth,
         deliverOrderMonth,
+        salesDAy
       })
     );
   } catch (err) {
