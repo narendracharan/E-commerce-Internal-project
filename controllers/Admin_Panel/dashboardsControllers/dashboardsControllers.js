@@ -75,7 +75,15 @@ exports.homeDashBoards = async (req, res) => {
           count: { $sum: 1 },
         },
       },
-    ]);
+    ])
+    const orderyear = await orderSchema.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: new Date(moment(new Date()).startOf("year")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("year")) },
+        },
+      },
+    ])
     const customerMonth = await userSchema.aggregate([
       {
         $match: {
@@ -156,7 +164,8 @@ exports.homeDashBoards = async (req, res) => {
         orderMonth,
         customerMonth,
         deliverOrderMonth,
-        salesDAy
+        salesDAy,
+        orderyear
       })
     );
   } catch (err) {

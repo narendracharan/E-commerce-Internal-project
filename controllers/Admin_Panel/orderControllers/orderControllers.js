@@ -16,7 +16,7 @@ exports.orderList = async (req, res) => {
       })
       .populate("products.product_Id").sort({
         createdAt:-1
-        }).populate("deliverdBy")
+        }).populate("deliverdBy").populate("user_Id")
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
