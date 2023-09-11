@@ -1,9 +1,11 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
+const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const UserorderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { success, error } = require("../../response");
-const moment=require("moment")
+const moment = require("moment");
 exports.userCount = async (req, res) => {
   try {
     const userCount = await userSchema.find().count();
@@ -62,63 +64,82 @@ exports.homeDashBoards = async (req, res) => {
   try {
     const orderMonth = await orderSchema.aggregate([
       {
-        //  $group: {
-        //  _id: { month: { $month: { $toDate: "$createdAt" } } },
-        //    orderOfMonth: { $sum: 1 },
-        // },
-         $match:{
-           createdAt: { $gte: moment(new Date()).startOf("month") } },
-               createdAt: { $lte: moment(new Date()).endOf("month") }
-             }
-        
-    ]);
-    console.log(orderMonth);
-    const customerMonth = await userSchema.aggregate([
+        $match: {
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
+      },
       {
         $group: {
-          _id: { month: { $month: { $toDate: "$createdAt" } } },
-          orderOfMonth: { $sum: 1 },
+          _id: null,
+          count: { $sum: 1 },
         },
-      
+      },
+    ]);
+    const customerMonth = await userSchema.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
       },
     ]);
     const deliverOrderMonth = await orderSchema.aggregate([
       {
-        $match : { orderStatus : "Delivered" } ,
-        
+        $match: {
+          orderStatus: "Delivered",
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
       },
       {
         $group: {
-            _id: { month: { $month: { $toDate: "$createdAt" } } },
-            orderOfMonth: { $sum: 1 },
-          },
-      }
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
     ]);
-    // const exapactedEarning = await orderSchema
-    //   .find()
-    //   .populate("products.product_Id");
-    // const order = exapactedEarning.filter(
-    //   (x) => x.orderStatus == "Shipped" || x.orderStatus == "Inprogress"
+    const deliverOrderday = await orderSchema.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    // let totalAfterDiscount = 0;
+    // let carts = await orderSchema.find({});
+    // console.log(carts);
+    // const cartsTotal = carts.map((cartsTotal) =>
+    //   parseInt(cartsTotal.cartsTotal)
     // );
-    // //console.log(order);
-    // let total = 0;
-    // // if(order.length>0){
-    // //   var v=order[0].cartsTotal.flatMap((innerArray => innerArray.map(value => value * 2)))
-    // // }
-    // if (order.length > 0) {
-    //   var v = order[0].cartsTotal.map((value) => value * 2);
-    // }
-    // console.log(v);
-    // for(let i=0;i<order.length;i++){
-    //   for(let j=0;j<i<order[i].cartsTotal.length;j++){
-    //     total=+order[i].cartsTotal[j]
+    // for (let i = 0; i < cartsTotal.length; i++) {
+    //   for (let j = 0; i < cartsTotal[j].length; j++) {
+    //     totalAfterDiscount += cartsTotal[i][j];
     //   }
     // }
-    // console.log(total);
-
-    res
-      .status(200)
-      .json(success(res.statusCode, "Succcess", { orderMonth, customerMonth ,deliverOrderMonth}));
+    // console.log(totalAfterDiscount);
+    // var discountedProduct = parseInt(cartsTotal)+totalAfterDiscount
+    // console.log(discountedProduct)
+    res.status(200).json(
+      success(res.statusCode, "Succcess", {
+        orderMonth,
+        customerMonth,
+        deliverOrderMonth,
+      })
+    );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
