@@ -33,16 +33,17 @@ exports.createOrder = async (req, res) => {
     } = req.body;
     const { carts } = req.body;
     // const id=req.params.id
+    console.log(carts);
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
       object.product_Id = carts[i].product_Id;
       object.user_Id = carts[i].user_Id;
       object.quantity = carts[i].quantity;
-      object.Price = carts[i].quantity
+      object.Price = carts[i].Price
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({ _id: carts[i].product_Id });
-      object.Disount = dis.map((x) => x.Discount);
+      //object.Disount = dis.map((x) => x.Discount);
       products.push(object);
     }
     console.log(products);
@@ -53,8 +54,7 @@ exports.createOrder = async (req, res) => {
         cartsTotal =
         cartsTotal +
         products[i].Price * products[i].quantity
-    const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
-     await productSchema.findByIdAndUpdate({_id:products[i].product_Id},{stockQuantity:dd},{new:true})
+    ///const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
     }
     let newCarts = new orderSchema({
       products,
@@ -73,8 +73,8 @@ exports.createOrder = async (req, res) => {
     //   let qr=  qrCode.toFile(path.join(__dirname,`${filename}.png`),json,(err,code)=>{
     //  if(err) return console.log(err);
     //   })
-    //newCarts.qrCode.push(qr)
-    await newCarts.save();
+    //newCarts.qrCode.push(qr)/
+      await newCarts.save();
     console.log(newCarts);
     const deleteCard=await cartsSchema.deleteMany({user_Id:user_Id})
     console.log(deleteCard);
