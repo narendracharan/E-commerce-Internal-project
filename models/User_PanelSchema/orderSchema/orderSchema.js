@@ -7,7 +7,10 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         require: true,
-        Price: Number,
+       
+      },
+      Price:{
+        type: Number
       },
       quantity: {
         type: Number,

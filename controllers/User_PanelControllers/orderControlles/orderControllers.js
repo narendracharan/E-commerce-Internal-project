@@ -39,33 +39,26 @@ exports.createOrder = async (req, res) => {
       object.product_Id = carts[i].product_Id;
       object.user_Id = carts[i].user_Id;
       object.quantity = carts[i].quantity;
-      let getPrice = await productSchema
-        .findById(carts[i].product_Id)
-        .select("addVarient.Price")
-        .exec();
+      object.Price = carts[i].quantity
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({ _id: carts[i].product_Id });
       object.Disount = dis.map((x) => x.Discount);
-      object.Price = getPrice.addVarient.filter((x)=>x.Price)
       products.push(object);
     }
     console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
-    const pp = dd.map((x) => x.totalAfterDiscount);
-    let cartsTotal = [];
+  ///  const pp = dd.map((x) => x.totalAfterDiscount);
+    let cartsTotal =0;
     for (let i = 0; i < products.length; i++) {
-      if(products[i].Price.length){
         cartsTotal =
         cartsTotal +
-        products[i].Price[0].Price * products[i].quantity -
-        products[i].Disount;
+        products[i].Price * products[i].quantity
     const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
      await productSchema.findByIdAndUpdate({_id:products[i].product_Id},{stockQuantity:dd},{new:true})
-      }
-      }
+    }
     let newCarts = new orderSchema({
       products,
-      cartsTotal: pp,
+      cartsTotal,
       user_Id,
       address_Id,
       deliverdBy,

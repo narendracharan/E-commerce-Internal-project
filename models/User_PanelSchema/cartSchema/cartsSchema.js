@@ -7,15 +7,19 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         require: true,
-        Price: Number,
       },
       quantity: {
         type: Number,
         default: 1,
       },
+      Price: {
+        type: Number,
+      },
     },
   ],
-  cartsTotal: Number,
+  cartsTotal: {
+    type: Number,
+  },
   totalAfterDiscount: Number,
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
