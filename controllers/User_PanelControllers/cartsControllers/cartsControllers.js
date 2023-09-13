@@ -6,35 +6,76 @@ const userSchema = require("../../../models/User_PanelSchema/userSchema/userSche
 const { error, success } = require("../../response");
 const User = require("../../../models/Admin_PanelSchema/userSchema/userSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
+const mongoose = require("mongoose");
 
 exports.addToCart = async (req, res) => {
   try {
     const { carts, user_Id } = req.body;
     let products = [];
+    
+    // let getPrice = await productSchema.aggregate([
+    //   // First Stage
+    //   {
+    //     $unwind: { path: "$addVarient" },
+    //   },
+    //   {
+    //     $match:{"addVarient._id":"64f99a34e4d0ea6ba184b5f0"}
+    //   }
+    //   // {
+    //   //   $match: {
+    //   //     "addVarient._id":new mongoose.ObjectId("64f85ebc73bbaa91ca4b7ae3"),
+    //   //   },
+    //   // }
+    //   ])
+   //   console.log(getPrice);
     for (let i = 0; i < carts.length; i++) {
       let object = {};
       object.product_Id = carts[i].product_Id;
       object.quantity = carts[i].quantity;
+     // console.log(carts[i].product_Id);
       let getPrice = await productSchema
-        .findById(carts[i].product_Id)
-        .select("addVarient.Price")
-        .exec();
-       console.log(getPrice);
+      // .aggregate([
+      //   // First Stage
+      //   {
+      //     $unwind:  "$addVarient" ,
+      //   },
+      //   {
+      //     $match: {
+      //       "addVarient._id":carts[i].product_Id,
+      //     },
+      //   },
+      //   //  Second Stage
+      //   //   {
+      //   //   $group:
+      //   //     {
+      //   //       _id:"$addVarient._id"
+
+      //   // //     //  averagePrice: { $avg: "$addVarient.Price" }
+      //   // }
+
+      //   // // Third Stage    
+      //   // // {
+      //   // //   $sort: { "averagePrice": -1 }
+      //   // }
+      // ]);
+      .findById(carts[i].product_Id)
+      .select("addVarient.Price")
+      .exec();
+      console.log(getPrice);
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       object.Discount = dis.map((x) => x.Discount);
-      object.Price = getPrice.addVarient.filter((x)=>x.Price)
+      object.Price = getPrice.addVarient.filter((x) => x.Price);
       products.push(object);
     }
     console.log(products);
     let cartsTotal = 0;
     for (let i = 0; i < products.length; i++) {
-      if(products[i].Price.length){
+      if (products[i].Price.length) {
         cartsTotal =
-        cartsTotal +
-        products[i].Price[0].Price * products[i].quantity -
-        products[i].Discount;
+          cartsTotal +
+          products[i].Price[0].Price * products[i].quantity -
+          products[i].Discount;
       }
-     
     }
     var newOne = await new cartSchema({
       products,
@@ -157,7 +198,7 @@ exports.applyCoupan = async (req, res) => {
         .exec();
       // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       // object.Discount = dis.map((x) => x.Discount);
-      object.Price = getPrice.addVarient.filter((x)=>x.Price)
+      object.Price = getPrice.addVarient.filter((x) => x.Price);
       product.push(object);
     }
     let DiscountType = validCoupan.map((x) => x.DiscountType);
@@ -167,11 +208,10 @@ exports.applyCoupan = async (req, res) => {
     let subtotal = 0;
     // for (let i = 0; i < getPrice.length; i++) {
     for (let i = 0; i < product.length; i++) {
-      if(product[i].Price.length){
+      if (product[i].Price.length) {
         subtotal = subtotal + product[i].Price[0].Price * product[i].quantity;
-   
       }
-      }
+    }
     console.log(subtotal);
     //  subtotal = subtotal +  * quantity;
     //}

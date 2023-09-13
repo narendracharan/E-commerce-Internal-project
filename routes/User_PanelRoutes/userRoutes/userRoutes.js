@@ -17,6 +17,7 @@ const { signupValidation } = require("../../../validation/userValidation");
 const router = express.Router();
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const { s3upload } = require("../../../middleware/multer");
+const { userReports, orderReports, userReportsList, orderReportsList } = require("../../../controllers/User_PanelControllers/reportsControllers");
 
 router.post("/signup", signupValidation, userSignup);
 router.post("/login", userLogin);
@@ -44,4 +45,9 @@ router.patch(
   tokenAuthorisationUser,
   notificationUpdate
 );
+
+router.post("/user-reports",userReports)
+router.post("/order-reports",orderReports)
+router.post("/user-reports-list",userReportsList)
+router.post("/order-reports-list",orderReportsList)
 module.exports = router;
