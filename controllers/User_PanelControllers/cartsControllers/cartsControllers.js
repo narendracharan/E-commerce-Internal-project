@@ -17,7 +17,7 @@ exports.addToCart = async (req, res) => {
       object.product_Id = carts[i].product_Id;
       object.quantity = carts[i].quantity;
       // console.log(carts[i].product_Id);
-       object.Price=parseInt(carts[i].Price)
+      object.Price = parseInt(carts[i].Price);
       products.push(object);
     }
     // let cartsTotal=0
@@ -27,11 +27,11 @@ exports.addToCart = async (req, res) => {
     // }
     var newOne = await new cartSchema({
       products,
-    //  cartsTotal,
+      //  cartsTotal,
       user_Id: user_Id,
     });
-   const newCarts = await newOne.save();
-   res.status(200).json(success(res.status, "Success", { newCarts }));
+    const newCarts = await newOne.save();
+    res.status(200).json(success(res.status, "Success", { newCarts }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -140,7 +140,7 @@ exports.applyCoupan = async (req, res) => {
       let object = {};
       object.product_Id = carts[i].product_Id;
       object.quantity = carts[i].quantity;
-      object.Price=carts[i].Price
+      object.Price = carts[i].Price;
       // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       // object.Discount = dis.map((x) => x.Discount)
       product.push(object);
@@ -148,14 +148,13 @@ exports.applyCoupan = async (req, res) => {
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     //   const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
     //   console.log(cartsTotal);
-    console.log(DiscountType);
-   // let subtotal = 0;
+    // let subtotal = 0;
     // for (let i = 0; i < getPrice.length; i++) {
     // for (let i = 0; i < product.length; i++) {
     //     subtotal = subtotal + product[i].Price * product[i].quantity;
-      
+
     // }
-   // console.log(subtotal);
+    // console.log(subtotal);
     //  subtotal = subtotal +  * quantity;
     //}
     // var cartsTotalSum =parseInt( subtotal - subtotal * (DiscountType / 100));
@@ -169,7 +168,7 @@ exports.applyCoupan = async (req, res) => {
       success(res.statusCode, "Success", {
         DiscountType,
         product,
-        user_Id
+        user_Id,
         // subtotal,
         // cartsTotalSum,
       })
@@ -188,7 +187,7 @@ exports.applyCoupanToAll = async (req, res) => {
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-   // let carts = await cartSchema.find({ user_Id: id });
+    // let carts = await cartSchema.find({ user_Id: id });
 
     let DiscountType = validCoupan.map((x) => x.DiscountType);
     // const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
@@ -198,7 +197,7 @@ exports.applyCoupanToAll = async (req, res) => {
     //   subtotal = subtotal + cartsTotal[i];
     // }
     // console.log(subtotal);
-   // var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
+    // var cartsTotalSum = subtotal - subtotal * (DiscountType / 100);
     // await cartSchema.findOneAndUpdate(
     //   { user_Id: id },
     //   { totalAfterDiscount: cartsTotalSum },
@@ -228,23 +227,21 @@ exports.coupanDetails = async (req, res) => {
 exports.orderSummery = async (req, res) => {
   try {
     const id = req.params.id;
-    let carts = await cartSchema.find({ user_Id: id });
-    const cartsTotal = carts.map((cartsTotal) =>
-      parseInt(cartsTotal.totalAfterDiscount)
-    );
+    let carts = await cartSchema.find({ user_Id: id }).populate("products.product_Id");
+    const cartsTotal = carts.map((cartsTotal) => cartsTotal.products);
     const shipping = 40;
     const Tax = 30;
-    var cartsTotalSum = parseInt(cartsTotal) + shipping + Tax;
+    // var cartsTotalSum = parseInt(cartsTotal) + shipping + Tax;
     const product = await cartSchema
       .find({ user_Id: id })
       .populate("products.product_Id");
     res.status(200).json(
       success(res.statusCode, "Success", {
-        product,
+     //   product,
         cartsTotal,
-        shipping,
-        Tax,
-        cartsTotalSum,
+        // shipping,
+        // Tax,
+        // cartsTotalSum,
       })
     );
   } catch (err) {

@@ -17,10 +17,6 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  cartsTotal: {
-    type: Number,
-  },
-  totalAfterDiscount: Number,
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "userPanel",

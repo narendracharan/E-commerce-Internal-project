@@ -30,32 +30,30 @@ exports.createOrder = async (req, res) => {
       shippingPrice,
       orderStatus,
       orderStatus_ar,
+      cartsTotal
     } = req.body;
     const { carts } = req.body;
-    // const id=req.params.id
-    console.log(carts);
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
       object.product_Id = carts[i].product_Id;
       object.user_Id = carts[i].user_Id;
       object.quantity = carts[i].quantity;
-      object.Price = carts[i].Price
+      object.Price = carts[i].Price;
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
-      var deletQuatity = await productSchema.findById({ _id: carts[i].product_Id });
+      var deletQuatity = await productSchema.findById({
+        _id: carts[i].product_Id,
+      });
       //object.Disount = dis.map((x) => x.Discount);
       products.push(object);
     }
-    console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
-  ///  const pp = dd.map((x) => x.totalAfterDiscount);
-    let cartsTotal =0;
-    for (let i = 0; i < products.length; i++) {
-        cartsTotal =
-        cartsTotal +
-        products[i].Price * products[i].quantity
-    ///const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
-    }
+    ///  const pp = dd.map((x) => x.totalAfterDiscount);
+    // let cartsTotal = 0;
+    // for (let i = 0; i < products.length; i++) {
+    //   cartsTotal = cartsTotal + products[i].Price * products[i].quantity;
+    //   ///const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
+    // }
     let newCarts = new orderSchema({
       products,
       cartsTotal,
@@ -74,10 +72,8 @@ exports.createOrder = async (req, res) => {
     //  if(err) return console.log(err);
     //   })
     //newCarts.qrCode.push(qr)/
-      await newCarts.save();
-    console.log(newCarts);
-    const deleteCard=await cartsSchema.deleteMany({user_Id:user_Id})
-    console.log(deleteCard);
+    await newCarts.save();
+    const deleteCard = await cartsSchema.deleteMany({ user_Id: user_Id });
     const updated = await orderSchema
       .findOne({
         _id: newCarts._id,
@@ -96,17 +92,17 @@ exports.createOrder = async (req, res) => {
     //   );
     //   console.log();
     // console.log(updated.user_Id.userEmail);
-    // var mailOptions = {
-    //   from: "s04450647@gmail.com",
-    //   to: updated.user_Id.userEmail,
-    //   subject: "Order Successfully",
-    //   text: `Hello ${updated.user_Id.userName}
-    //   Thank you for placing an order with us. We are pleased to confirm that your order has been successfully placed and is being ${newCarts.orderStatus}.
-    //   Order Number: ${newCarts._id}
-    //   Date of Order: ${newCarts.createdAt}
-    //   Item(s) Ordered: ${newCarts.products.length}`,
-    // };
-    // await transporter.sendMail(mailOptions);
+    var mailOptions = {
+      from: "s04450647@gmail.com",
+      to: updated.user_Id.userEmail,
+      subject: "Order Successfully",
+      text: `Hello ${updated.user_Id.userName}
+      Thank you for placing an order with us. We are pleased to confirm that your order has been successfully placed and is being ${newCarts.orderStatus}.
+      Order Number: ${newCarts._id}
+      Date of Order: ${newCarts.createdAt}
+      Item(s) Ordered: ${newCarts.products.length}`,
+    };
+    await transporter.sendMail(mailOptions);
     // const message = {
     //   notification: {
     //     title:"Order Shippment",
@@ -149,9 +145,10 @@ exports.orderList = async (req, res) => {
     const orderList = await orderSchema
       .find({ user_Id: _id })
       .populate("products.product_Id")
-      .populate("user_Id").sort({
-        createdAt:-1
-        })
+      .populate("user_Id")
+      .sort({
+        createdAt: -1,
+      });
     res.status(200).json(success(res.status, "Success", { orderList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
