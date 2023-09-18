@@ -10,23 +10,69 @@ const mongoose = require("mongoose");
 
 exports.addToCart = async (req, res) => {
   try {
-    const { carts, user_Id } = req.body;
-    let products = [];
-    for (let i = 0; i < carts.length; i++) {
-      let object = {};
-      object.product_Id = carts[i].product_Id;
-      object.quantity = carts[i].quantity;
-      // console.log(carts[i].product_Id);
-      object.Price = parseInt(carts[i].Price);
-      products.push(object);
-    }
-    // let cartsTotal=0
-    // for (let i = 0; i < products.length; i++) {
-    //   console.log(cartsTotal);
-    //     cartsTotal =+ products[i].Price * products[i].quantity
+    const { product_Id, quantity, Price, user_Id } = req.body;
+    // let products = [];
+    // for (let i = 0; i < carts.length; i++) {
+    //   let object = {};
+    //   object.product_Id = carts[i].product_Id;
+    //   object.quantity = carts[i].quantity;
+    //   // console.log(carts[i].product_Id);
+    //   object.Price = parseInt(carts[i].Price);
+    //   products.push(object);
     // }
+    // // let cartsTotal=0
+    // // for (let i = 0; i < products.length; i++) {
+    // //   console.log(cartsTotal);
+    // //     cartsTotal =+ products[i].Price * products[i].quantity
+    // // }
+    if (!product_Id) {
+      return res
+        .status(201)
+        .json(error("Please provide productId!", res.statusCode));
+    }
+    if (!quantity) {
+      return res
+        .status(201)
+        .json(error("Please provide quantity!", res.statusCode));
+    }
+    if (!user_Id) {
+      return res
+        .status(201)
+        .json(error("Please provide user_Id!", res.statusCode));
+    }
+    let carts;
+    carts = await cartSchema.findOne({ user_Id: user_Id });
+    if (carts) {
+      const newproducts = carts.products.filter(
+        (product) => String(product.product_Id) == String(product_Id)
+      );
+      if (newproducts.length) {
+      newproducts[0].quantity = newproducts[0].quantity + +quantity;
+        console.log(newproducts);
+        await carts.save();
+        return res
+          .status(201)
+          .json(success(res.statusCode, "Product Added", { carts }));
+      } else {
+        carts.products.push({
+          product_Id: product_Id,
+          quantity: quantity,
+          Price: Price,
+        });
+        await carts.save();
+        return res
+          .status(201)
+          .json(success(res.statusCode, "Product Added", { carts }));
+      }
+    }
     var newOne = await new cartSchema({
-      products,
+      products: [
+        {
+          product_Id: product_Id,
+          quantity: quantity,
+          Price: Price,
+        },
+      ],
       //  cartsTotal,
       user_Id: user_Id,
     });
@@ -227,7 +273,9 @@ exports.coupanDetails = async (req, res) => {
 exports.orderSummery = async (req, res) => {
   try {
     const id = req.params.id;
-    let carts = await cartSchema.find({ user_Id: id }).populate("products.product_Id");
+    let carts = await cartSchema
+      .find({ user_Id: id })
+      .populate("products.product_Id");
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.products);
     const shipping = 40;
     const Tax = 30;
@@ -237,7 +285,7 @@ exports.orderSummery = async (req, res) => {
       .populate("products.product_Id");
     res.status(200).json(
       success(res.statusCode, "Success", {
-     //   product,
+        //   product,
         cartsTotal,
         // shipping,
         // Tax,

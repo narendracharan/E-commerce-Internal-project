@@ -14,9 +14,12 @@ exports.orderList = async (req, res) => {
           to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
         ],
       })
-      .populate("products.product_Id").sort({
-        createdAt:-1
-        }).populate("deliverdBy").populate("user_Id")
+      .populate("products.product_Id")
+      .sort({
+        createdAt: -1,
+      })
+      .populate("deliverdBy")
+      .populate("user_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
@@ -48,7 +51,8 @@ exports.orderDetails = async (req, res) => {
     const id = req.params.id;
     const orderDetails = await orderSchema
       .findById(id)
-      .populate("products.product_Id").populate("address_Id")
+      .populate("products.product_Id")
+      .populate("address_Id");
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -141,7 +145,7 @@ exports.orderExel = async (req, res) => {
       const newDate = `${date[2]}/${date[1]}/${date[3]}`;
       let obj = {
         "Order Date": newDate,
-        "order ID": `${exportOrder._id}`,
+        "Order ID": `${exportOrder._id}`,
         "Payment Method": ` ${exportOrder.paymentIntent}`,
         "Delivery Status": `${exportOrder.orderStatus}`,
         "Total Amount": `${exportOrder.cartsTotal}`,

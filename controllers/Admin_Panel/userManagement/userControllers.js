@@ -189,12 +189,10 @@ exports.userDetails = async (req, res) => {
     // for (let i = 0; i < price.length; i++) {
     //   totalSpent += price[i];
     // }
-    for (let i = 0; i < list.totalAfterDiscount.length; i++) {
-      totalSpent += list.totalAfterDiscount[i];
-      // for(let j=0;j<list[i]..length;j++){
-
+    for (let i = 0; i < price.length; i++) {
+      totalSpent += price[i];
+      // for(let j=0;j<list[i]..length;j++)
       //   for(let k=0;k<order[i].cartsTotal[j];k++){
-
       //   }
       // }
     }
