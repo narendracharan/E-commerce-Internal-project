@@ -96,7 +96,10 @@ const schema = new mongoose.Schema({
     type:Array
   },
   statusTime:{
-    orderPlace:{
+    Approved:{
+      type:Date
+    },
+    Packed:{
       type:Date
     },
     processing:{

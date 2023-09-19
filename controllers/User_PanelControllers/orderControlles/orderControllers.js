@@ -8,7 +8,7 @@ const {
 } = require("../../Admin_Panel/agentControllers/agentControllers");
 const qrCode = require("qrcode");
 const path = require("path");
-
+const moment=require("moment")
 const { error, success } = require("../../response");
 const { Notification } = require("../../notificationControllers");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
@@ -83,6 +83,7 @@ exports.createOrder = async (req, res) => {
         // user_Id:newCarts.user_Id
       })
       .populate("user_Id");
+      const date = moment(newCarts.createdAt).format("MM/DD/YYYY");
     // const dd=  await Notification(
     //     "ORDER PLACED",
     //     `${updated.user_Id.userEmail} ${updated.user_Id.userEmail}`,
@@ -101,7 +102,7 @@ exports.createOrder = async (req, res) => {
       text: `Hello ${updated.user_Id.userName}
       Thank you for placing an order with us. We are pleased to confirm that your order has been successfully placed and is being ${newCarts.orderStatus}.
       Order Number: ${newCarts._id}
-      Date of Order: ${newCarts.createdAt}
+      Date of Order: ${date}
       Item(s) Ordered: ${newCarts.products.length}`,
     };
     await transporter.sendMail(mailOptions);

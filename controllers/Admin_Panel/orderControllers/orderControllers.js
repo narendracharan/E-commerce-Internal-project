@@ -3,6 +3,7 @@ const { transporter } = require("../../../service/mailService");
 const { success, error } = require("../../response");
 const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
+const moment=require("moment")
 
 exports.orderList = async (req, res) => {
   try {
@@ -75,42 +76,6 @@ exports.orderUpdate = async (req, res) => {
   try {
     const id = req.params.id;
     const { orderStatus, orderStatus_ar } = req.body;
-    // const status=await orderSchema.findOne({_id:id})
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
-    // if (orderStatus == status.orderStatus) {
-    //   return res
-    //     .status(201)
-    //     .json(error("This orderStatus are alredy change", res.statusCode));
-    // }
     const updateOrder = await orderSchema
       .findByIdAndUpdate(
         id,
@@ -118,6 +83,28 @@ exports.orderUpdate = async (req, res) => {
         { new: true }
       )
       .populate("user_Id");
+    const order = await orderSchema.findById(id);
+    order.orderStatus = orderStatus;
+    const date = moment(order.createdAt).format("MM/DD/YYYY");
+    if (orderStatus === "Approved") {
+      order.statusTime.Approved = new Date();
+    }
+    if (orderStatus === "Packed") {
+      order.statusTime.Packed = new Date();
+    }
+    if (orderStatus === "Shipped") {
+      order.statusTime.Shipped = new Date();
+    }
+    if (orderStatus === "Inprogress") {
+      order.statusTime.processing = new Date();
+    }
+    if (orderStatus === "Delivered") {
+      order.statusTime.Delivered = new Date();
+    }
+    if (orderStatus === "Cancelled") {
+      order.statusTime.Cancel = new Date();
+    }
+    await order.save();
     var mailOptions = {
       from: "s04450647@gmail.com",
       to: updateOrder.user_Id.userEmail,
@@ -125,7 +112,7 @@ exports.orderUpdate = async (req, res) => {
       text: `Hello ${updateOrder.user_Id.userName}
   Your order has been successfully placed  and is being ${updateOrder.orderStatus}.
   Order Number: ${updateOrder._id}
-  Date of Order: ${updateOrder.createdAt}
+  Date of Order: ${date}
   Item(s) Ordered: ${updateOrder.products.length}
   Thank you`,
     };
