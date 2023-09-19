@@ -25,6 +25,7 @@ router.post(
   tokenAuthorisationUser,
   selectSubSubCategory
 );
+
 router.post("/selectAttribute/:id", tokenAuthorisationUser, selectAttribute);
 router.patch("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
 router.post("/delete-values/:id",tokenAuthorisationUser,deleteValues)

@@ -10,6 +10,10 @@ const {
   DisplayOne,
   updateStatus,
   homeScreenList,
+  addCategoryBanner,
+  addProductBanner,
+  categoryBannerList,
+  productBannerList,
 } = require("../../../controllers/Admin_Panel/homeScreenControllers/homeScreenControllers");
 const { s3upload } = require("../../../middleware/multer");
 
@@ -46,4 +50,8 @@ router.post(
 router.get("/display/:id", DisplayOne);
 router.post("/update-status/:id",tokenAuthorisationUser,updateStatus)
 router.post('/list',homeScreenList)
+router.post("/category-banner",s3upload.any(),addCategoryBanner)
+router.post("/product-banner",s3upload.any(),addProductBanner)
+router.post("/category-banner-list",categoryBannerList)
+router.post("/product-banner-list",productBannerList)
 module.exports = router;
