@@ -44,22 +44,13 @@ exports.addToCart = async (req, res) => {
     carts = await cartSchema.findOne({ user_Id: user_Id });
     if (carts) {
       const newproducts = carts.products.filter(
-        (product) => String(product.product_Id) == String(product_Id)
+        (product) => product.product_Id ==product_Id
       );
       if (newproducts.length) {
-      newproducts[0].quantity = newproducts[0].quantity + +quantity;
+        newproducts[0].quantity = newproducts[0].quantity + +quantity;
         console.log(newproducts);
         await carts.save();
-        return res
-          .status(201)
-          .json(success(res.statusCode, "Product Added", { carts }));
-      } else {
-        carts.products.push({
-          product_Id: product_Id,
-          quantity: quantity,
-          Price: Price,
-        });
-        await carts.save();
+       
         return res
           .status(201)
           .json(success(res.statusCode, "Product Added", { carts }));
@@ -76,7 +67,7 @@ exports.addToCart = async (req, res) => {
       //  cartsTotal,
       user_Id: user_Id,
     });
-     await carts.save();
+    await carts.save();
     res.status(200).json(success(res.status, "Success", { carts }));
   } catch (err) {
     console.log(err);
