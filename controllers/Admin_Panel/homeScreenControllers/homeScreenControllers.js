@@ -1,7 +1,10 @@
 const categoryBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/categoryBanner");
 const homeSchema = require("../../../models/Admin_PanelSchema/homeScreenSchema/homeScreenSchema");
+const middlebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/middlebanner");
 const productBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/productBanner");
+const sidebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/sidebanner");
 const { error, success } = require("../../response");
+const bottomBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/bottomBanner");
 
 exports.createBannerOne = async (req, res) => {
   try {
@@ -129,7 +132,10 @@ exports.addProductBanner = async (req, res) => {
 
 exports.categoryBannerList = async (req, res) => {
   try {
-    const bannerList = await categoryBanner.find({});
+    const bannerList = await categoryBanner
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
     if (bannerList) {
       res.status(200).json(success(res.statusCode, "Success", { bannerList }));
     } else {
@@ -142,11 +148,113 @@ exports.categoryBannerList = async (req, res) => {
 
 exports.productBannerList = async (req, res) => {
   try {
-    const bannerList = await productBanner.find({});
+    const bannerList = await productBanner
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
     if (bannerList) {
       res.status(200).json(success(res.statusCode, "Success", { bannerList }));
     } else {
       res.status(201).json(error("Failed", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.addSideBanner = async (req, res) => {
+  try {
+    const banner = new sidebanner(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "productBanner") {
+          banner.sideBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.sideBannerList = async (req, res) => {
+  try {
+    const bannerList = await sidebanner
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("Failed", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.addMiddleBanner = async (req, res) => {
+  try {
+    const banner = new middlebanner(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "productBanner") {
+          banner.middleBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.middleBannerList = async (req, res) => {
+  try {
+    const bannerList = await sidebanner
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("Failed", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.bottomBanner = async (req, res) => {
+  try {
+    const banner = new bottomBanner(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "bottomBanner") {
+          banner.bottomBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error(res.statusCode));
+  }
+};
+
+exports.bottomBannerList = async (req, res) => {
+  try {
+    const bannerList = await bottomBanner
+      .find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

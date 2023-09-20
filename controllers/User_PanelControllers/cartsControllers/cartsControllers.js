@@ -65,7 +65,7 @@ exports.addToCart = async (req, res) => {
           .json(success(res.statusCode, "Product Added", { carts }));
       }
     }
-    var newOne = await new cartSchema({
+    carts = await new cartSchema({
       products: [
         {
           product_Id: product_Id,
@@ -76,8 +76,8 @@ exports.addToCart = async (req, res) => {
       //  cartsTotal,
       user_Id: user_Id,
     });
-    const newCarts = await newOne.save();
-    res.status(200).json(success(res.status, "Success", { newCarts }));
+     await carts.save();
+    res.status(200).json(success(res.status, "Success", { carts }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
