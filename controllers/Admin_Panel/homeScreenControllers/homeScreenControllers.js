@@ -173,7 +173,7 @@ exports.addSideBanner = async (req, res) => {
     const banner = new sidebanner(req.body);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
-        if (req.files[i].fieldname == "productBanner") {
+        if (req.files[i].fieldname == "sideBanner") {
           banner.sideBanner.push(req.files[i].location);
         }
       }
@@ -206,7 +206,7 @@ exports.addMiddleBanner = async (req, res) => {
     const banner = new middlebanner(req.body);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
-        if (req.files[i].fieldname == "productBanner") {
+        if (req.files[i].fieldname == "middleBanner") {
           banner.middleBanner.push(req.files[i].location);
         }
       }
