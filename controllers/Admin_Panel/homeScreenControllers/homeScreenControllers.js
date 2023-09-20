@@ -5,6 +5,12 @@ const productBanner = require("../../../models/Admin_PanelSchema/homeScreenSchem
 const sidebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/sidebanner");
 const { error, success } = require("../../response");
 const bottomBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/bottomBanner");
+const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const productSide = require("../../../models/Admin_PanelSchema/homeScreenSchema/productSide");
+const scrolleBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/scrolleBanner");
+const productBottom = require("../../../models/Admin_PanelSchema/homeScreenSchema/productBottom");
+const productMiddle = require("../../../models/Admin_PanelSchema/homeScreenSchema/productMiddle");
+const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchema/productScroll");
 
 exports.createBannerOne = async (req, res) => {
   try {
@@ -251,6 +257,186 @@ exports.bottomBannerList = async (req, res) => {
       .find({})
       .populate("category_Id")
       .populate("subCategory_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.categoryProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const product = await productSchema.find(
+      { category_Id: id },
+      { productName_en: 1 }
+    );
+    if (product) {
+      res.status(200).json(success(res.statusCode, "Success", { product }));
+    } else {
+      res.status(201).json(error("No Data Found", res.statusCode));
+    }
+  } catch {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.scrollBanner = async (req, res) => {
+  try {
+    const banner = new scrolleBanner(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "scrollBanner") {
+          banner.scrollBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.scrollBannerList = async (req, res) => {
+  try {
+    const bannerList = await scrolleBanner.find({})
+      .populate("category_Id")
+      .populate("subCategory_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productSideBanner = async (req, res) => {
+  try {
+    const banner = new productSide(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "sideBanner") {
+          banner.sideBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productSideList = async (req, res) => {
+  try {
+    const bannerList = await productSide.find({})
+      .populate("category_Id")
+      .populate("product_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.productBottomBanner = async (req, res) => {
+  try {
+    const banner = new productBottom(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "bottomBanner") {
+          banner.bottomBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productBottomList = async (req, res) => {
+  try {
+    const bannerList = await productBottom.find({})
+      .populate("category_Id")
+      .populate("product_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productMiddleBanner = async (req, res) => {
+  try {
+    const banner = new productMiddle(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "middleBanner") {
+          banner.middleBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productMiddleList = async (req, res) => {
+  try {
+    const bannerList = await productMiddle.find({})
+      .populate("category_Id")
+      .populate("product_Id");
+    if (bannerList) {
+      res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productScrollBanner = async (req, res) => {
+  try {
+    const banner = new productScroll(req.body);
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "scrollBanner") {
+          banner.scrollBanner.push(req.files[i].location);
+        }
+      }
+    }
+    await banner.save();
+    res.status(200).json(success(res.statusCode, "Success", { banner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.productScrollList = async (req, res) => {
+  try {
+    const bannerList = await productScroll.find({})
+      .populate("category_Id")
+      .populate("product_Id");
     if (bannerList) {
       res.status(200).json(success(res.statusCode, "Success", { bannerList }));
     } else {
