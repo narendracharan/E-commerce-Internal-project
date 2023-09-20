@@ -301,10 +301,10 @@ exports.scrollBanner = async (req, res) => {
   }
 };
 
-
 exports.scrollBannerList = async (req, res) => {
   try {
-    const bannerList = await scrolleBanner.find({})
+    const bannerList = await scrolleBanner
+      .find({})
       .populate("category_Id")
       .populate("subCategory_Id");
     if (bannerList) {
@@ -336,7 +336,8 @@ exports.productSideBanner = async (req, res) => {
 
 exports.productSideList = async (req, res) => {
   try {
-    const bannerList = await productSide.find({})
+    const bannerList = await productSide
+      .find({})
       .populate("category_Id")
       .populate("product_Id");
     if (bannerList) {
@@ -348,7 +349,6 @@ exports.productSideList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 exports.productBottomBanner = async (req, res) => {
   try {
@@ -369,7 +369,8 @@ exports.productBottomBanner = async (req, res) => {
 
 exports.productBottomList = async (req, res) => {
   try {
-    const bannerList = await productBottom.find({})
+    const bannerList = await productBottom
+      .find({})
       .populate("category_Id")
       .populate("product_Id");
     if (bannerList) {
@@ -401,7 +402,8 @@ exports.productMiddleBanner = async (req, res) => {
 
 exports.productMiddleList = async (req, res) => {
   try {
-    const bannerList = await productMiddle.find({})
+    const bannerList = await productMiddle
+      .find({})
       .populate("category_Id")
       .populate("product_Id");
     if (bannerList) {
@@ -431,10 +433,10 @@ exports.productScrollBanner = async (req, res) => {
   }
 };
 
-
 exports.productScrollList = async (req, res) => {
   try {
-    const bannerList = await productScroll.find({})
+    const bannerList = await productScroll
+      .find({})
       .populate("category_Id")
       .populate("product_Id");
     if (bannerList) {
@@ -446,3 +448,103 @@ exports.productScrollList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.topBannerDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await categoryBanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.sideBannerDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await sidebanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.middleBannerDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await middlebanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.bottomBannerDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await bottomBanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.scrollBannerDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await scrolleBanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productTopDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await productBanner.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+exports.productMiddleDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await productMiddle.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productBottomDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await productBottom.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productSideDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await productSide.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productScrollDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteBanner = await productScroll.findByIdAndDelete(id);
+    res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
