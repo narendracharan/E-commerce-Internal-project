@@ -1,6 +1,8 @@
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const subCategorySchema = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
+const categoryBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/categoryBanner");
+const productBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/productBanner");
 const { error, success } = require("../../response");
 
 exports.categoryList = async (req, res) => {
@@ -18,12 +20,11 @@ exports.subCatagoryList = async (req, res) => {
     const listData = await subCategorySchema
       .find({ category_Id: id })
       .sort({ _id: -1 });
-      if(listData){
-        res.status(200).json(success(res.statusCode, "Success", { listData }));
-      }else{
-        res.status(200).json(error("subCatgory not found",res.statusCode));
-      }
-  
+    if (listData) {
+      res.status(200).json(success(res.statusCode, "Success", { listData }));
+    } else {
+      res.status(200).json(error("subCatgory not found", res.statusCode));
+    }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -35,12 +36,11 @@ exports.checkSubCategoryProduct = async (req, res) => {
     const listData = await productSchema
       .find({ Subcategory_Id: id })
       .sort({ _id: -1 });
-      if(listData){
-        res.status(200).json(success(res.statusCode, "Success", { listData }));
-      }else{
-        res.status(200).json(error("category not Found",res.statusCode));
-      }
-    
+    if (listData) {
+      res.status(200).json(success(res.statusCode, "Success", { listData }));
+    } else {
+      res.status(200).json(error("category not Found", res.statusCode));
+    }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -78,6 +78,38 @@ exports.topCategory = async (req, res) => {
   try {
     const categoryData = await categorySchema.find({}).sort({ createdAt: -1 });
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.categoryBanner = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const banner = await categoryBanner
+      .find({ category_Id: id })
+      .populate(["category_Id", "subCategory_Id", "subSubCategory_Id"]);
+    if (banner) {
+      res.status(200).json(success(res.statusCode, "Success", { banner }));
+    } else {
+      res.status(200).json(error("No Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(200).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.productBanner = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const banner = await productBanner
+      .find({ product_Id: id })
+      .populate(["category_Id", "product_Id"]);
+    if (banner) {
+      res.status(200).json(success(res.statusCode, "Success", { banner }));
+    } else {
+      res.status(201).json(error("No Data Found", res.statusCode));
+    }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

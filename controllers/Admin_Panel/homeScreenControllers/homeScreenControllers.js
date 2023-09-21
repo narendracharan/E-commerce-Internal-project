@@ -154,16 +154,16 @@ exports.categoryBannerList = async (req, res) => {
 
 exports.productBannerList = async (req, res) => {
   try {
-    const bannerList = await productBanner
-      .find({})
+    const bannerList = await productBanner.find({})
       .populate("category_Id")
-      .populate("subCategory_Id");
+      .populate("product_Id");
     if (bannerList) {
       res.status(200).json(success(res.statusCode, "Success", { bannerList }));
     } else {
       res.status(201).json(error("Failed", res.statusCode));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -220,7 +220,7 @@ exports.addMiddleBanner = async (req, res) => {
 
 exports.middleBannerList = async (req, res) => {
   try {
-    const bannerList = await sidebanner
+    const bannerList = await middlebanner
       .find({})
       .populate("category_Id")
       .populate("subCategory_Id");
@@ -475,6 +475,7 @@ exports.middleBannerDelete = async (req, res) => {
     const deleteBanner = await middlebanner.findByIdAndDelete(id);
     res.status(200).json(success(res.statusCode, "Success", { deleteBanner }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

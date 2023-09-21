@@ -6,6 +6,8 @@ const {
   searchCategory,
   topCategory,
   checkSubCategoryProduct,
+  categoryBanner,
+  productBanner,
 } = require("../../../controllers/User_PanelControllers/categoryControllers/categoryControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
@@ -24,4 +26,8 @@ router.post(
 router.post("/search-category", tokenAuthorisationUser, searchCategory);
 router.post("/top-category", tokenAuthorisationUser, topCategory);
 router.post("/subCategory-product/:id", checkSubCategoryProduct);
+
+
+router.post("/category-banner/:id",categoryBanner)
+router.post("/product-banner/:id",productBanner)
 module.exports = router;
