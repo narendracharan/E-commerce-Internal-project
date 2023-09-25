@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 
 exports.addToCart = async (req, res) => {
   try {
-    const { product_Id, quantity, Price, varient_Id, user_Id } = req.body;
+    const { product_Id, quantity, Price, user_Id } = req.body;
     // let products = [];
     // for (let i = 0; i < carts.length; i++) {
     //   let object = {};
@@ -66,7 +66,6 @@ exports.addToCart = async (req, res) => {
       ],
       //  cartsTotal,
       user_Id: user_Id,
-      varient_Id: varient_Id,
     });
     await carts.save();
     res.status(200).json(success(res.status, "Success", { carts }));
@@ -145,7 +144,7 @@ exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartsSchema
-      .findOne({ user_Id: _id })
+      .find({ user_Id: _id })
       .populate("products.product_Id");
     //  let carts = [];
     // for (const product of list.products) {

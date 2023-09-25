@@ -15,10 +15,10 @@ const schema = new mongoose.Schema({
       Price: {
         type: Number,
       },
-      varient_Id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-      },
+      // varient_Id: {
+      //   type: mongoose.Schema.Types.ObjectId,
+      //   ref: "product",
+      // },
     },
   ],
   user_Id: {

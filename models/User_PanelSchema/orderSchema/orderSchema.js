@@ -18,11 +18,11 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  varient_Id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "product",
-    require: true,
-  },
+  // varient_Id: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "product",
+  //   require: true,
+  // },
   cartsTotal: Number,
   orderStatus: {
     type: String,
