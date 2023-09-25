@@ -1,8 +1,16 @@
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const subCategorySchema = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
+const BottomBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/bottomBanner");
 const categoryBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/categoryBanner");
+const middlebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/middlebanner");
 const productBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/productBanner");
+const productBottom = require("../../../models/Admin_PanelSchema/homeScreenSchema/productBottom");
+const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchema/productScroll");
+const ProductSide = require("../../../models/Admin_PanelSchema/homeScreenSchema/productSide");
+const scrolleBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/scrolleBanner");
+const sidebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/sidebanner");
+const { productSideBanner } = require("../../Admin_Panel/homeScreenControllers/homeScreenControllers");
 const { error, success } = require("../../response");
 
 exports.categoryList = async (req, res) => {
@@ -86,31 +94,69 @@ exports.topCategory = async (req, res) => {
 exports.categoryBanner = async (req, res) => {
   try {
     const id = req.params.id;
-    const banner = await categoryBanner
+    const topBanner = await categoryBanner
       .find({ category_Id: id })
-      .populate(["category_Id", "subCategory_Id", "subSubCategory_Id"]);
-    if (banner) {
-      res.status(200).json(success(res.statusCode, "Success", { banner }));
-    } else {
-      res.status(200).json(error("No Data Found", res.statusCode));
-    }
+      .populate(["category_Id", "subCategory_Id"]);
+    const middleBanner = await middlebanner
+      .find({ category_Id: id })
+      .populate(["category_Id", "subCategory_Id"]);
+    const sideBanner = await sidebanner
+      .find({ category_Id: id })
+      .populate(["category_Id", "subCategory_Id"]);
+    const scrollBanner = await scrolleBanner
+      .find({ category_Id: id })
+      .populate(["category_Id", "subCategory_Id"]);
+    const bottomBanner = await BottomBanner.find({ category_Id: id }).populate([
+      "category_Id",
+      "subCategory_Id",
+    ]);
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        topBanner,
+        scrollBanner,
+        middleBanner,
+        bottomBanner,
+        sideBanner,
+      })
+    );
   } catch (err) {
-    res.status(200).json(error("Failed", res.statusCode));
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.productBanner = async (req, res) => {
   const id = req.params.id;
   try {
-    const banner = await productBanner
+    const topBanner = await productBanner
       .find({ product_Id: id })
       .populate(["category_Id", "product_Id"]);
-    if (banner) {
-      res.status(200).json(success(res.statusCode, "Success", { banner }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+    const middleBanner = await productBanner
+      .find({ product_Id: id })
+      .populate(["category_Id", "product_Id"]);
+    const scrollBanner = await productScroll
+      .find({ product_Id: id })
+      .populate(["category_Id", "product_Id"]);
+    const bottomBanner = await productBottom
+      .find({ product_Id: id })
+      .populate(["category_Id", "product_Id"]);
+    const sideBanner = await ProductSide
+      .find({ product_Id: id })
+      .populate(["category_Id", "product_Id"]);
+
+    res
+      .status(200)
+      .json(
+        success(res.statusCode, "Success", {
+          topBanner,
+          middleBanner,
+          scrollBanner,
+          bottomBanner,
+          sideBanner,
+        })
+      );
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 
 exports.addToCart = async (req, res) => {
   try {
-    const { product_Id, quantity, Price, user_Id } = req.body;
+    const { product_Id, quantity, Price, varient_Id, user_Id } = req.body;
     // let products = [];
     // for (let i = 0; i < carts.length; i++) {
     //   let object = {};
@@ -44,13 +44,13 @@ exports.addToCart = async (req, res) => {
     carts = await cartSchema.findOne({ user_Id: user_Id });
     if (carts) {
       const newproducts = carts.products.filter(
-        (product) => product.product_Id ==product_Id
+        (product) => product.product_Id == product_Id
       );
       if (newproducts.length) {
         newproducts[0].quantity = newproducts[0].quantity + +quantity;
         console.log(newproducts);
         await carts.save();
-       
+
         return res
           .status(201)
           .json(success(res.statusCode, "Product Added", { carts }));
@@ -66,6 +66,7 @@ exports.addToCart = async (req, res) => {
       ],
       //  cartsTotal,
       user_Id: user_Id,
+      varient_Id: varient_Id,
     });
     await carts.save();
     res.status(200).json(success(res.status, "Success", { carts }));
@@ -144,10 +145,18 @@ exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartsSchema
-      .find({ user_Id: _id })
+      .findOne({ user_Id: _id })
       .populate("products.product_Id");
+    //  let carts = [];
+    // for (const product of list.products) {
+    //   let varient = product.product_Id.find(
+    //     (varient) => varient._id === product.varient_Id
+    //   );
+    //   console.log(varient);
+    // }
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -178,6 +187,7 @@ exports.applyCoupan = async (req, res) => {
       object.product_Id = carts[i].product_Id;
       object.quantity = carts[i].quantity;
       object.Price = carts[i].Price;
+      object.varient_Id = carts[i].varient_Id;
       // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       // object.Discount = dis.map((x) => x.Discount)
       product.push(object);

@@ -7,9 +7,9 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         require: true,
-       
+
       },
-      Price:{
+      Price: {
         type: Number
       },
       quantity: {
@@ -18,6 +18,11 @@ const schema = new mongoose.Schema({
       },
     },
   ],
+  varient_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "product",
+    require: true,
+  },
   cartsTotal: Number,
   orderStatus: {
     type: String,
@@ -78,45 +83,45 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  assignStatus:{
-    type:String,
-    default:"UnAssign",
-    enum:[
-     "Assign",
-     "UnAssign",
-     "Confirm",
-     "Accepted",
-     "Decline"
+  assignStatus: {
+    type: String,
+    default: "UnAssign",
+    enum: [
+      "Assign",
+      "UnAssign",
+      "Confirm",
+      "Accepted",
+      "Decline"
     ]
   },
-  declineReason:{
-    type:String
+  declineReason: {
+    type: String
   },
-  status:{
-    type:Array
+  status: {
+    type: Array
   },
-  statusTime:{
-    Approved:{
-      type:Date
+  statusTime: {
+    Approved: {
+      type: Date
     },
-    Packed:{
-      type:Date
+    Packed: {
+      type: Date
     },
-    processing:{
-      type:Date
+    processing: {
+      type: Date
     },
-    Shipped:{
-      type:Date 
+    Shipped: {
+      type: Date
     },
-    Delivered:{
-      type:Date 
+    Delivered: {
+      type: Date
     },
-    Cancel:{
-      type:Date 
+    Cancel: {
+      type: Date
     }
   },
-  device_Id:{
-    type:String
+  device_Id: {
+    type: String
   }
 });
 schema.set("timestamps", true);

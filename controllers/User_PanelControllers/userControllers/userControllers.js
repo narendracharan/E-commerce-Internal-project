@@ -8,7 +8,15 @@ const { validationResult } = require("express-validator");
 
 exports.userSignup = async (req, res) => {
   try {
-    const {userEmail,userName,userName_ar,password,mobileNumber,longitude,latitude} =req.body
+    const {
+      userEmail,
+      userName,
+      userName_ar,
+      password,
+      mobileNumber,
+      longitude,
+      latitude,
+    } = req.body;
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.status(200).json({ errors: error.array() });
@@ -20,16 +28,16 @@ exports.userSignup = async (req, res) => {
         message: "userEmail Already Exited",
       });
     }
-   const passwordHash=  await bcrypt.hash(password, 10);
-    const newUser=await new userSchema({
-      userEmail:userEmail,
-      userName:userName,
-      password:passwordHash,
-      mobileNumber:mobileNumber,
-      userName_ar:userName_ar,
-      longitude:longitude,
-      latitude:latitude
-    }).save()
+    const passwordHash = await bcrypt.hash(password, 10);
+    const newUser = await new userSchema({
+      userEmail: userEmail,
+      userName: userName,
+      password: passwordHash,
+      mobileNumber: mobileNumber,
+      userName_ar: userName_ar,
+      longitude: longitude,
+      latitude: latitude,
+    }).save();
     res
       .status(201)
       .json(success(res.statusCode, "userSignup Successfully", { newUser }));
@@ -43,7 +51,7 @@ exports.userLogin = async (req, res) => {
   try {
     const { userEmail, password } = req.body;
     const user = await userSchema.findOne({ userEmail: userEmail });
-    if(user.status ==true){
+    if (user.status == true) {
       if (userEmail && password) {
         const verifyUser = await userSchema.findOne({ userEmail: userEmail });
         if (verifyUser != null) {
@@ -66,17 +74,17 @@ exports.userLogin = async (req, res) => {
               .json(error("User Password Are Incorrect", res.statusCode));
           }
         } else {
-          res.status(403).json(error("User Email Are Incorrect", res.statusCode));
+          res
+            .status(403)
+            .json(error("User Email Are Incorrect", res.statusCode));
         }
       } else {
         res
           .status(403)
           .json(error("User Email and Password Are empty", res.statusCode));
       }
-
-
-    }else{
-      res.status(400).json(error("Block By Admin"))
+    } else {
+      res.status(400).json(error("Block By Admin"));
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -130,7 +138,7 @@ exports.profilePic = async (req, res) => {
     const data = {
       profile_Pic: req.file.location,
       userName: req.body.userName,
-      userName_ar:req.body. userName_ar,
+      userName_ar: req.body.userName_ar,
       userEmail: req.body.userEmail,
       mobileNumber: req.body.mobileNumber,
     };
@@ -150,7 +158,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
     const user = new userSchema(req.body);
-     const data = {
+    const data = {
       userName: req.body.userName,
       userEmail: req.body.userEmail,
       profile_Pic: req.file.location,
@@ -162,7 +170,7 @@ exports.updateProfile = async (req, res) => {
       country: req.body.country,
       city: req.body.city,
       pinCode: req.body.pinCode,
-      status:req.body.status
+      status: req.body.status,
     };
     const profile = await userSchema.findByIdAndUpdate(id, data, {
       new: true,
@@ -275,18 +283,17 @@ exports.notificationUpdate = async (req, res) => {
   }
 };
 
-
-exports.blockUser=async(req,res)=>{
-  try{
-    const {id,status}=req.params
-    const update=await userSchema.findById(id).select("status")
+exports.blockUser = async (req, res) => {
+  try {
+    const { id, status } = req.params;
+    const update = await userSchema.findById(id).select("status");
     const statusupdate = await userSchema.findByIdAndUpdate(
       update.id,
       { $set: { status: status } },
       { new: true }
     );
-res.status(200).json(success(res.statusCode,"Success",{statusupdate}))
-  }catch(err){
-    res.status(400).json(error("Failed",res.statusCode))
+    res.status(200).json(success(res.statusCode, "Success", { statusupdate }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
