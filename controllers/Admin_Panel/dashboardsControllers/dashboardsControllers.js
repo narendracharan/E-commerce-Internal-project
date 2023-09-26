@@ -76,6 +76,14 @@ exports.homeDashBoards = async (req, res) => {
         },
       },
     ])
+
+    const Month = await orderSchema.aggregate([
+      {$project: { 
+        month: { $month: "$createdAt" }, 
+    }},
+    ])
+    console.log(Month);
+
     const orderyear = await orderSchema.aggregate([
       {
         $match: {

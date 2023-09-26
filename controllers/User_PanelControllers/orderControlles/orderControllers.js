@@ -70,6 +70,7 @@ exports.createOrder = async (req, res) => {
       orderStatus_ar,
       status: [orderStatus],
     });
+
     //   const filename=Date.now()
     //   const json = JSON.stringify(newCarts);
     //   let qr=  qrCode.toFile(path.join(__dirname,`${filename}.png`),json,(err,code)=>{
@@ -77,6 +78,22 @@ exports.createOrder = async (req, res) => {
     //   })
     //newCarts.qrCode.push(qr)/
     await newCarts.save();
+    const order = await orderSchema
+      .findOne({ _id: newCarts._id })
+      .populate("products.product_Id");
+    for (const product of order.products) {
+      var deletQuatity = await productSchema.findOne({
+        _id: product.product_Id,
+      });
+
+      var varient = deletQuatity.addVarient.find(
+        (varient) => String(varient._id) === String(product.varient_Id)
+      );
+      let stock = varient.stockQuantity - product.quantity;
+      varient.stockQuantity = stock;
+      await deletQuatity.save();
+    }
+
     const deleteCard = await cartsSchema.deleteOne({ user_Id: user_Id });
     const updated = await orderSchema
       .findOne({
@@ -147,31 +164,33 @@ exports.orderList = async (req, res) => {
   try {
     const _id = req.params.id;
     const orderList = await orderSchema
-      .findOne({ user_Id: _id })
+      .find({ user_Id: _id })
       .populate("products.product_Id")
       .populate("user_Id")
       .sort({
         createdAt: -1,
       });
-
-      let carts=[]
-    for (const product of orderList.products) {
-      var varient = product.product_Id.addVarient.find(
-        (varient) => String(varient._id) === String(product.varient_Id)
-      );
-      let obj = {
-        varient: varient,
-        cartsTotal:orderList.cartsTotal,
-        user_Id:orderList.user_Id,
-        address_Id:orderList.address_Id,
-        deliverdBy:orderList.deliverdBy,
-        taxPrice:orderList.taxPrice,
-        shippingPrice:orderList.shippingPrice,
-        orderStatus:orderList.orderStatus,
-        orderStatus_ar:orderList.orderStatus_ar,
-        products:orderList.products
-      };
-      carts.push(obj);
+    let carts = [];
+    for (let i = 0; i < orderList.length; i++) {
+      for (let i = 0; i < orderList[i].products.length; i++) {
+        var varient = orderList[i].products[i].product_Id.addVarient.find(
+          (varient) =>
+            String(varient._id) === String(orderList[i].products[i].varient_Id)
+        );
+        let obj = {
+          varient: varient,
+          products: orderList[i].products,
+          cartsTotal: orderList[i].cartsTotal,
+          user_Id: orderList[i].user_Id,
+          address_Id: orderList[i].address_Id,
+          deliverdBy: orderList[i].deliverdBy,
+          taxPrice: orderList[i].taxPrice,
+          shippingPrice: orderList[i].shippingPrice,
+          orderStatus: orderList[i].orderStatus,
+          orderStatus_ar: orderList[i].orderStatus_ar,
+        };
+        carts.push(obj);
+      }
     }
     res.status(200).json(success(res.status, "Success", { carts }));
   } catch (err) {

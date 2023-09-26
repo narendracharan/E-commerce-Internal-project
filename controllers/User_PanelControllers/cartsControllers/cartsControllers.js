@@ -145,21 +145,23 @@ exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartsSchema
-      .findOne({ user_Id: _id })
+      .find({ user_Id: _id })
       .populate("products.product_Id");
-    
     let carts = [];
-    for (const product of list.products) {
-      var varient = product.product_Id.addVarient.find(
-        (varient) => String(varient._id ) === String(product.varient_Id)
-      );
-      let obj={
-        varient:varient,
-        productId:product.product_Id,
-        quantity:product.quantity,
-        Price:product.Price
+    for (let i=0;i<list.length;i++) {
+      for (let i=0;i<list[i].products.length;i++) {
+        var varient =list[i].products[i].product_Id.addVarient.find(
+          (varient) => String(varient._id ) === String(list[i].products[i].varient_Id)
+        );
+        let obj={
+          varient:varient,
+          productId:list[i].products[i].product_Id,
+          quantity:list[i].products[i].quantity,
+          Price:list[i].products[i].Price
+        }
+        carts.push(obj)
       }
-      carts.push(obj)
+     
     }
     // const newCart = await cartSchema.findByIdAndUpdate(
     //   list._id,
