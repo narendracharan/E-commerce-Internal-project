@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 
 exports.addToCart = async (req, res) => {
   try {
-    const { product_Id, quantity, Price, user_Id } = req.body;
+    const { product_Id, quantity, varient_Id, Price, user_Id } = req.body;
     // let products = [];
     // for (let i = 0; i < carts.length; i++) {
     //   let object = {};
@@ -62,6 +62,7 @@ exports.addToCart = async (req, res) => {
           product_Id: product_Id,
           quantity: quantity,
           Price: Price,
+          varient_Id: varient_Id,
         },
       ],
       //  cartsTotal,
@@ -144,16 +145,34 @@ exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartsSchema
-      .find({ user_Id: _id })
+      .findOne({ user_Id: _id })
       .populate("products.product_Id");
-    //  let carts = [];
-    // for (const product of list.products) {
-    //   let varient = product.product_Id.find(
-    //     (varient) => varient._id === product.varient_Id
-    //   );
-    //   console.log(varient);
-    // }
-    res.status(200).json(success(res.statusCode, "Success", { list }));
+    
+    let carts = [];
+    for (const product of list.products) {
+      var varient = product.product_Id.addVarient.find(
+        (varient) => String(varient._id ) === String(product.varient_Id)
+      );
+      let obj={
+        varient:varient,
+        productId:product.product_Id,
+        quantity:product.quantity,
+        Price:product.Price
+      }
+      carts.push(obj)
+    }
+    // const newCart = await cartSchema.findByIdAndUpdate(
+    //   list._id,
+    //   { products: carts },
+    //   { new: true }
+    // ).populate([
+    //   {
+    //     path: "products.product_Id",
+    //    // select: "-type",
+    //   },
+    // ]);
+ 
+    res.status(200).json(success(res.statusCode, "Success", { carts }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

@@ -10,7 +10,9 @@ const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchem
 const ProductSide = require("../../../models/Admin_PanelSchema/homeScreenSchema/productSide");
 const scrolleBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/scrolleBanner");
 const sidebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/sidebanner");
-const { productSideBanner } = require("../../Admin_Panel/homeScreenControllers/homeScreenControllers");
+const {
+  productSideBanner,
+} = require("../../Admin_Panel/homeScreenControllers/homeScreenControllers");
 const { error, success } = require("../../response");
 
 exports.categoryList = async (req, res) => {
@@ -140,21 +142,54 @@ exports.productBanner = async (req, res) => {
     const bottomBanner = await productBottom
       .find({ product_Id: id })
       .populate(["category_Id", "product_Id"]);
-    const sideBanner = await ProductSide
-      .find({ product_Id: id })
-      .populate(["category_Id", "product_Id"]);
+    const sideBanner = await ProductSide.find({ product_Id: id }).populate([
+      "category_Id",
+      "product_Id",
+    ]);
 
-    res
-      .status(200)
-      .json(
-        success(res.statusCode, "Success", {
-          topBanner,
-          middleBanner,
-          scrollBanner,
-          bottomBanner,
-          sideBanner,
-        })
-      );
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        topBanner,
+        middleBanner,
+        scrollBanner,
+        bottomBanner,
+        sideBanner,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.BannerList = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const topBanner = await categoryBanner
+      .find()
+      .populate(["category_Id", "subCategory_Id"]);
+    const middleBanner = await middlebanner
+      .find()
+      .populate(["category_Id", "subCategory_Id"]);
+    const sideBanner = await sidebanner
+      .find()
+      .populate(["category_Id", "subCategory_Id"]);
+    const scrollBanner = await scrolleBanner
+      .find()
+      .populate(["category_Id", "subCategory_Id"]);
+    const bottomBanner = await BottomBanner.find().populate([
+      "category_Id",
+      "subCategory_Id",
+    ]);
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        topBanner,
+        scrollBanner,
+        middleBanner,
+        bottomBanner,
+        sideBanner,
+      })
+    );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

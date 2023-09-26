@@ -8,6 +8,7 @@ const {
   checkSubCategoryProduct,
   categoryBanner,
   productBanner,
+  BannerList,
 } = require("../../../controllers/User_PanelControllers/categoryControllers/categoryControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
@@ -30,4 +31,5 @@ router.post("/subCategory-product/:id", checkSubCategoryProduct);
 
 router.post("/category-banner/:id",categoryBanner)
 router.post("/product-banner/:id",productBanner)
+router.post("/banner-list",BannerList)
 module.exports = router;

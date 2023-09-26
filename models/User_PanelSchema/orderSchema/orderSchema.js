@@ -7,14 +7,18 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         require: true,
-
       },
       Price: {
-        type: Number
+        type: Number,
       },
       quantity: {
         type: Number,
         default: 1,
+      },
+      varient_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product",
+        require: true,
       },
     },
   ],
@@ -34,7 +38,7 @@ const schema = new mongoose.Schema({
       "Delivered",
       "Cancelled",
       "Pending",
-      "Inprogress"
+      "Inprogress",
     ],
   },
   orderStatus_ar: {
@@ -49,7 +53,7 @@ const schema = new mongoose.Schema({
       "قيد الانتظار",
       "يعالج",
       "لا ترسل",
-      "في تَقَدم"
+      "في تَقَدم",
     ],
   },
   paymentIntent: {
@@ -86,43 +90,37 @@ const schema = new mongoose.Schema({
   assignStatus: {
     type: String,
     default: "UnAssign",
-    enum: [
-      "Assign",
-      "UnAssign",
-      "Confirm",
-      "Accepted",
-      "Decline"
-    ]
+    enum: ["Assign", "UnAssign", "Confirm", "Accepted", "Decline"],
   },
   declineReason: {
-    type: String
+    type: String,
   },
   status: {
-    type: Array
+    type: Array,
   },
   statusTime: {
     Approved: {
-      type: Date
+      type: Date,
     },
     Packed: {
-      type: Date
+      type: Date,
     },
     processing: {
-      type: Date
+      type: Date,
     },
     Shipped: {
-      type: Date
+      type: Date,
     },
     Delivered: {
-      type: Date
+      type: Date,
     },
     Cancel: {
-      type: Date
-    }
+      type: Date,
+    },
   },
   device_Id: {
-    type: String
-  }
+    type: String,
+  },
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("userOrder", schema);

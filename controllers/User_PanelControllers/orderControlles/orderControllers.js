@@ -40,6 +40,7 @@ exports.createOrder = async (req, res) => {
       object.user_Id = carts[i].user_Id;
       object.quantity = carts[i].quantity;
       object.Price = carts[i].Price;
+      object.varient_Id = carts[i].varient_Id;
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({
         _id: carts[i].product_Id,
@@ -146,13 +147,33 @@ exports.orderList = async (req, res) => {
   try {
     const _id = req.params.id;
     const orderList = await orderSchema
-      .find({ user_Id: _id })
+      .findOne({ user_Id: _id })
       .populate("products.product_Id")
       .populate("user_Id")
       .sort({
         createdAt: -1,
       });
-    res.status(200).json(success(res.status, "Success", { orderList }));
+
+      let carts=[]
+    for (const product of orderList.products) {
+      var varient = product.product_Id.addVarient.find(
+        (varient) => String(varient._id) === String(product.varient_Id)
+      );
+      let obj = {
+        varient: varient,
+        cartsTotal:orderList.cartsTotal,
+        user_Id:orderList.user_Id,
+        address_Id:orderList.address_Id,
+        deliverdBy:orderList.deliverdBy,
+        taxPrice:orderList.taxPrice,
+        shippingPrice:orderList.shippingPrice,
+        orderStatus:orderList.orderStatus,
+        orderStatus_ar:orderList.orderStatus_ar,
+        products:orderList.products
+      };
+      carts.push(obj);
+    }
+    res.status(200).json(success(res.status, "Success", { carts }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
