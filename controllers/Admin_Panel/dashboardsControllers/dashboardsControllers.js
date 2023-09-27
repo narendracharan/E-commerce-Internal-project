@@ -78,20 +78,19 @@ exports.homeDashBoards = async (req, res) => {
     ]);
 
     const MonthData = await orderSchema.aggregate([
-      // {
-      //   $project: {
-      //     cartsTotal: 1,
-      //     month: { $month: "$createdAt" },
-      //   },
-      // },
+      //   {
+      //     $project: {
+      //            yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+      //            total: { $sum: "$cartsTotal" },
+      //     }
+      // }
       {
         $group: {
-          _id: { $dateToString: { date: "$createdAt", format: "%Y-%m" } },
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
           total: { $sum: "$cartsTotal" },
         },
       },
-    ])
-    
+    ]);
     const orderyear = await orderSchema.aggregate([
       {
         $match: {
@@ -122,6 +121,24 @@ exports.homeDashBoards = async (req, res) => {
       //   },
       // },
     ]);
+    const salesDays = await orderSchema.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $match: {
+          orderStatus: "Delivered",
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
+      },
+    ]);
+
     const deliverOrderMonth = await orderSchema.aggregate([
       {
         $match: {
@@ -190,7 +207,8 @@ exports.homeDashBoards = async (req, res) => {
         salesDAy,
         orderyear,
         OrderMonth,
-        MonthData
+        MonthData,
+        salesDays,
       })
     );
   } catch (err) {
