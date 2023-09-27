@@ -172,14 +172,14 @@ exports.orderList = async (req, res) => {
       });
     let carts = [];
     for (let i = 0; i < orderList.length; i++) {
-      for (let i = 0; i < orderList[i].products.length; i++) {
-        var varient = orderList[i].products[i].product_Id.addVarient.find(
+      for (let j = 0; j < orderList[i].products.length; j++) {
+        var varient = orderList[i].products[j].product_Id.addVarient.find(
           (varient) =>
-            String(varient._id) === String(orderList[i].products[i].varient_Id)
+            String(varient._id) === String(orderList[i].products[j].varient_Id)
         );
         let obj = {
           varient: varient,
-          products: orderList[i].products,
+          products: orderList[i].products[j].product_Id,
           cartsTotal: orderList[i].cartsTotal,
           user_Id: orderList[i].user_Id,
           address_Id: orderList[i].address_Id,
@@ -188,6 +188,7 @@ exports.orderList = async (req, res) => {
           shippingPrice: orderList[i].shippingPrice,
           orderStatus: orderList[i].orderStatus,
           orderStatus_ar: orderList[i].orderStatus_ar,
+          _id:orderList[i]._id
         };
         carts.push(obj);
       }

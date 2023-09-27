@@ -75,15 +75,23 @@ exports.homeDashBoards = async (req, res) => {
           count: { $sum: 1 },
         },
       },
-    ])
+    ]);
 
-    const Month = await orderSchema.aggregate([
-      {$project: { 
-        month: { $month: "$createdAt" }, 
-    }},
+    const MonthData = await orderSchema.aggregate([
+      // {
+      //   $project: {
+      //     cartsTotal: 1,
+      //     month: { $month: "$createdAt" },
+      //   },
+      // },
+      {
+        $group: {
+          _id: { $dateToString: { date: "$createdAt", format: "%Y-%m" } },
+          total: { $sum: "$cartsTotal" },
+        },
+      },
     ])
-    console.log(Month);
-
+    
     const orderyear = await orderSchema.aggregate([
       {
         $match: {
@@ -91,12 +99,12 @@ exports.homeDashBoards = async (req, res) => {
           createdAt: { $lte: new Date(moment(new Date()).endOf("year")) },
         },
       },
-    ])
+    ]);
     const customerMonth = await userSchema.aggregate([
       {
         $match: {
           createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
-          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) }
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
         },
       },
       // {
@@ -114,7 +122,7 @@ exports.homeDashBoards = async (req, res) => {
       //   },
       // },
     ]);
-    const deliverOrderMonth = await    orderSchema.aggregate([
+    const deliverOrderMonth = await orderSchema.aggregate([
       {
         $match: {
           orderStatus: "Delivered",
@@ -129,7 +137,7 @@ exports.homeDashBoards = async (req, res) => {
         },
       },
     ]);
-    const OrderMonth = await    orderSchema.aggregate([
+    const OrderMonth = await orderSchema.aggregate([
       {
         $match: {
           createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
@@ -137,30 +145,29 @@ exports.homeDashBoards = async (req, res) => {
         },
       },
     ]);
-    const salesDAy = await  orderSchema.aggregate([
+    const salesDAy = await orderSchema.aggregate([
       {
         $match: {
           createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
-          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) }
-          
+          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
         },
       },
-    //   // {
-    //   //   $lookup: {
-    //   //     from: "user",
-    //   //     foreignField: "_id",
-    //   //     localField: "_id",
-    //   //     as: "userorders",
-    //   //   },
-    //   // },
-    //   // {
-    //   //   $group: {
-    //   //     _id: null,
-    //   //     count: { $sum: 1 },
-    //   //   },
-    //   // },
+      //   // {
+      //   //   $lookup: {
+      //   //     from: "user",
+      //   //     foreignField: "_id",
+      //   //     localField: "_id",
+      //   //     as: "userorders",
+      //   //   },
+      //   // },
+      //   // {
+      //   //   $group: {
+      //   //     _id: null,
+      //   //     count: { $sum: 1 },
+      //   //   },
+      //   // },
     ]);
-    
+
     // let totalAfterDiscount = 0;
     // let carts = await orderSchema.find({});
     // console.log(carts);
@@ -182,7 +189,8 @@ exports.homeDashBoards = async (req, res) => {
         deliverOrderMonth,
         salesDAy,
         orderyear,
-        OrderMonth
+        OrderMonth,
+        MonthData
       })
     );
   } catch (err) {
@@ -200,7 +208,6 @@ exports.deliveryOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 // exports.salesthisMonth=async(req,res)=>{
 //   try{

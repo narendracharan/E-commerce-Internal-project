@@ -148,20 +148,23 @@ exports.cartsList = async (req, res) => {
       .find({ user_Id: _id })
       .populate("products.product_Id");
     let carts = [];
-    for (let i=0;i<list.length;i++) {
-      for (let i=0;i<list[i].products.length;i++) {
-        var varient =list[i].products[i].product_Id.addVarient.find(
-          (varient) => String(varient._id ) === String(list[i].products[i].varient_Id)
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < list[i].products.length; j++) {
+        console.log(list[i].products.length);
+        var varient = list[i].products[j].product_Id.addVarient.find(
+          (varient) =>
+            String(varient._id) === String(list[i].products[j].varient_Id)
         );
-        let obj={
-          varient:varient,
-          productId:list[i].products[i].product_Id,
-          quantity:list[i].products[i].quantity,
-          Price:list[i].products[i].Price
-        }
-        carts.push(obj)
+        var obj = {
+          varient: varient,
+          product_Id: list[i].products[j].product_Id,
+          quantity: list[i].products[j].quantity,
+          Price: list[i].products[j].Price,
+          _id:list[i]._id
+        };
+        carts.push(obj);
+      
       }
-     
     }
     // const newCart = await cartSchema.findByIdAndUpdate(
     //   list._id,
@@ -173,7 +176,7 @@ exports.cartsList = async (req, res) => {
     //    // select: "-type",
     //   },
     // ]);
- 
+
     res.status(200).json(success(res.statusCode, "Success", { carts }));
   } catch (err) {
     console.log(err);
