@@ -50,14 +50,6 @@ exports.createOrder = async (req, res) => {
     }
     console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
-    ///  const pp = dd.map((x) => x.totalAfterDiscount);
-    // let cartsTotal = 0;
-    // for (let i = 0; i < products.length; i++) {
-    // //   cartsTotal = cartsTotal + products[i].Price * products[i].quantity;
-    // //   ///const dd=   products[i].Price[0].stockQuantity  - products[i].quantity
-    // console.log(products[i].quantity);
-    //  }
-    /// await deletQuatity.save()
     let newCarts = new orderSchema({
       products,
       cartsTotal,
@@ -93,8 +85,8 @@ exports.createOrder = async (req, res) => {
       varient.stockQuantity = stock;
       await deletQuatity.save();
     }
+    const deleteCard = await cartsSchema.deleteMany({ user_Id: user_Id });
 
-    const deleteCard = await cartsSchema.deleteOne({ user_Id: user_Id });
     const updated = await orderSchema
       .findOne({
         _id: newCarts._id,
@@ -188,7 +180,7 @@ exports.orderList = async (req, res) => {
           shippingPrice: orderList[i].shippingPrice,
           orderStatus: orderList[i].orderStatus,
           orderStatus_ar: orderList[i].orderStatus_ar,
-          _id:orderList[i]._id
+          _id: orderList[i]._id,
         };
         carts.push(obj);
       }

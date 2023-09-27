@@ -137,7 +137,7 @@ exports.homeDashBoards = async (req, res) => {
           createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
         },
       },
-    ]);
+    ]).limit(7)
 
     const deliverOrderMonth = await orderSchema.aggregate([
       {

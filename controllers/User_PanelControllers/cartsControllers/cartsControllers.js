@@ -160,10 +160,9 @@ exports.cartsList = async (req, res) => {
           product_Id: list[i].products[j].product_Id,
           quantity: list[i].products[j].quantity,
           Price: list[i].products[j].Price,
-          _id:list[i]._id
+          _id: list[i]._id,
         };
         carts.push(obj);
-      
       }
     }
     // const newCart = await cartSchema.findByIdAndUpdate(
@@ -324,24 +323,17 @@ exports.orderSummery = async (req, res) => {
 exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;
-    const { quantity } = req.body;
-    const product = await cartSchema.findOne({ _id: id });
-    console.log(product);
-    for (let i = 0; i < product.products.length; i++) {
-      product.products[i].quantity = product.products[i].quantity + +quantity;
-      let getPrice = await productSchema
-        .findById(product.products[i].product_Id)
-        .select("Price")
-        .exec();
-      let total = getPrice.Price * quantity;
-      //let tol = getPrice.Price - quantity2;
-      product.cartsTotal = product.cartsTotal + +total;
-      // product.cartsTotal = product.cartsTotal -  -tol;
+    const { quantity, product_Id } = req.body;
+    const carts = await cartSchema
+      .findOne({ _id: id })
+      .populate("products.product_Id");
+    for (const products of carts.products) {
+      products.quantity = products.quantity + +quantity;
     }
-    await product.save();
+    await carts.save();
     res
       .status(200)
-      .json(success(success(res.statusCode, "Success", { product })));
+      .json(success(success(res.statusCode, "Success", { carts })));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
