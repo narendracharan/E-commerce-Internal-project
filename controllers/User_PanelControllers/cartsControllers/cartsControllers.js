@@ -196,47 +196,37 @@ exports.cartCount = async (req, res) => {
 exports.applyCoupan = async (req, res) => {
   try {
     const { coupanCode, carts, user_Id } = req.body;
-    let product = [];
+
     const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    //let carts = await cartSchema.find({ _id: id });
-    // console.log(carts);
-
+    const cart = await cartSchema
+      .find({ user_Id: user_Id })
+      .populate("products.product_Id");
+    let productVarient = [];
     for (let i = 0; i < carts.length; i++) {
-      let object = {};
-      object.product_Id = carts[i].product_Id;
-      object.quantity = carts[i].quantity;
-      object.Price = carts[i].Price;
-      object.varient_Id = carts[i].varient_Id;
-      // const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
-      // object.Discount = dis.map((x) => x.Discount)
-      product.push(object);
+      for (let k = 0; k < cart.length; k++) {
+        for (let j = 0; j < cart[k].products.length; j++) {
+          var varient = cart[k].products[j].product_Id.addVarient.find(
+            (varient) => String(varient._id) === String(carts[i].varient_Id)
+          );
+          var obj = {
+            varient: varient,
+            produtc_Id: carts[i].product_Id,
+            quantity: carts[i].quantity,
+            Price: carts[i].Price,
+          };
+          productVarient.push(obj);
+        }
+      }
     }
     let DiscountType = validCoupan.map((x) => x.DiscountType);
-    //   const cartsTotal = carts.map((cartsTotal) => cartsTotal.cartsTotal);
-    //   console.log(cartsTotal);
-    // let subtotal = 0;
-    // for (let i = 0; i < getPrice.length; i++) {
-    // for (let i = 0; i < product.length; i++) {
-    //     subtotal = subtotal + product[i].Price * product[i].quantity;
 
-    // }
-    // console.log(subtotal);
-    //  subtotal = subtotal +  * quantity;
-    //}
-    // var cartsTotalSum =parseInt( subtotal - subtotal * (DiscountType / 100));
-    // const dd = await userSchema.findByIdAndUpdate(
-    //   user_Id,
-    //   { totalAfterDiscount: parseInt(cartsTotalSum) },
-    //   { new: true }
-    // );
-    // console.log(dd);
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
-        product,
+        productVarient,
         user_Id,
         // subtotal,
         // cartsTotalSum,
