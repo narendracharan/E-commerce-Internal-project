@@ -257,9 +257,9 @@ exports.orderList = async (req, res) => {
       .populate("deliverdBy", { name: 1, address: 1 });
     const shippedData = orderList.filter(
       (x) =>
-        x.orderStatus == "Shipped" ||
-        x.orderStatus == "Inprogress" ||
-        x.orderStatus == "Delivered"
+        x.orderStatus == "Shipped" 
+        // x.orderStatus == "Inprogress" ||
+        // x.orderStatus == "Delivered"
     );
     res.status(200).json(success(res.statusCode, "Success", { shippedData }));
   } catch (err) {

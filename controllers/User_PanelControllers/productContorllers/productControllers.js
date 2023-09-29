@@ -85,22 +85,12 @@ exports.relatedProduct = async (req, res) => {
 exports.filterPrice = async (req, res) => {
   try {
     const { min, max } = req.body;
-    console.log(req.body);
     const categoryData = await productSchema.aggregate([
-      // {
-      //   $match: {
-      //     "addVarient.Price": {
-      //       $gte: max,
-      //       $lte: min,
-      //     },
-      //   },
-      // },
-      //{"$unwind" : "$addVarient"},
       {
         $match: {
           $and: [
-            { "addVarient.Price": { $gte: min } },
-            { "addVarient.Price": { $lte: max } },
+            { "addVarient.Price": { $gte: +min } },
+            { "addVarient.Price": { $lte: +max } },
           ],
         },
       },
