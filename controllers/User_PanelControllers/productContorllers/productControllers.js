@@ -15,7 +15,7 @@ exports.productList = async (req, res) => {
       .populate("addVarient.attribute_Id")
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
-      .populate("category_Id")
+      .populate("category_Id");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -25,12 +25,14 @@ exports.productList = async (req, res) => {
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await productSchema.findById(id).populate("brand_Id")
-    .populate("addVarient.values_Id")
-    .populate("addVarient.attribute_Id")
-    .populate("subSubcategory_Id")
-    .populate("Subcategory_Id")
-    .populate("category_Id")
+    const details = await productSchema
+      .findById(id)
+      .populate("brand_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id");
     const Discount = await offerSchema
       .find({ product_Id: id })
       .select("Discount");
@@ -83,17 +85,38 @@ exports.relatedProduct = async (req, res) => {
 exports.filterPrice = async (req, res) => {
   try {
     const { min, max } = req.body;
-    const categoryData = await productSchema.find({});
-    var filterData = categoryData.filter((x) => x.Price > min && x.Price < max);
-    res.status(200).json(success(res.statusCode, "Success", { filterData }));
+    console.log(req.body);
+    const categoryData = await productSchema.aggregate([
+      // {
+      //   $match: {
+      //     "addVarient.Price": {
+      //       $gte: max,
+      //       $lte: min,
+      //     },
+      //   },
+      // },
+      //{"$unwind" : "$addVarient"},
+      {
+        $match: {
+          $and: [
+            { "addVarient.Price": { $gte: min } },
+            { "addVarient.Price": { $lte: max } },
+          ],
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
 exports.lowPrice = async (req, res) => {
   try {
-    const productlist = await productSchema.find({}).sort({ Price: 1 });
+    const productlist = await productSchema.aggregate([
+      { $sort: { "addVarient.Price": 1 } },
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -102,9 +125,12 @@ exports.lowPrice = async (req, res) => {
 
 exports.highPrice = async (req, res) => {
   try {
-    const productList = await productSchema.find({}).sort({ Price: -1 });
+    const productList = await productSchema.aggregate([
+      aggregate([{ $sort: { "addVarient.Price": -1 } }]),
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { productList }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
