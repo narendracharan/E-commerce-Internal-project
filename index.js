@@ -21,6 +21,10 @@ app.set("view engine", "ejs");
 const staticPath = path.join(__dirname, "./public");
 
 app.use("/", commonRoutes);
+app.get("/", (req, res) => {
+  console.log("Hello Admin ");
+  res.status(200).send("Hello Admin");
+});
 
 app.use(express.static("./public"));
 
