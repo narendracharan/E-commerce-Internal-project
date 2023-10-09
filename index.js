@@ -12,7 +12,7 @@ const corsoptions = {
   credentials: true,
   optionSuccessStatus: 200,
 };
-process.env["BASE_URL"] = "https://ec2-65-2-108-172.ap-south-1.compute.amazonaws.com:5000";
+process.env["BASE_URL"] = "https://euser.techgropsedev.com:2087";
 require("./models/config");
 app.use(cors(corsoptions));
 app.use(bodyparser.json());

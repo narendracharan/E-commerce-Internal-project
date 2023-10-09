@@ -288,3 +288,36 @@ exports.popularProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.categoryProduct = async (req, res) => {
+  try {
+    const product = await productSchema.find({ category_Id: req.params.id });
+    if (product == null) {
+      return res.status(201).json(error("Product Not Found", res.statusCode));
+    }
+    res.status(200).json(success(res.statusCode, "Success", { product }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.searchCategory = async (req, res) => {
+  try {
+    const search = req.body.search;
+    if (!search) {
+      return res
+        .status(201)
+        .json(error("Please provide search key", res.statusCode));
+    }
+    const searchData = await categorySchema.find({
+      categoryName_en: { $regex: search, $options: "i" },
+      categoryName_ar: { $regex: search, $options: "i" },
+    });
+    if (searchData == null) {
+      return res.status(201).json(error("No Data Found", res.statusCode));
+    }
+    res.status(200).json(success(res.statusCode, "Success", { searchData }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
