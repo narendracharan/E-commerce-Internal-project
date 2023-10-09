@@ -9,6 +9,6 @@ const { Pdf } = require("../controllers/notificationControllers")
 router.use("/admin",adminRoutes)
 router.use("/user",userRoutes)
 router.use("/device",deviceRoutes)
-router.use("/adda",Pdf)
+//router.use("/adda",Pdf)
 
 module.exports=router
