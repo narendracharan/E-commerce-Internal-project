@@ -19,7 +19,9 @@ const {
   popularProduct,
   categoryProduct,
   searchCategory,
-  DealsOfDay
+  DealsOfDay,
+  discountProduct,
+  similarProduct
 } = require("../../../controllers/User_PanelControllers/productContorllers/productControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
@@ -43,5 +45,7 @@ router.post("/brand-product", tokenAuthorisationUser, brandProduct);
 router.post("/popular-product/:id", tokenAuthorisationUser, popularProduct);
 router.post("/category-product/:id",tokenAuthorisationUser,categoryProduct)
 router.post("/search-category",tokenAuthorisationUser,searchCategory)
-router.post("/deals-of-day",DealsOfDay)
+router.post("/deals-of-day",tokenAuthorisationUser,DealsOfDay)
+router.post("/Discount-product",tokenAuthorisationUser,discountProduct)
+router.post("/similar-product/:id",tokenAuthorisationUser,similarProduct)
 module.exports = router;

@@ -5,7 +5,7 @@ const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offer
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const { error, success } = require("../../response");
-const moment=require("moment")
+const moment = require("moment");
 
 exports.productList = async (req, res) => {
   try {
@@ -324,20 +324,56 @@ exports.searchCategory = async (req, res) => {
   }
 };
 
-
-exports.DealsOfDay=async(req,res)=>{
-  try{
+exports.DealsOfDay = async (req, res) => {
+  try {
     const dealsDay = await orderSchema.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
       {
         $match: {
           createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
           createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
         },
       },
-    ])
-    res.status(201).json(success(res.statusCode,"Success",{dealsDay}))
-  }catch(err){
-  
-    res.status(400).json(error("Error in Product"))
+    ]);
+    res.status(201).json(success(res.statusCode, "Success", { dealsDay }));
+  } catch (err) {
+    res.status(400).json(error("Error in Product"));
   }
-}
+};
+
+exports.discountProduct = async (req, res) => {
+  try {
+    const offerList = await offerSchema.aggregate([
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+      { $sort: { Discount: -1 } },
+    ]);
+
+    res.status(201).json(success(res.statusCode, "Success", { offerList }));
+  } catch (err) {
+    res.status(400).json(error("Error in Discount Product"));
+  }
+};
+
+exports.similarProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const product = await productSchema.find({ subSubcategory_Id: id });
+    res.status(200).json(success(res.statusCode, "Success", { product }));
+  } catch (err) {
+    res.status(400).json(error("Error in Similar Product", res.statusCode));
+  }
+};
