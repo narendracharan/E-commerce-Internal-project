@@ -2,8 +2,10 @@ const brandSchema = require("../../../models/Admin_PanelSchema/categorySchema/br
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
+const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const { error, success } = require("../../response");
+const moment=require("moment")
 
 exports.productList = async (req, res) => {
   try {
@@ -321,3 +323,21 @@ exports.searchCategory = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+exports.DealsOfDay=async(req,res)=>{
+  try{
+    const dealsDay = await orderSchema.aggregate([
+      {
+        $match: {
+          createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
+          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
+        },
+      },
+    ])
+    res.status(201).json(success(res.statusCode,"Success",{dealsDay}))
+  }catch(err){
+  
+    res.status(400).json(error("Error in Product"))
+  }
+}
