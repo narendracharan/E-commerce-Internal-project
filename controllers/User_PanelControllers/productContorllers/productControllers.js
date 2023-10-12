@@ -1,6 +1,7 @@
 const brandSchema = require("../../../models/Admin_PanelSchema/categorySchema/brandSchema");
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const dealsSchema = require("../../../models/Admin_PanelSchema/dealsSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
@@ -326,22 +327,7 @@ exports.searchCategory = async (req, res) => {
 
 exports.DealsOfDay = async (req, res) => {
   try {
-    const dealsDay = await orderSchema.aggregate([
-      {
-        $lookup: {
-          from: "products",
-          localField: "products.product_Id",
-          foreignField: "_id",
-          as: "products",
-        },
-      },
-      {
-        $match: {
-          createdAt: { $lte: new Date(moment(new Date()).endOf("day")) },
-          createdAt: { $gte: new Date(moment(new Date()).startOf("day")) },
-        },
-      },
-    ]);
+    const dealsDay = await dealsSchema.find().sort({createdAt:-1}).populate("product_Id")
     res.status(201).json(success(res.statusCode, "Success", { dealsDay }));
   } catch (err) {
     res.status(400).json(error("Error in Product"));
@@ -375,5 +361,17 @@ exports.similarProduct = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Error in Similar Product", res.statusCode));
+  }
+};
+
+exports.newArriwalProduct = async (req, res) => {
+  try {
+    const product = await productSchema
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.status(200).json(success(res.status, "Success", { product }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };

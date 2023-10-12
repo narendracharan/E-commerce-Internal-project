@@ -1,5 +1,6 @@
 const brandSchema = require("../../../models/Admin_PanelSchema/categorySchema/brandSchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
+const dealsSchema = require("../../../models/Admin_PanelSchema/dealsSchema");
 const { success, error } = require("../../response");
 
 exports.createProduct = async (req, res) => {
@@ -232,12 +233,12 @@ exports.addVarient = async (req, res) => {
     }
     console.log(req.files);
     let pic = [];
-   // if (newVarient.addVarient.length) {
-      for (let i = 0; i < req.files.length; i++) {
-        // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
-        pic.push(req.files[i].location);
-      }
-   // }
+    // if (newVarient.addVarient.length) {
+    for (let i = 0; i < req.files.length; i++) {
+      // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
+      pic.push(req.files[i].location);
+    }
+    // }
     newVarient.addVarient.push({
       Price: Price,
       oldPrice: oldPrice,
@@ -255,6 +256,20 @@ exports.addVarient = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { saveVarient }));
   } catch (err) {
     console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.addDealsProduct = async (req, res) => {
+  try {
+    const { product_Id, user_Id } = req.body;
+    const deals = new dealsSchema({
+      product_Id: product_Id,
+      user_Id: user_Id,
+    });
+    await deals.save();
+    res.status(200).json(success(res.statusCode, "Success", { deals }));
+  } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
