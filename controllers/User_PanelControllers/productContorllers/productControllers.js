@@ -157,17 +157,26 @@ exports.highDiscount = async (req, res) => {
 
 exports.trandingProduct = async (req, res) => {
   try {
-    const productlist = await productSchema
-      .find({})
-      .populate("addVarient.values_Id")
-      .populate("addVarient.attribute_Id")
-      .populate("subSubcategory_Id")
-      .populate("Subcategory_Id")
-      .populate("category_Id")
-      .sort({ productName: -1 })
-      .limit(4);
+    const productlist = await orderSchema.aggregate([
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: "$products.product_Id",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -327,7 +336,10 @@ exports.searchCategory = async (req, res) => {
 
 exports.DealsOfDay = async (req, res) => {
   try {
-    const dealsDay = await dealsSchema.find().sort({createdAt:-1}).populate("product_Id")
+    const dealsDay = await dealsSchema
+      .find()
+      .sort({ createdAt: -1 })
+      .populate("product_Id");
     res.status(201).json(success(res.statusCode, "Success", { dealsDay }));
   } catch (err) {
     res.status(400).json(error("Error in Product"));
@@ -373,5 +385,38 @@ exports.newArriwalProduct = async (req, res) => {
     res.status(200).json(success(res.status, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.indemandProducts = async (req, res) => {
+  try {
+    const products = await orderSchema.aggregate([
+      { $unwind: "$products" },
+      {
+        $match: {
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
+      },
+      {
+        $group: {
+          _id: "$products.product_Id",
+          count: { $sum: 1 },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { products }));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error in InDemand Product"));
   }
 };
