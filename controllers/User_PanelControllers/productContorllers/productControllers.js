@@ -369,7 +369,7 @@ exports.discountProduct = async (req, res) => {
 exports.similarProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await productSchema.find({ subSubcategory_Id: id });
+    const product = await productSchema.find({ Subcategory_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Error in Similar Product", res.statusCode));
@@ -404,7 +404,6 @@ exports.indemandProducts = async (req, res) => {
           count: { $sum: 1 },
         },
       },
-
       {
         $lookup: {
           from: "products",

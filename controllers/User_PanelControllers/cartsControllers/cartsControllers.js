@@ -197,9 +197,12 @@ exports.applyCoupan = async (req, res) => {
   try {
     const { coupanCode, carts, user_Id } = req.body;
 
-    const validCoupan = await coupanSchema.find({ coupanCode: coupanCode });
+    const validCoupan = await coupanSchema.findOne({ coupanCode: coupanCode });
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
+    }
+    if(new Date() >validCoupan.enddate){
+      return res.status(400).json(error("Coupan Code is Expired", res.statusCode));
     }
     const cart = await cartSchema
       .find({ user_Id: user_Id })
@@ -221,7 +224,7 @@ exports.applyCoupan = async (req, res) => {
         }
       }
     }
-    let DiscountType = validCoupan.map((x) => x.DiscountType);
+    let DiscountType = validCoupan.DiscountType
 
     res.status(200).json(
       success(res.statusCode, "Success", {
