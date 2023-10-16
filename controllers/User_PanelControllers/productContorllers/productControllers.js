@@ -369,7 +369,14 @@ exports.discountProduct = async (req, res) => {
 exports.similarProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await productSchema.find({ Subcategory_Id: id });
+    const product = await productSchema
+      .find({ Subcategory_Id: id })
+      .populate([
+        "category_Id",
+        "Subcategory_Id",
+        "addVarient.values_Id",
+        "addVarient.attribute_Id",
+      ]);
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Error in Similar Product", res.statusCode));
