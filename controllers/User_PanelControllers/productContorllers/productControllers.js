@@ -119,7 +119,7 @@ exports.lowPrice = async (req, res) => {
 exports.highPrice = async (req, res) => {
   try {
     const productList = await productSchema.aggregate([
-      aggregate([{ $sort: { "addVarient.Price": -1 } }]),
+     { $sort: { "addVarient.Price": -1 } },
     ]);
     res.status(200).json(success(res.statusCode, "Success", { productList }));
   } catch (err) {
@@ -279,7 +279,7 @@ exports.Brandlist = async (req, res) => {
 
 exports.brandProduct = async (req, res) => {
   try {
-    const id = req.query.id;
+    const id = req.params.id;
     const product = await productSchema.find({ brand_Id: id });
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
