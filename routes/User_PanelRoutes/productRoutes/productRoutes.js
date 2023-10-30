@@ -26,6 +26,7 @@ const {
   indemandProducts
 } = require("../../../controllers/User_PanelControllers/productContorllers/productControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
+const { updateQuatity } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
 const router = express.Router();
 
 router.post("/list", tokenAuthorisationUser, productList);
@@ -52,4 +53,5 @@ router.post("/Discount-product",tokenAuthorisationUser,discountProduct)
 router.post("/similar-product/:id",tokenAuthorisationUser,similarProduct)
 router.post("/newProduct",tokenAuthorisationUser,newArriwalProduct)
 router.post("/indemand-product",tokenAuthorisationUser,indemandProducts)
+router.post("/update-qty",updateQuatity)
 module.exports = router;

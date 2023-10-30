@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  products: [
-    {
+ // products: [
+  //  {
       product_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
@@ -19,8 +19,8 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
       },
-    },
-  ],
+  //   },
+  // ],
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "userPanel",

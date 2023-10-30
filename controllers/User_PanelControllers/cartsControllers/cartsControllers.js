@@ -41,30 +41,30 @@ exports.addToCart = async (req, res) => {
         .json(error("Please provide user_Id!", res.statusCode));
     }
     let carts;
-    carts = await cartSchema.findOne({ user_Id: user_Id });
-    if (carts) {
-      const newproducts = carts.products.filter(
-        (product) => product.product_Id == product_Id
-      );
-      if (newproducts.length) {
-        newproducts[0].quantity = newproducts[0].quantity + +quantity;
-        console.log(newproducts);
-        await carts.save();
+    // carts = await cartSchema.findOne({ user_Id: user_Id });
+    // if (carts) {
+    //   const newproducts = carts.products.filter(
+    //     (product) => product.product_Id == product_Id
+    //   );
+    //   if (newproducts.length) {
+    //     newproducts[0].quantity = newproducts[0].quantity + +quantity;
+    //     console.log(newproducts);
+    //     await carts.save();
 
-        return res
-          .status(201)
-          .json(success(res.statusCode, "Product Added", { carts }));
-      }
-    }
+    //     return res
+    //       .status(201)
+    //       .json(success(res.statusCode, "Product Added", { carts }));
+    //   }
+    // }
     carts = await new cartSchema({
-      products: [
-        {
-          product_Id: product_Id,
-          quantity: quantity,
-          Price: Price,
-          varient_Id: varient_Id,
-        },
-      ],
+      // products: [
+      //   {
+      product_Id: product_Id,
+      quantity: quantity,
+      Price: Price,
+      varient_Id: varient_Id,
+      //   },
+      // ],
       //  cartsTotal,
       user_Id: user_Id,
     });
@@ -146,24 +146,24 @@ exports.cartsList = async (req, res) => {
     const _id = req.params.id;
     const list = await cartsSchema
       .find({ user_Id: _id })
-      .populate("products.product_Id");
+      .populate("product_Id");
     let carts = [];
     for (let i = 0; i < list.length; i++) {
-      for (let j = 0; j < list[i].products.length; j++) {
-        console.log(list[i].products.length);
-        var varient = list[i].products[j].product_Id.addVarient.find(
-          (varient) =>
-            String(varient._id) === String(list[i].products[j].varient_Id)
-        );
-        var obj = {
-          varient: varient,
-          product_Id: list[i].products[j].product_Id,
-          quantity: list[i].products[j].quantity,
-          Price: list[i].products[j].Price,
-          _id: list[i]._id,
-        };
-        carts.push(obj);
-      }
+      //for (let j = 0; j < list[i].products.length; j++) {
+      //console.log(list[i].products.length);
+      var varient = list[i].product_Id.addVarient.find(
+        (varient) =>
+          String(varient._id) === String(list[i].varient_Id)
+      );
+      var obj = {
+        varient: varient,
+        product_Id: list[i].product_Id,
+        quantity: list[i].quantity,
+        Price: list[i].Price,
+        _id: list[i]._id,
+      };
+      carts.push(obj);
+      // }
     }
     // const newCart = await cartSchema.findByIdAndUpdate(
     //   list._id,
@@ -201,8 +201,10 @@ exports.applyCoupan = async (req, res) => {
     if (validCoupan == null) {
       return res.status(400).json(error("Invalid Coupan Code", res.statusCode));
     }
-    if(new Date() >validCoupan.enddate){
-      return res.status(400).json(error("Coupan Code is Expired", res.statusCode));
+    if (new Date() > validCoupan.enddate) {
+      return res
+        .status(400)
+        .json(error("Coupan Code is Expired", res.statusCode));
     }
     const cart = await cartSchema
       .find({ user_Id: user_Id })
@@ -210,21 +212,21 @@ exports.applyCoupan = async (req, res) => {
     let productVarient = [];
     for (let i = 0; i < carts.length; i++) {
       for (let k = 0; k < cart.length; k++) {
-        for (let j = 0; j < cart[k].products.length; j++) {
-          var varient = cart[k].products[j].product_Id.addVarient.find(
-            (varient) => String(varient._id) === String(carts[i].varient_Id)
-          );
-          var obj = {
-            varient: varient,
-            produtc_Id: carts[i].product_Id,
-            quantity: carts[i].quantity,
-            Price: carts[i].Price,
-          };
-          productVarient.push(obj);
-        }
+        //  for (let j = 0; j < cart[k].products.length; j++) {
+        var varient = cart[k].product_Id.addVarient.find(
+          (varient) => String(varient._id) === String(carts[i].varient_Id)
+        );
+        var obj = {
+          varient: varient,
+          produtc_Id: carts[i].product_Id,
+          quantity: carts[i].quantity,
+          Price: carts[i].Price,
+        };
+        productVarient.push(obj);
+        //  }
       }
     }
-    let DiscountType = validCoupan.DiscountType
+    let DiscountType = validCoupan.DiscountType;
 
     res.status(200).json(
       success(res.statusCode, "Success", {
@@ -319,10 +321,11 @@ exports.editCart = async (req, res) => {
     const { quantity, product_Id } = req.body;
     const carts = await cartSchema
       .findOne({ _id: id })
-      .populate("products.product_Id");
-    for (const products of carts.products) {
-      products.quantity = products.quantity + +quantity;
-    }
+      .populate("product_Id");
+    // for (const products of carts) {
+    //   products.quantity = products.q + +quantity;
+    // }
+    carts.quantity = carts.quantity + +quantity
     await carts.save();
     res
       .status(200)
@@ -330,5 +333,18 @@ exports.editCart = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.updateQuatity = async (req, res) => {
+  try {
+    var { prod_Id, quantity } = req.body;
+    const carts = await cartSchema.findOne({ product_Id: prod_Id });
+    carts.quantity = carts.quantity + +quantity
+    await carts.save();
+    res.status(200).json(success(res.statusCode, "Quantity Updated",{}));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error in Update quantity", res.statusCode));
   }
 };
