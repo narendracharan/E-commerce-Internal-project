@@ -14,7 +14,7 @@ const { Notification } = require("../../notificationControllers");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
 
-const Razorpay = require("razorpay");
+//\const Razorpay = require("razorpay");
 // const admin = require("firebase-admin");
 // const service = require("../../../config/userfirebase.json");
 
@@ -22,56 +22,56 @@ const Razorpay = require("razorpay");
 //   credential: admin.credential.cert(service),
 // });
 
-var instance = new Razorpay({
-  key_id: "rzp_test_0JgQmSV6pwg0ZU",
-  key_secret: "UlUGF28sENCj8MVOgTYzBS10",
-});
+// var instance = new Razorpay({
+//   key_id: "rzp_test_0JgQmSV6pwg0ZU",
+//   key_secret: "UlUGF28sENCj8MVOgTYzBS10",
+// });
 
-exports.payment = async (req, res) => {
-  try {
-    const { amount, name, email } = req.body;
-    var options = {
-      amount: amount, // amount in the smallest currency unit
-      currency: "INR",
-      receipt: "rcpti1",
-    };
-    instance.orders.create(options, function (err, order) {
-      res.status(200).json(
-        success(res.statusCode, "Success", {
-          order: order.id,
-          amount: amount,
-          //  razorpay_payment_id:payment.id,
-          key_Id: "rzp_test_0JgQmSV6pwg0ZU",
-          name: name,
-          email: email,
-        })
-      );
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Error in Payment", res.statusCode));
-  }
-};
+// exports.payment = async (req, res) => {
+//   try {
+//     const { amount, name, email } = req.body;
+//     var options = {
+//       amount: amount, // amount in the smallest currency unit
+//       currency: "INR",
+//       receipt: "rcpti1",
+//     };
+//     instance.orders.create(options, function (err, order) {
+//       res.status(200).json(
+//         success(res.statusCode, "Success", {
+//           order: order.id,
+//           amount: amount,
+//           //  razorpay_payment_id:payment.id,
+//           key_Id: "rzp_test_0JgQmSV6pwg0ZU",
+//           name: name,
+//           email: email,
+//         })
+//       );
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Error in Payment", res.statusCode));
+//   }
+// };
 
-exports.paymentVerify = async (req, res) => {
-  console.log(req.body)
-  body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
-  var crypto = require("crypto");
-  var expectedSignature = crypto
-    .createHmac("sha256", "UlUGF28sENCj8MVOgTYzBS10")
-    .update(body.toString())
-    .digest("hex");
-  console.log("sig" + req.body.razorpay_signature);
-  console.log("sig" + expectedSignature);
+// exports.paymentVerify = async (req, res) => {
+//   console.log(req.body)
+//   body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
+//   var crypto = require("crypto");
+//   var expectedSignature = crypto
+//     .createHmac("sha256", "UlUGF28sENCj8MVOgTYzBS10")
+//     .update(body.toString())
+//     .digest("hex");
+//   console.log("sig" + req.body.razorpay_signature);
+//   console.log("sig" + expectedSignature);
 
-  if (expectedSignature === req.body.razorpay_signature) {
-    console.log("Payment Success");
-    res.status(200).json(success(res.statusCode, "Payment Success"));
-  } else {
-    console.log("Payment Fail");
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+//   if (expectedSignature === req.body.razorpay_signature) {
+//     console.log("Payment Success");
+//     res.status(200).json(success(res.statusCode, "Payment Success"));
+//   } else {
+//     console.log("Payment Fail");
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 
 exports.createOrder = async (req, res) => {
   try {
