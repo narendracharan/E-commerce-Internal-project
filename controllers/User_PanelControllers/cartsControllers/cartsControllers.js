@@ -152,8 +152,7 @@ exports.cartsList = async (req, res) => {
       //for (let j = 0; j < list[i].products.length; j++) {
       //console.log(list[i].products.length);
       var varient = list[i].product_Id.addVarient.find(
-        (varient) =>
-          String(varient._id) === String(list[i].varient_Id)
+        (varient) => String(varient._id) === String(list[i].varient_Id)
       );
       var obj = {
         varient: varient,
@@ -319,13 +318,13 @@ exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;
     const { quantity, product_Id } = req.body;
-    const carts = await cartSchema
-      .findOne({ _id: id })
-      .populate("product_Id");
-    // for (const products of carts) {
-    //   products.quantity = products.q + +quantity;
-    // }
-    carts.quantity = carts.quantity + +quantity
+    if (!quantity) {
+      return res
+        .status(201)
+        .json(error("Please Provide quantity", res.statusCode));
+    }
+    const carts = await cartSchema.findOne({ _id: id }).populate("product_Id");
+    carts.quantity = carts.quantity + +quantity;
     await carts.save();
     res
       .status(200)
@@ -339,10 +338,20 @@ exports.editCart = async (req, res) => {
 exports.updateQuatity = async (req, res) => {
   try {
     var { prod_Id, quantity } = req.body;
+    if (!prod_Id) {
+      return res
+        .status(201)
+        .json(error("Please Provide Product_Id", res.statusCode));
+    }
+    if (!quantity) {
+      return res
+        .status(201)
+        .json(error("Please Provide quantity", res.statusCode));
+    }
     const carts = await cartSchema.findOne({ product_Id: prod_Id });
-    carts.quantity = carts.quantity + +quantity
+    carts.quantity = carts.quantity + +quantity;
     await carts.save();
-    res.status(200).json(success(res.statusCode, "Quantity Updated",{}));
+    res.status(200).json(success(res.statusCode, "Quantity Updated", {}));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Update quantity", res.statusCode));

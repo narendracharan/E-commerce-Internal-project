@@ -15,5 +15,5 @@ router.post("/search", tokenAuthorisationUser, orderSearch);
 router.post("/order-Details/:id", tokenAuthorisationUser, orderDetails);
 router.delete("/delete-order/:id", tokenAuthorisationUser, deleteOrder);
 router.post("/order-update/:id",tokenAuthorisationUser,orderUpdate)
-router.post("/order-download",orderExel)
+//router.post("/order-download",orderExel)
 module.exports = router;

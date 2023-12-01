@@ -123,33 +123,3 @@ exports.orderUpdate = async (req, res) => {
   }
 };
 
-exports.orderExel = async (req, res) => {
-  try {
-    const order = await orderSchema.find({}).populate(["products.product_Id"]);
-    let allOrders = [];
-    for (const exportOrder of order) {
-      let date = String(exportOrder.createdAt).split(" ");
-      const newDate = `${date[2]}/${date[1]}/${date[3]}`;
-      let obj = {
-        "Order Date": newDate,
-        "Order ID": `${exportOrder._id}`,
-        "Payment Method": ` ${exportOrder.paymentIntent}`,
-        "Delivery Status": `${exportOrder.orderStatus}`,
-        "Total Amount": `${exportOrder.cartsTotal}`,
-        // "Image":`${exportOrder.products}`
-      };
-      allOrders.push(obj);
-    }
-    const filename = Date.now();
-    const excel = jsonrawtoxlsx(allOrders);
-    const file = fs.writeFileSync(`./public/${filename}.xlsx`, excel, "binary");
-    res.status(201).json(
-      success(res.statusCode, "Exported Successfully", {
-        file: `${process.env.BASE_URL}/${filename}.xlsx`,
-      })
-    );
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};

@@ -6,15 +6,10 @@ const bodyparser = require("body-parser");
 const path = require("path");
 const commonRoutes = require("./routes/commonRoutes");
 const cors = require("cors");
-const multer = require("./middleware/multer");
-const corsoptions = {
-  origin: "*",
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+//const multer = require("./middleware/multer");
 process.env["BASE_URL"] = "https://euser.techgropsedev.com:2087";
 require("./models/config");
-app.use(cors(corsoptions));
+app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("dev"));
 app.set("view engine", "ejs");

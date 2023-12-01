@@ -1,6 +1,6 @@
-const express=require("express")
-const router=express.Router()
-const orderRoutes=require("./orderRoutes")
+const express = require("express");
+const router = express.Router();
+const orderRoutes = require("./orderRoutes");
 
-router.use("/order",orderRoutes)
-module.exports=router
+router.use("/order", orderRoutes);
+module.exports = router;
