@@ -292,14 +292,14 @@ exports.orderSummery = async (req, res) => {
     const id = req.params.id;
     let carts = await cartSchema
       .find({ user_Id: id })
-      .populate("products.product_Id");
+      .populate("product_Id");
     const cartsTotal = carts.map((cartsTotal) => cartsTotal.products);
     const shipping = 40;
     const Tax = 30;
     // var cartsTotalSum = parseInt(cartsTotal) + shipping + Tax;
     const product = await cartSchema
       .find({ user_Id: id })
-      .populate("products.product_Id");
+     .populate("product_Id");
     res.status(200).json(
       success(res.statusCode, "Success", {
         //   product,
