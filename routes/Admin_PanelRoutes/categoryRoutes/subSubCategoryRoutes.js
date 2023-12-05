@@ -25,6 +25,7 @@ router.post(
   tokenAuthorisationUser,
   subSubCategorySearch
 );
+
 router.post("/selectCategory/:id", tokenAuthorisationUser, selectCategory);
 router.post("/selectSubCategory/:id", tokenAuthorisationUser, selectSubCategory);
 router.post("/checkAttribute/:id", tokenAuthorisationUser, checkAttribute);

@@ -1,6 +1,7 @@
 const categorySchema = require("../../../models/Admin_PanelSchema/categorySchema/categorySchema");
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
 const subCategorySchema = require("../../../models/Admin_PanelSchema/categorySchema/subCategorySchema");
+const subSubCategorySchema= require("../../../models/Admin_PanelSchema/categorySchema/subSubCategorySchema")
 const BottomBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/bottomBanner");
 const categoryBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/categoryBanner");
 const middlebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/middlebanner");
@@ -39,6 +40,24 @@ exports.subCatagoryList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//============================================subsub catogorylist===========================================
+exports.subSubCategoryList = async (req, res) => {
+  try {
+    const id = req.params.id; 
+    const subSubCategoryData = await subSubCategorySchema
+      .find({ subCategory_Id: id }) 
+      .sort({ _id: -1 });
+
+    if (subSubCategoryData.length > 0) {
+      res.status(200).json(success(res.statusCode, "Success", { subSubCategoryData }));
+    } else {
+      res.status(200).json(error("Sub-subcategories not found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+//=============================================subsub Categorylist================================
 
 exports.checkSubCategoryProduct = async (req, res) => {
   try {
