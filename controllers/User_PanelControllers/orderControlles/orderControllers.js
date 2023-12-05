@@ -198,37 +198,16 @@ exports.orderDetails = async (req, res) => {
       .findById(id)
       .populate("address_Id")
       .populate("products.product_Id");
-     let carts=[];
-     for(let i=0;i<orderDetails.length;i++){
-      for(let j=0;j<orderDetails[i].products.length;j++){
-        var varient = orderDetails[i].products[j].product_Id.addVarient.find(
-          (varient) =>
-            String(varient._id) === String(orderDetails[i].products[j].varient_Id)
-        );
-        let obj = {
-          varient: varient,
-          products: orderDetails[i].products[j].product_Id,
-          cartsTotal: orderDetails[i].cartsTotal,
-          user_Id: this.orderDetails[i].user_Id,
-          address_Id: this.orderDetails[i].address_Id,
-          deliverdBy: this.orderDetails[i].deliverdBy,
-          taxPrice: this.orderDetails[i].taxPrice,
-          shippingPrice: this.orderDetails[i].shippingPrice,
-          orderStatus: this.orderDetails[i].orderStatus,
-          orderStatus_ar: this.orderDetails[i].orderStatus_ar,
-          _id: this.orderDetails[i]._id,
-        };
-        carts.push(obj);
-
-      }
-
-     }
     res.status(200).json(success(res.status, "Success", { order }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+
+
 exports.orderList = async (req, res) => {
   try {
     const _id = req.params.id;
