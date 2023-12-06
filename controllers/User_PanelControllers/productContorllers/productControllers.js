@@ -28,6 +28,7 @@ exports.productList = async (req, res) => {
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
+    const varient_Id = req.body.varient_Id;
     const details = await productSchema
       .findById(id)
       .populate("brand_Id")
@@ -45,13 +46,17 @@ exports.productDetails = async (req, res) => {
     if (details.stockQuantity == 0) {
       res.status(400).json(error("Product Out of Stock", res.statusCode));
     }
+    var varient = details.addVarient.find(
+      (varient) => String(varient._id) === String(varient_Id)
+    );
     const reviewCount = await reviewSchema.find({ product_Id: id }).count();
     res.status(200).json(
       success(res.statusCode, "Success", {
-        details,
-        Discount,
-        afterDiscountPrice,
-        reviewCount,
+        varient,
+        // details,
+        // Discount,
+        // afterDiscountPrice,
+        // reviewCount,
       })
     );
   } catch (err) {

@@ -290,17 +290,30 @@ exports.coupanDetails = async (req, res) => {
 exports.orderSummery = async (req, res) => {
   try {
     const id = req.params.id;
-    let carts = await cartSchema.find({ user_Id: id }).populate("product_Id");
-    const cartsTotal = carts.map((cartsTotal) => cartsTotal.products);
+    // let carts = await cartSchema.find({ user_Id: id }).populate("product_Id");
+    // const cartsTotal = carts.map((cartsTotal) => cartsTotal.products);
     const shipping = 40;
     const Tax = 30;
     // var cartsTotalSum = parseInt(cartsTotal) + shipping + Tax;
     const product = await cartSchema
       .find({ user_Id: id })
-      .populate("product_Id");
+      .populate(["product_Id"]);
+    // .populate("addVarient.values_Id")
+    // .populate("addVarient.attribute_Id");
+    let carts = [];
+    for (let i = 0; i < product.length; i++) {
+      //for (let j = 0; j < product[i].product_Id.a) {
+      var varient = product[i].product_Id.addVarient.find(
+        (varient) => String(varient._id) === String(product[i].varient_Id)
+      );
+      let obj = {
+        varient: varient,
+      };
+      carts.push(obj);
+    }
     res.status(200).json(
       success(res.statusCode, "Success", {
-        product,
+        carts,
         //  cartsTotal,
         // shipping,
         // Tax,
@@ -308,10 +321,10 @@ exports.orderSummery = async (req, res) => {
       })
     );
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;
