@@ -15,10 +15,8 @@ const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchem
 exports.createBannerOne = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenOne = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    banners.homeScreenOne = req.file.location
+   
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -29,10 +27,7 @@ exports.createBannerOne = async (req, res) => {
 exports.createBannerTwo = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenTwo = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    banners.homeScreenTwo = req.file.location
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -54,10 +49,7 @@ exports.createBannerThree = async (req, res) => {
 exports.createBannerFour = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenFour = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    banners.homeScreenFour = req.file.location
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -68,10 +60,7 @@ exports.createBannerFour = async (req, res) => {
 exports.createBannerFive = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenFive = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    banners.homeScreenFive = req.file.location
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -120,10 +109,8 @@ exports.addCategoryBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "categoryBanner") {
-          category.categoryBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          category.categoryBanner.push(req.files[i].location
+          );
         }
       }
     }
@@ -140,10 +127,9 @@ exports.addProductBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productBanner") {
-          product.productBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          product.productBanner.push(req.files[i].location
+          
+          );
         }
       }
     }
@@ -192,10 +178,9 @@ exports.addSideBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "sideBanner") {
-          banner.sideBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.sideBanner.push(req.files[i].location
+          
+          );
         }
       }
     }
@@ -228,10 +213,9 @@ exports.addMiddleBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "middleBanner") {
-          banner.middleBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.middleBanner.push(req.files[i].location
+           
+          );
         }
       }
     }
@@ -264,10 +248,8 @@ exports.bottomBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "bottomBanner") {
-          banner.bottomBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.bottomBanner.push(req.files[i].location
+          )
         }
       }
     }
@@ -317,10 +299,9 @@ exports.scrollBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "scrollBanner") {
-          banner.scrollBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.scrollBanner.push(req.files[i].location
+           
+          );
         }
       }
     }
@@ -353,10 +334,9 @@ exports.productSideBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "sideBanner") {
-          banner.sideBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.sideBanner.push(req.files[i].location
+           
+          );
         }
       }
     }
@@ -389,10 +369,9 @@ exports.productBottomBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "bottomBanner") {
-          banner.bottomBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.bottomBanner.push(req.files[i].location
+           
+          );
         }
       }
     }
@@ -425,10 +404,9 @@ exports.productMiddleBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "middleBanner") {
-          banner.middleBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.middleBanner.push(req.files[i].location
+           
+          );
         }
       }
     }
@@ -461,10 +439,9 @@ exports.productScrollBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "scrollBanner") {
-          banner.scrollBanner.push(req.files[i].location.replace(
-            "ecommercemedia.s3.ap-south-1.amazonaws.com",
-            process.env.CDN_URL
-          ));
+          banner.scrollBanner.push(req.files[i].location
+          
+        );
         }
       }
     }

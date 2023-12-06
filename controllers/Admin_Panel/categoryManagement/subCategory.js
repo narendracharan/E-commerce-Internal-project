@@ -9,10 +9,11 @@ const { success, error } = require("../../response");
 exports.subCategory = async (req, res) => {
   try {
     const subCategory = new cateSchema(req.body);
-    subCategory.subCategoryPic = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    subCategory.subCategoryPic = req.file.location
+    // .replace(
+    //   "ecommercemedia.s3.ap-south-1.amazonaws.com",
+    //   process.env.CDN_URL
+    // );
     const createSubCategory = await subCategory.save();
     res
       .status(200)
@@ -93,10 +94,7 @@ exports.subCategoryUpdate = async (req, res) => {
     const data={
       subCategoryName_en:req.body.subCategoryName_en,
       subCategoryName_ar:req.body.subCategoryName_ar,
-      subCategoryPic:req.file.location.replace(
-        "ecommercemedia.s3.ap-south-1.amazonaws.com",
-        process.env.CDN_URL
-      ),
+      subCategoryPic:req.file.location,
       shipmentService:req.body.shipmentService,
       status:req.body.status,
       category_Id:req.body.category_Id

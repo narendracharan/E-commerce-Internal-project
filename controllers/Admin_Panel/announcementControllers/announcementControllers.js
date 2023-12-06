@@ -4,10 +4,11 @@ const { success, error } = require("../../response");
 exports.createAnnouncement = async (req, res) => {
   try {
     const create = new announcementSchema(req.body);
-    create.pic = req.file.location.replace(
-      "ecommercemedia.s3.ap-south-1.amazonaws.com",
-      process.env.CDN_URL
-    );
+    create.pic = req.file.location
+    // .replace(
+    //   "ecommercemedia.s3.ap-south-1.amazonaws.com",
+    //   process.env.CDN_URL
+    // );
     const saveData = await create.save()
     res.status(200).json(success(res.statusCode, "Success", { saveData }));
   } catch (err) {

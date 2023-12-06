@@ -106,10 +106,7 @@ exports.editProfile = async (req, res) => {
     const data = {
       userName: req.body.userName,
       userEmail: req.body.userEmail,
-      profile_Pic: req.file.location.replace(
-        "ecommercemedia.s3.ap-south-1.amazonaws.com",
-        process.env.CDN_URL
-      ),
+      profile_Pic: req.file.location
     };
     console.log(req.file);
 
