@@ -25,6 +25,23 @@ exports.productList = async (req, res) => {
   }
 };
 
+exports.userProductDetails = async (req, res) => {
+  try {
+    const list = await productSchema
+      .findById(req.params.id)
+      .sort({ _id: -1 })
+      .populate("brand_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id");
+    res.status(200).json(success(res.statusCode, "Success", { list }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
