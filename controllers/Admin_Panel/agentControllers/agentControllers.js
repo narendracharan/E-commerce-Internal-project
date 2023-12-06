@@ -19,7 +19,10 @@ exports.addUser = async (req, res) => {
   try {
     const user = new agentSchema(req.body);
     user.password = await bcrypt.hash(user.password, 10);
-    user.profile_Pic = req.file.location;
+    user.profile_Pic = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const saveUser = await user.save();
     res
       .status(201)
@@ -134,7 +137,10 @@ exports.editProfile = async (req, res) => {
       name: req.body.name,
       Email: req.body.Email,
       mobileNumber: req.body.mobileNumber,
-      profile_Pic: req.file.location,
+      profile_Pic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
     };
     const updateData = await agentSchema
       .findByIdAndUpdate(id, data, { new: true })
@@ -305,7 +311,10 @@ exports.updateUser = async (req, res) => {
       Email: req.body.Email,
       accountNumber: req.body.accountNumber,
       bankName: req.body.bankName,
-      profile_Pic: req.file.location,
+      profile_Pic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
       commisionType: req.body.commisionType,
       mobileNumber: req.body.mobileNumber,
       address: req.body.address,

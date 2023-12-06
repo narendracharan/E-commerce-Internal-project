@@ -9,7 +9,10 @@ const { success, error } = require("../../../controllers/response");
 exports.createCategory = async (req, res) => {
   try {
     const category = new cateSchema(req.body);
-    category.categoryPic = req.file.location;
+    category.categoryPic = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const saveCategory = await category.save();
     res.status(201).json(
       success(res.statusCode, "Category Create Successfully", {
@@ -96,7 +99,10 @@ exports.categoryUpdate = async (req, res) => {
     const data = {
       categoryName_en: req.body.categoryName_en,
       categoryName_ar: req.body.categoryName_ar,
-      categoryPic: req.file.location,
+      categoryPic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
       shipmentService: req.body.shipmentService,
       status: req.body.status,
     };
@@ -133,7 +139,7 @@ exports.deleteCategory = async (req, res) => {
     const id = req.params.id;
     const deleteData = await cateSchema.findByIdAndDelete(id);
     if (!deleteData) {
-      return res.status(400).json(error("Invalid Id",res.statusCode));
+      return res.status(400).json(error("Invalid Id", res.statusCode));
     } else {
       return res
         .status(200)

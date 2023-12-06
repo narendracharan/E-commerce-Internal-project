@@ -8,7 +8,7 @@ const commonRoutes = require("./routes/commonRoutes");
 const cors = require("cors");
 //const multer = require("./middleware/multer");
 process.env["BASE_URL"] = "https://euser.techgropsedev.com:2087";
-require("./models/config");
+process.env["CDN_URL"] = "https://d37jiv91kn6vpg.cloudfront.net"
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("dev"));

@@ -9,7 +9,10 @@ exports.createProduct = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "product_Pic") {
-          product.product_Pic.push(req.files[i].location);
+          product.product_Pic.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          ));
         }
       }
     }
@@ -90,7 +93,10 @@ exports.updateProduct = async (req, res) => {
       brand_Id: req.body.brand_Id,
       category_Id: req.body.category_Id,
       Subcategory_Id: req.body.Subcategory_Id,
-      product_Pic: req.files.location,
+      product_Pic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
     };
     const updateData = await productSchema.findByIdAndUpdate(id, data, {
       new: true,
@@ -114,7 +120,10 @@ exports.productDelete = async (req, res) => {
 exports.addBrand = async (req, res) => {
   try {
     const brand = new brandSchema(req.body);
-    brand.brandPic = req.file.location;
+    brand.brandPic = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const brandData = await brand.save();
     res.status(200).json(success(res.statusCode, "Success", { brandData }));
   } catch (err) {
@@ -152,7 +161,10 @@ exports.editBrand = async (req, res) => {
     var data = {
       brandName_en: req.body.brandName_en,
       brandName_ar: req.body.brandName_ar,
-      brandPic: req.file.location,
+      brandPic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
     };
     const updateBrand = await brandSchema.findByIdAndUpdate(id, data, {
       new: true,
@@ -236,7 +248,10 @@ exports.addVarient = async (req, res) => {
     // if (newVarient.addVarient.length) {
     for (let i = 0; i < req.files.length; i++) {
       // newVarient.addVarient[0].product_Pic.push([req.files[i].location]);
-      pic.push(req.files[i].location);
+      pic.push(req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ));
     }
     // }
     newVarient.addVarient.push({
