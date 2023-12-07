@@ -308,6 +308,7 @@ exports.orderSummery = async (req, res) => {
       );
       let obj = {
         varient: varient,
+        product:product[i].product_Id,
       };
       carts.push(obj);
     }

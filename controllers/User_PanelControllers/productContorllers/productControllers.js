@@ -70,7 +70,7 @@ exports.productDetails = async (req, res) => {
     res.status(200).json(
       success(res.statusCode, "Success", {
         varient,
-        // details,
+        details,
         // Discount,
         // afterDiscountPrice,
         // reviewCount,
@@ -141,7 +141,7 @@ exports.lowPrice = async (req, res) => {
 exports.highPrice = async (req, res) => {
   try {
     const productList = await productSchema.aggregate([
-     { $sort: { "addVarient.Price": -1 } },
+      { $sort: { "addVarient.Price": -1 } },
     ]);
     res.status(200).json(success(res.statusCode, "Success", { productList }));
   } catch (err) {
