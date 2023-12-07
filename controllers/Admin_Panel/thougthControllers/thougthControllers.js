@@ -4,7 +4,10 @@ const { error, success } = require("../../response");
 exports.createThougth = async (req, res) => {
   try {
     const thougth = new thougthSchema(req.body);
-    thougth.thougth_Pic = req.file.location
+    thougth.thougth_Pic = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
   
     const thoughtsData = await thougth.save();
     res.status(201).json(success(res.statusCode, "Success", { thoughtsData }));

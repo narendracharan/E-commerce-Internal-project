@@ -136,7 +136,10 @@ exports.profilePic = async (req, res) => {
   try {
     const id = req.params.id;
     const data = {
-      profile_Pic:req.file.location,
+      profile_Pic:req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
       userName: req.body.userName,
       userName_ar: req.body.userName_ar,
       userEmail: req.body.userEmail,
@@ -161,7 +164,10 @@ exports.updateProfile = async (req, res) => {
     const data = {
       userName: req.body.userName,
       userEmail: req.body.userEmail,
-      profile_Pic: req.file.location,
+      profile_Pic: req.file.location.replace(
+        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+        process.env.CDN_URL
+      ),
       gender: req.body.gender,
       birthDay: req.body.birthDay,
       mobileNumber: req.body.mobileNumber,

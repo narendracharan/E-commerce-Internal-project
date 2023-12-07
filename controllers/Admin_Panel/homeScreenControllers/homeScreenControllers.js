@@ -15,7 +15,10 @@ const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchem
 exports.createBannerOne = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenOne = req.file.location
+    banners.homeScreenOne = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
    
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
@@ -27,7 +30,10 @@ exports.createBannerOne = async (req, res) => {
 exports.createBannerTwo = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenTwo = req.file.location
+    banners.homeScreenTwo = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -38,7 +44,10 @@ exports.createBannerTwo = async (req, res) => {
 exports.createBannerThree = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenThree = req.file.location;
+    banners.homeScreenThree = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -49,7 +58,10 @@ exports.createBannerThree = async (req, res) => {
 exports.createBannerFour = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenFour = req.file.location
+    banners.homeScreenFour = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -60,7 +72,10 @@ exports.createBannerFour = async (req, res) => {
 exports.createBannerFive = async (req, res) => {
   try {
     const banners = new homeSchema(req.body);
-    banners.homeScreenFive = req.file.location
+    banners.homeScreenFive = req.file.location.replace(
+      "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      process.env.CDN_URL
+    );
     const bannersData = await banners.save();
     res.status(201).json(success("Success", res.statusCode, { bannersData }));
   } catch (err) {
@@ -109,7 +124,10 @@ exports.addCategoryBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "categoryBanner") {
-          category.categoryBanner.push(req.files[i].location
+          category.categoryBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           );
         }
       }
@@ -127,8 +145,10 @@ exports.addProductBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productBanner") {
-          product.productBanner.push(req.files[i].location
-          
+          product.productBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           );
         }
       }
@@ -178,8 +198,10 @@ exports.addSideBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "sideBanner") {
-          banner.sideBanner.push(req.files[i].location
-          
+          banner.sideBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           );
         }
       }
@@ -213,7 +235,10 @@ exports.addMiddleBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "middleBanner") {
-          banner.middleBanner.push(req.files[i].location
+          banner.middleBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
            
           );
         }
@@ -248,7 +273,10 @@ exports.bottomBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "bottomBanner") {
-          banner.bottomBanner.push(req.files[i].location
+          banner.bottomBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           )
         }
       }
@@ -299,8 +327,10 @@ exports.scrollBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "scrollBanner") {
-          banner.scrollBanner.push(req.files[i].location
-           
+          banner.scrollBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           );
         }
       }
@@ -334,8 +364,10 @@ exports.productSideBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "sideBanner") {
-          banner.sideBanner.push(req.files[i].location
-           
+          banner.sideBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           );
         }
       }
@@ -369,7 +401,10 @@ exports.productBottomBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "bottomBanner") {
-          banner.bottomBanner.push(req.files[i].location
+          banner.bottomBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
            
           );
         }
@@ -404,7 +439,10 @@ exports.productMiddleBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "middleBanner") {
-          banner.middleBanner.push(req.files[i].location
+          banner.middleBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
            
           );
         }
@@ -439,7 +477,10 @@ exports.productScrollBanner = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "scrollBanner") {
-          banner.scrollBanner.push(req.files[i].location
+          banner.scrollBanner.push(req.files[i].location.replace(
+            "ecommercemedia.s3.ap-south-1.amazonaws.com",
+            process.env.CDN_URL
+          )
           
         );
         }
