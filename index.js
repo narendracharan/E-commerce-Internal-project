@@ -9,6 +9,16 @@ const cors = require("cors");
 //const multer = require("./middleware/multer");
 process.env["BASE_URL"] = "https://euser.techgropsedev.com:2087";
 process.env["CDN_URL"] = "https://d37jiv91kn6vpg.cloudfront.net"
+const mongoose = require("mongoose");
+
+mongoose.connect(
+  "mongodb+srv://narendracharan:MwXDBJTWBx3jPfQq@ecommerce.yonhe3a.mongodb.net/",
+  { useNewUrlParser: true }
+);
+const connection = mongoose.connection;
+connection.once("open", () => {
+  console.log("MongoDB connect successfully");
+});
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("dev"));
