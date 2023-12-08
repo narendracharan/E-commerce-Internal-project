@@ -209,7 +209,7 @@ exports.applyCoupan = async (req, res) => {
       .find({ user_Id: user_Id })
       .populate("products.product_Id");
     let productVarient = [];
-    for (let i = 0; i < carts.length; i++) {
+    for (let i = 0; i < cart.length; i++) {
       for (let k = 0; k < cart.length; k++) {
         //  for (let j = 0; j < cart[k].products.length; j++) {
         var varient = cart[k].product_Id.addVarient.find(
@@ -330,7 +330,7 @@ exports.orderSummery = async (req, res) => {
 exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;
-    const { quantity, product_Id } = req.body;
+    const { quantity,product_Id } = req.body;
     if (!quantity) {
       return res
         .status(201)
