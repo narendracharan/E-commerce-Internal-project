@@ -307,6 +307,7 @@ exports.orderSummery = async (req, res) => {
         (varient) => String(varient._id) === String(product[i].varient_Id)
       );
       let obj = {
+        cartId:product[i]._id,
         varient: varient,
         quantity:product[i].quantity,
         product:product[i].product_Id,
@@ -317,8 +318,8 @@ exports.orderSummery = async (req, res) => {
       success(res.statusCode, "Success", {
         carts,
         //  cartsTotal,
-        // shipping,
-        // Tax,
+        shipping,
+        Tax,
         // cartsTotalSum,
       })
     );
@@ -327,6 +328,7 @@ exports.orderSummery = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//===============================================================================================
 exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;
