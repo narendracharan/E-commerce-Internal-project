@@ -18,7 +18,8 @@ exports.productList = async (req, res) => {
       .populate("addVarient.attribute_Id")
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
-      .populate("category_Id");
+      .populate("category_Id")
+      .populate("category_name");
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -195,6 +196,8 @@ exports.trandingProduct = async (req, res) => {
           as: "products",
         },
       },
+      
+
     ]);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {

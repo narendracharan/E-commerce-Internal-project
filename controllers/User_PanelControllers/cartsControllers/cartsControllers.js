@@ -210,7 +210,7 @@ exports.applyCoupan = async (req, res) => {
       .populate("products.product_Id");
     let productVarient = [];
     for (let i = 0; i < cart.length; i++) {
-      for (let k = 0; k < cart.length; k++) {
+      for (let k = 0; k < carts.length; k++) {
         //  for (let j = 0; j < cart[k].products.length; j++) {
         var varient = cart[k].product_Id.addVarient.find(
           (varient) => String(varient._id) === String(carts[i].varient_Id)
@@ -230,7 +230,7 @@ exports.applyCoupan = async (req, res) => {
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
-        productVarient,
+       // productVarient,
         user_Id,
         // subtotal,
         // cartsTotalSum,
@@ -319,7 +319,7 @@ exports.orderSummery = async (req, res) => {
         carts,
         //  cartsTotal,
         shipping,
-        Tax,
+        // Tax,
         // cartsTotalSum,
       })
     );
@@ -331,7 +331,7 @@ exports.orderSummery = async (req, res) => {
 //===============================================================================================
 exports.editCart = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id;//cart-id
     const { quantity,product_Id } = req.body;
     if (!quantity) {
       return res
@@ -345,6 +345,7 @@ exports.editCart = async (req, res) => {
       .status(200)
       .json(success(success(res.statusCode, "Success", { carts })));
   } catch (err) {
+    
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
