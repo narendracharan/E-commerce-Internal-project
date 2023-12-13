@@ -178,6 +178,32 @@ exports.highDiscount = async (req, res) => {
   }
 };
 
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const productlist = await orderSchema.aggregate([
+//       { $unwind: "$products" },
+//       {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: 1 },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "_id",
+//           foreignField: "_id",
+//           as: "products",
+//         },
+//       },
+//     ]);
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+//===============================================================================
 exports.trandingProduct = async (req, res) => {
   try {
     const productlist = await orderSchema.aggregate([
@@ -186,18 +212,39 @@ exports.trandingProduct = async (req, res) => {
         $group: {
           _id: "$products.product_Id",
           count: { $sum: 1 },
-        },
+        }
       },
       {
         $lookup: {
           from: "products",
           localField: "_id",
           foreignField: "_id",
-          as: "products",
+          as: "productDetails",
         },
       },
-      
-
+      {
+        $unwind: "$productDetails"
+      },
+      {
+        $lookup: {
+          from: "brands",
+          localField: "productDetails.brand_Id",
+          foreignField: "_id",
+          as: "brandDetails",
+        },
+      },
+      {
+        $unwind: "$brandDetails"
+      },
+      {
+        $project: {
+          "_id": 1,
+          "count": 1,
+          "productDetails": 1,
+          "brand_Id": "$brandDetails._id",
+          "brandName_en": "$brandDetails.brandName_en"
+        }
+      }
     ]);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
@@ -205,7 +252,73 @@ exports.trandingProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//=============================================================rest api=====================
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const productlist = await orderSchema.aggregate([
+//        { $unwind: "$products" },
+//        {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: 1 },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "product_Id",
+//           foreignField: "_id",
+//           as: "productDetails",
+//           pipeline:[
+//             { $project:{productName_en:1,attribute_Id:1,profile_pic:1} },
+//           ]
+//         },
+//       },
+//       // {
+//       //   $unwind: "$productDetails"
+//       // },
+//       // {
+//       //   $lookup: {
+//       //     from: "brands",
+//       //     localField: "productDetails.brand_Id",
+//       //     foreignField: "_id",
+//       //     as: "brandDetails",
+//       //   },
+//       // },
+//       // {
+//       //   $unwind: "$brandDetails"
+//       // },
+//       // {
+//       //   $lookup: {
+//       //     from: "category",
+//       //     localField: "productDetails.category_Id",
+//       //     foreignField: "_id",
+//       //     as: "categoryDetails",
+//       //   },
+//       // },
+//       // {
+//       //   $unwind: "$categoryDetails"
+//        },
+      // {
+      //   $project: {
+      //     "_id": 1,
+      //     "count": 1,
+      //     "productDetails": 1,
+      //     "brand_Id": "$brandDetails._id",
+      //     "brandName_en": "$brandDetails.brandName_en",
+      //     "category_Id": "$categoryDetails._id",
+      //     "categoryName_en": "$categoryDetails.categoryName_en"
+      //   }
+     // }
+//     ]);
 
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+//===============================================================================================
 exports.productDiscount = async (req, res) => {
   try {
     const { Discount } = req.query;
