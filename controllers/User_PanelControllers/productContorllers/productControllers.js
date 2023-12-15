@@ -204,6 +204,55 @@ exports.highDiscount = async (req, res) => {
 //   }
 // };
 //===============================================================================
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const productlist = await orderSchema.aggregate([
+//       { $unwind: "$products" },
+//       {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: 1 },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "_id",
+//           foreignField: "_id",
+//           as: "productDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$productDetails"
+//       },
+//       {
+//         $lookup: {
+//           from: "brands",
+//           localField: "productDetails.brand_Id",
+//           foreignField: "_id",
+//           as: "brandDetails",
+//         },
+//       },
+//       {
+//         $unwind: "$brandDetails"
+//       },
+//       {
+//         $project: {
+//           "_id": 1,
+//           "count": 1,
+//           "productDetails": 1,
+//           "brand_Id": "$brandDetails._id",
+//           "brandName_en": "$brandDetails.brandName_en"
+//         }
+//       }
+//     ]);
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// }; this is  miane file
+//==================================================attribute name a rha ===========
 exports.trandingProduct = async (req, res) => {
   try {
     const productlist = await orderSchema.aggregate([
@@ -220,32 +269,58 @@ exports.trandingProduct = async (req, res) => {
           localField: "_id",
           foreignField: "_id",
           as: "productDetails",
-        },
-      },
-      {
-        $unwind: "$productDetails"
-      },
-      {
-        $lookup: {
-          from: "brands",
-          localField: "productDetails.brand_Id",
-          foreignField: "_id",
-          as: "brandDetails",
-        },
-      },
-      {
-        $unwind: "$brandDetails"
-      },
-      {
-        $project: {
-          "_id": 1,
-          "count": 1,
-          "productDetails": 1,
-          "brand_Id": "$brandDetails._id",
-          "brandName_en": "$brandDetails.brandName_en"
+          pipeline: [
+            {
+              $project: {
+                productName_en: 1,
+                product_Id: 1,
+                brand_Id: 1,
+                attribute_Id: 1,
+                addVarient: 1 // Include the addVarient field for further processing
+              }
+            },
+            {
+              $lookup: {
+                from: "brands",
+                localField: "brand_Id",
+                foreignField: "_id",
+                as: "brandDetails"
+              }
+            },
+            {
+              $unwind: "$brandDetails" // Unwind to access brand details
+            },
+            {
+              $lookup: {
+                from: "attributes",
+                localField: "addVarient.attribute_Id",
+                foreignField: "_id",
+                as: "attributeDetails"
+              }
+            },
+            {
+              $unwind: "$attributeDetails" // Unwind to access attribute details
+            },
+            {
+              $addFields: {
+                "addVarient.attributeName_en": "$attributeDetails.attributeName_en"
+              }
+            },
+            {
+              $project: {
+                productName_en: 1,
+                product_Id: 1,
+                brand_Id: 1,
+                brandName_en: "$brandDetails.brandName_en",
+                "addVarient.attribute_Id": 1,
+                "addVarient.attributeName_en": 1
+              }
+            }
+          ]
         }
       }
     ]);
+    
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
     console.log(err);
@@ -272,7 +347,7 @@ exports.trandingProduct = async (req, res) => {
 //           pipeline:[
 //             { $project:{productName_en:1,attribute_Id:1,profile_pic:1} },
 //           ]
-//         },
+//         },+
 //       },
 //       // {
 //       //   $unwind: "$productDetails"

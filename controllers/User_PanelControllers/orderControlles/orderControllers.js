@@ -227,7 +227,8 @@ exports.orderList = async (req, res) => {
         );
         let obj = {
           varient: varient,
-          products: orderList[i].products[j].product_Id,
+          products: orderList[i].products[j].product_Id ,
+          quantity: orderList[i].products[j].quantity,
           cartsTotal: orderList[i].cartsTotal,
           user_Id: orderList[i].user_Id,
           address_Id: orderList[i].address_Id,
@@ -243,6 +244,7 @@ exports.orderList = async (req, res) => {
     }
     res.status(200).json(success(res.status, "Success", { carts }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -284,7 +286,7 @@ exports.orderSuccessDetails = async (req, res) => {
     const _id = req.params.id;
     const Delivered = await orderSchema
       .find({ user_Id: _id })
-      .populate("products.product_Id");
+     // .populate("products.product_Id");
     console.log(Delivered);
     const orderData = Delivered.filter((x) => x.orderStatus == "Delivered");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
@@ -316,25 +318,38 @@ exports.cancelledOrder = async (req, res) => {
   }
 };
 
+// exports.IndeliveryOrder = async (req, res) => {
+//   try {
+//     const _id = req.params.id;
+//     const Delivered = await orderSchema
+//       .find({ user_Id: _id })
+//       .populate("products.product_Id");
+//     const orderData = Delivered.filter(
+//       (x) =>
+//         x.orderStatus == "Processing" ||
+//         "Packed" ||
+//         "Shipped" ||
+//         "Inprogress" ||
+//         "Pending"
+//     );
+//     res.status(200).json(success(res.statusCode, "Success", { orderData }));
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 exports.IndeliveryOrder = async (req, res) => {
   try {
     const _id = req.params.id;
-    const Delivered = await orderSchema
-      .find({ user_Id: _id })
-      .populate("products.product_Id");
-    const orderData = Delivered.filter(
-      (x) =>
-        x.orderStatus == "Processing" ||
-        "Packed" ||
-        "Shipped" ||
-        "Inprogress" ||
-        "Pending"
-    );
-    res.status(200).json(success(res.statusCode, "Success", { orderData }));
+    const approvedOrders = await orderSchema
+      .find({ user_Id: _id, orderStatus: "Approved" })
+     // .populate("products.product_Id");
+    
+    res.status(200).json(success(res.statusCode, "Success", { approvedOrders }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//==============================================================================================
 
 exports.orderShipped = async (req, res) => {
   try {
