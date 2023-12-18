@@ -276,7 +276,7 @@ exports.trandingProduct = async (req, res) => {
                 product_Id: 1,
                 brand_Id: 1,
                 attribute_Id: 1,
-                addVarient: 1 // Include the addVarient field for further processing
+                addVarient: 1 
               }
             },
             {
@@ -288,8 +288,8 @@ exports.trandingProduct = async (req, res) => {
               }
             },
             {
-              $unwind: "$brandDetails" // Unwind to access brand details
-            },
+              $unwind: "$brandDetails" 
+                       },
             {
               $lookup: {
                 from: "attributes",
@@ -299,7 +299,7 @@ exports.trandingProduct = async (req, res) => {
               }
             },
             {
-              $unwind: "$attributeDetails" // Unwind to access attribute details
+              $unwind: "$attributeDetails" 
             },
             {
               $addFields: {
