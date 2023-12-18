@@ -310,7 +310,7 @@ exports.cancelledOrder = async (req, res) => {
     const _id = req.params.id;
     const cancelled = await orderSchema
       .find({ user_Id: _id })
-      .populate("products.product_Id");
+     // .populate("products.product_Id");
     const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
