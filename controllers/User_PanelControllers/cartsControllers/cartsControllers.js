@@ -1,5 +1,5 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
-const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
+const coupanSchema = require ("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const cartSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
@@ -141,20 +141,60 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
+// exports.cartsList = async (req, res) => {
+//   try {
+//     const _id = req.params.id;
+//     const list = await cartsSchema
+//       .find({user_Id: _id })
+//       .populate("product_Id");
+//     let carts = [];
+//     for (let i = 0; i < list.length; i++) {
+//       //for (let j = 0; j < list[i].products.length; j++) {
+//       //console.log(list[i].products.length);
+//       var varient = list[i].product_Id.addVarient.find(
+//         (varient) => String(varient._id) === String(list[i].varient_Id)
+//       );
+//       var obj = {
+//         varient: varient,
+//         product_Id: list[i].product_Id,
+//         quantity: list[i].quantity,
+//         Price: list[i].Price,
+//         _id: list[i]._id,
+//       };
+//       carts.push(obj);
+//       // }
+//     }
+//     // const newCart = await cartSchema.findByIdAndUpdate(
+//     //   list._id,
+//     //   { products: carts },
+//     //   { new: true }
+//     // ).populate([
+//     //   {
+//     //     path: "products.product_Id",
+//     //    // select: "-type",
+//     //   },
+//     // ]);
+
+//     res.status(200).json(success(res.statusCode, "Success", { carts }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartsSchema
       .find({ user_Id: _id })
-      .populate("product_Id");
+      .populate("cart_Id");
+
     let carts = [];
     for (let i = 0; i < list.length; i++) {
-      //for (let j = 0; j < list[i].products.length; j++) {
-      //console.log(list[i].products.length);
-      var varient = list[i].product_Id.addVarient.find(
+      const varient = list[i].product_Id.addVarient.find(
         (varient) => String(varient._id) === String(list[i].varient_Id)
       );
-      var obj = {
+
+      const obj = {
         varient: varient,
         product_Id: list[i].product_Id,
         quantity: list[i].quantity,
@@ -162,23 +202,12 @@ exports.cartsList = async (req, res) => {
         _id: list[i]._id,
       };
       carts.push(obj);
-      // }
     }
-    // const newCart = await cartSchema.findByIdAndUpdate(
-    //   list._id,
-    //   { products: carts },
-    //   { new: true }
-    // ).populate([
-    //   {
-    //     path: "products.product_Id",
-    //    // select: "-type",
-    //   },
-    // ]);
 
-    res.status(200).json(success(res.statusCode, "Success", { carts }));
+    res.status(200).json({ success: true, message: "Success", carts });
   } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    console.error(err);
+    res.status(400).json({ success: false, message: err.message });
   }
 };
 
