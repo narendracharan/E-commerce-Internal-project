@@ -302,8 +302,21 @@ exports.trandingProduct = async (req, res) => {
               $unwind: "$attributeDetails" 
             },
             {
+              $lookup: {
+                from: "values",
+                localField: "addVarient.values_Id",
+                foreignField: "_id",
+                as: "valuesDetails"
+              }
+            },{
+              $unwind: "$valuesDetails"
+            },
+
+            {
               $addFields: {
-                "addVarient.attributeName_en": "$attributeDetails.attributeName_en"
+                "addVarient.attributeName_en": "$attributeDetails.attributeName_en",
+                "addVarient.valuesName_en": "$valuesDetails.valuesName_en"
+                
               }
             },
             {
@@ -311,9 +324,12 @@ exports.trandingProduct = async (req, res) => {
                 productName_en: 1,
                 product_Id: 1,
                 brand_Id: 1,
+                values_Id: 1,
                 brandName_en: "$brandDetails.brandName_en",
                 "addVarient.attribute_Id": 1,
-                "addVarient.attributeName_en": 1
+                "addVarient.attributeName_en": 1,
+                "addVarient.values_Id": 1,
+                "addVarient.valuesName_en":1
               }
             }
           ]
