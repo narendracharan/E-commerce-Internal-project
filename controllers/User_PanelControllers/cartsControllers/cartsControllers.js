@@ -181,6 +181,35 @@ exports.deleteProduct = async (req, res) => {
 //     res.status(400).json(error("Failed", res.statusCode));
 //   }
 // };
+//===========================================================================================================
+// exports.cartsList = async (req, res) => {
+//   try {
+//     const _id = req.params.id;
+//     const list = await cartsSchema
+//       .find({ user_Id: _id })
+//       .populate("cart_Id");
+
+//     let carts = [];
+//     for (let i = 0; i < list.length; i++) {
+//       const varient = list[i].product_Id.addVarient.find(
+//         (varient) => String(varient._id) === String(list[i].varient_Id)
+//       );
+
+//       const obj = {
+//         varient: varient,
+//         product_Id: list[i].product_Id,
+//         quantity: list[i].quantity,
+//         Price: list[i].Price,
+//         _id: list[i]._id,
+//       };
+//       carts.push(obj);
+//     }
+//     res.status(200).json({ success: true, message: "Success", carts });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(400).json({ success: false, message: err.message });
+//   }
+// };/////////////////////////////////////////////////////////////
 exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
@@ -190,26 +219,33 @@ exports.cartsList = async (req, res) => {
 
     let carts = [];
     for (let i = 0; i < list.length; i++) {
-      const varient = list[i].product_Id.addVarient.find(
-        (varient) => String(varient._id) === String(list[i].varient_Id)
+      const product = list[i].product_Id;
+      const varientId = list[i].varient_Id;      
+      const varient = product.addVarient.find(
+        (varient) => String(varient._id) === String(varientId)
       );
+      if (!varient) {
+        throw new Error(`Variant not found for product ${product._id}`);
+      }
 
       const obj = {
         varient: varient,
-        product_Id: list[i].product_Id,
+        product_Id: product,
         quantity: list[i].quantity,
         Price: list[i].Price,
         _id: list[i]._id,
       };
       carts.push(obj);
     }
-
     res.status(200).json({ success: true, message: "Success", carts });
   } catch (err) {
     console.error(err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+
+
 
 exports.cartCount = async (req, res) => {
   try {

@@ -111,7 +111,7 @@ exports.relatedProduct = async (req, res) => {
 exports.filterPrice = async (req, res) => {
   try {
     const { min, max } = req.body;
-    const categoryData = await productSchema.aggregate([
+    const list = await productSchema.aggregate([
       {
         $match: {
           $and: [
@@ -121,7 +121,7 @@ exports.filterPrice = async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(success(res.statusCode, "Success", { categoryData }));
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
