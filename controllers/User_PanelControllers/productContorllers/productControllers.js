@@ -19,7 +19,8 @@ exports.productList = async (req, res) => {
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
       .populate("category_Id")
-      .populate({ path: 'category_name', options: { strictPopulate: false } });
+      .populate("category_Id.categoryName_en")
+      //.populate({ path: 'category_name', options: { strictPopulate: false } });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
