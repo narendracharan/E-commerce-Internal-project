@@ -19,9 +19,10 @@ exports.productList = async (req, res) => {
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
       .populate("category_Id")
-      .populate("category_name");
+      .populate({ path: 'category_name', options: { strictPopulate: false } });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -118,7 +119,7 @@ exports.filterPrice = async (req, res) => {
             { "addVarient.Price": { $gte: +min } },
             { "addVarient.Price": { $lte: +max } },
           ],
-          
+
         },
       },
     ]);
