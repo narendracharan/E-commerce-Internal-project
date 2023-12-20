@@ -118,6 +118,7 @@ exports.filterPrice = async (req, res) => {
             { "addVarient.Price": { $gte: +min } },
             { "addVarient.Price": { $lte: +max } },
           ],
+          
         },
       },
     ]);
