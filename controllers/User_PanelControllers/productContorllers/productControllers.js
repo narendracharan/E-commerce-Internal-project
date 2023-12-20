@@ -22,7 +22,7 @@ exports.productList = async (req, res) => {
       .populate({ path: 'category_name', options: { strictPopulate: false } });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
