@@ -141,47 +141,47 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// exports.cartsList = async (req, res) => {
-//   try {
-//     const _id = req.params.id;
-//     const list = await cartsSchema
-//       .find({user_Id: _id })
-//       .populate("product_Id");
-//     let carts = [];
-//     for (let i = 0; i < list.length; i++) {
-//       //for (let j = 0; j < list[i].products.length; j++) {
-//       //console.log(list[i].products.length);
-//       var varient = list[i].product_Id.addVarient.find(
-//         (varient) => String(varient._id) === String(list[i].varient_Id)
-//       );
-//       var obj = {
-//         varient: varient,
-//         product_Id: list[i].product_Id,
-//         quantity: list[i].quantity,
-//         Price: list[i].Price,
-//         _id: list[i]._id,
-//       };
-//       carts.push(obj);
-//       // }
-//     }
-//     // const newCart = await cartSchema.findByIdAndUpdate(
-//     //   list._id,
-//     //   { products: carts },
-//     //   { new: true }
-//     // ).populate([
-//     //   {
-//     //     path: "products.product_Id",
-//     //    // select: "-type",
-//     //   },
-//     // ]);
+exports.cartsList = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const list = await cartsSchema
+      .find({user_Id: _id })
+      .populate("product_Id");
+    let carts = [];
+    for (let i = 0; i < list.length; i++) {
+      //for (let j = 0; j < list[i].products.length; j++) {
+      //console.log(list[i].products.length);
+      var varient = list[i].product_Id.addVarient.find(
+        (varient) => String(varient._id) === String(list[i].varient_Id)
+      );
+      var obj = {
+        varient: varient,
+        product_Id: list[i].product_Id,
+        quantity: list[i].quantity,
+        Price: list[i].Price,
+        _id: list[i]._id,
+      };
+      carts.push(obj);
+       }
+    
+    // const newCart = await cartSchema.findByIdAndUpdate(
+    //   list._id,
+    //   { products: carts },
+    //   { new: true }
+    // ).populate([
+    //   {
+    //     path: "products.product_Id",
+    //    // select: "-type",
+    //   },
+    // ]);
 
-//     res.status(200).json(success(res.statusCode, "Success", { carts }));
-//   } catch (err) {
-//     console.log(err);
-//     res.status(400).json(error("Failed", res.statusCode));
-//   }
-// };
-//===========================================================================================================
+    res.status(200).json(success(res.statusCode, "Success", { carts }));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+// //cart list
 // exports.cartsList = async (req, res) => {
 //   try {
 //     const _id = req.params.id;
@@ -204,48 +204,13 @@ exports.deleteProduct = async (req, res) => {
 //       };
 //       carts.push(obj);
 //     }
+
 //     res.status(200).json({ success: true, message: "Success", carts });
 //   } catch (err) {
 //     console.error(err);
 //     res.status(400).json({ success: false, message: err.message });
 //   }
-// };/////////////////////////////////////////////////////////////
-exports.cartsList = async (req, res) => {
-  try {
-    const _id = req.params.id;
-    const list = await cartsSchema
-      .find({ user_Id: _id })
-      .populate("cart_Id");
-
-    let carts = [];
-    for (let i = 0; i < list.length; i++) {
-      const product = list[i].product_Id;
-      const varientId = list[i].varient_Id;      
-      const varient = product.addVarient.find(
-        (varient) => String(varient._id) === String(varientId)
-      );
-      if (!varient) {
-        throw new Error(`Variant not found for product ${product._id}`);
-      }
-
-      const obj = {
-        varient: varient,
-        product_Id: product,
-        quantity: list[i].quantity,
-        Price: list[i].Price,
-        _id: list[i]._id,
-      };
-      carts.push(obj);
-    }
-    res.status(200).json({ success: true, message: "Success", carts });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
-
-
-
+// }
 
 exports.cartCount = async (req, res) => {
   try {

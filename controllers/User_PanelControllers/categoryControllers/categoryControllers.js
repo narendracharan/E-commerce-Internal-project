@@ -11,6 +11,7 @@ const productScroll = require("../../../models/Admin_PanelSchema/homeScreenSchem
 const ProductSide = require("../../../models/Admin_PanelSchema/homeScreenSchema/productSide");
 const scrolleBanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/scrolleBanner");
 const sidebanner = require("../../../models/Admin_PanelSchema/homeScreenSchema/sidebanner");
+
 const {
   productSideBanner,
 } = require("../../Admin_Panel/homeScreenControllers/homeScreenControllers");
@@ -216,3 +217,20 @@ exports.BannerList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//==========================================================
+exports.categoryProductList = async (req, res) => {
+  try {
+    const categoriesWithProducts = await productSchema.find({})
+      .populate({
+        path: 'product',
+        model: 'Products',
+        options: { sort: { _id: -1 } }
+      });
+
+    res.status(200).json(success(res.statusCode, 'Success', { categoriesWithProducts }));
+  } catch (err) {
+    res.status(400).json(error('Failed', res.statusCode));
+  }
+};
+
+
