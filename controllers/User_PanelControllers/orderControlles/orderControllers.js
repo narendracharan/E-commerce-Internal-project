@@ -205,9 +205,6 @@ exports.orderDetails = async (req, res) => {
   }
 };
 
-
-
-
 exports.orderList = async (req, res) => {
   try {
     const _id = req.params.id;

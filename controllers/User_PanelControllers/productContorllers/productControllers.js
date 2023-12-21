@@ -8,10 +8,17 @@ const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/revi
 const { error, success } = require("../../response");
 const moment = require("moment");
 
+
+//
 exports.productList = async (req, res) => {
   try {
+    const { productName_en } = req.body; 
+    const query = productName_en
+      ? { productName_en: { $regex: productName_en, $options: "i" } }
+      : {};
+
     const list = await productSchema
-      .find({})
+      .find(query)
       .sort({ _id: -1 })
       .populate("brand_Id")
       .populate("addVarient.values_Id")
@@ -19,15 +26,14 @@ exports.productList = async (req, res) => {
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
       .populate("category_Id")
-      .populate("category_Id.categoryName_en")
-      //.populate({ path: 'category_name', options: { strictPopulate: false } });
+      .populate("category_Id.categoryName_en");
+
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 exports.userProductDetails = async (req, res) => {
   try {
     const list = await productSchema
@@ -84,21 +90,7 @@ exports.productDetails = async (req, res) => {
   }
 };
 
-exports.productSearch = async (req, res) => {
-  try {
-    const productName_en = req.body.productName_en;
-    const productData = await productSchema.find({
-      productName_en: { $regex: productName_en, $options: "i" },
-    });
-    if (productData.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { productData }));
-    }
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+
 
 exports.relatedProduct = async (req, res) => {
   try {
@@ -180,34 +172,6 @@ exports.highDiscount = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
-// exports.trandingProduct = async (req, res) => {
-//   try {
-//     const productlist = await orderSchema.aggregate([
-//       { $unwind: "$products" },
-//       {
-//         $group: {
-//           _id: "$products.product_Id",
-//           count: { $sum: 1 },
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "products",
-//           localField: "_id",
-//           foreignField: "_id",
-//           as: "products",
-//         },
-//       },
-//     ]);
-//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
-//   } catch (err) {
-//     console.log(err);
-//     res.status(400).json(error("Failed", res.statusCode));
-//   }
-// };
-//===============================================================================
-
 //===================================================================================
 exports.trandingProduct = async (req, res) => {
   try {
