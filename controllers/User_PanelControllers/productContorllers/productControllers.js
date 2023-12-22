@@ -9,13 +9,19 @@ const { error, success } = require("../../response");
 const moment = require("moment");
 
 
-//
+
 exports.productList = async (req, res) => {
-  try {
-    const { productName_en } = req.body; 
+  
+    const productName_en = req.body.productName_en; 
+    if (!productName_en) {
+      return res
+        .status(201)
+        .json(error("Please Provide Search Key", res.statusCode));
+    }
     const query = productName_en
       ? { productName_en: { $regex: productName_en, $options: "i" } }
       : {};
+      try {
 
     const list = await productSchema
       .find(query)
@@ -35,6 +41,7 @@ exports.productList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 exports.userProductDetails = async (req, res) => {
   try {
     const list = await productSchema
