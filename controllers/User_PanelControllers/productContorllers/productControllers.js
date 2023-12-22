@@ -26,6 +26,7 @@ exports.productList = async (req, res) => {
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
       .populate("category_Id")
+    
       .populate("category_Id.categoryName_en");
 
     res.status(200).json(success(res.statusCode, "Success", { list }));
@@ -50,6 +51,7 @@ exports.userProductDetails = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+
 
 exports.productDetails = async (req, res) => {
   try {
@@ -249,6 +251,7 @@ exports.trandingProduct = async (req, res) => {
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
                 "addVarient.values_Id": 1,
+                "addVarient.product_Pic":1,
                 "addVarient.valuesName_en":1
               }
             }
