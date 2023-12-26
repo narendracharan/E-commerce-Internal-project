@@ -138,7 +138,7 @@ exports.createOrder = async (req, res) => {
       varient.stockQuantity = stock;
       await deletQuatity.save();
     }
-    const deleteCard = await cartsSchema.findOneAndDelete({_id: product.product_Id });
+    const deleteCard = await cartsSchema.findOneAndDelete({ user_Id: user_Id, 'products.product_Id':{ $in: products}});
 
     const updated = await orderSchema
       .findOne({
@@ -212,6 +212,7 @@ exports.orderList = async (req, res) => {
       .find({ user_Id: _id })
       .populate("products.product_Id")
       .populate("user_Id")
+
       .sort({
         createdAt: -1,
       });
@@ -230,7 +231,7 @@ exports.orderList = async (req, res) => {
           user_Id: orderList[i].user_Id,
           address_Id: orderList[i].address_Id,
           deliverdBy: orderList[i].deliverdBy,
-          taxPrice: orderList[i].taxPrice,
+         taxPrice: orderList[i].taxPrice,
           shippingPrice: orderList[i].shippingPrice,
           orderStatus: orderList[i].orderStatus,
           orderStatus_ar: orderList[i].orderStatus_ar,
