@@ -1,5 +1,5 @@
 const productSchema = require("../../../models/Admin_PanelSchema/categorySchema/productSchema");
-const coupanSchema = require ("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
+const coupanSchema = require("../../../models/Admin_PanelSchema/coupanSchema/coupanSchema");
 const cartsSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const cartSchema = require("../../../models/User_PanelSchema/cartSchema/cartsSchema");
 const userSchema = require("../../../models/User_PanelSchema/userSchema/userSchema");
@@ -40,7 +40,8 @@ exports.addToCart = async (req, res) => {
         .status(201)
         .json(error("Please provide user_Id!", res.statusCode));
     }
-    let carts;
+    let carts; 
+  //cartlist  
     // carts = await cartSchema.findOne({ user_Id: user_Id });
     // if (carts) {
     //   const newproducts = carts.products.filter(
@@ -138,8 +139,7 @@ exports.deleteProduct = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { item }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+  }};
 
 // exports.cartsList = async (req, res) => {
 //   try {
@@ -163,7 +163,7 @@ exports.deleteProduct = async (req, res) => {
 //       };
 //       carts.push(obj);
 //        }
-    
+
 //     // const newCart = await cartSchema.findByIdAndUpdate(
 //     //   list._id,
 //     //   { products: carts },
@@ -186,9 +186,8 @@ exports.cartsList = async (req, res) => {
   try {
     const _id = req.params.id;
     const list = await cartSchema
-      .find({user_Id: _id})
+      .find({ user_Id: _id })
       .populate(["product_Id"]);
-
     let carts = [];
     for (let i = 0; i < list.length; i++) {
       const varient = list[i].product_Id.addVarient.find(
@@ -204,7 +203,6 @@ exports.cartsList = async (req, res) => {
       };
       carts.push(obj);
     }
-
     res.status(200).json({ success: true, message: "Success", carts });
   } catch (err) {
     console.error(err);
@@ -259,7 +257,7 @@ exports.applyCoupan = async (req, res) => {
     res.status(200).json(
       success(res.statusCode, "Success", {
         DiscountType,
-       // productVarient,
+        // productVarient,
         user_Id,
         // subtotal,
         // cartsTotalSum,
@@ -336,10 +334,10 @@ exports.orderSummery = async (req, res) => {
         (varient) => String(varient._id) === String(product[i].varient_Id)
       );
       let obj = {
-        cartId:product[i]._id,
+        cartId: product[i]._id,
         varient: varient,
-        quantity:product[i].quantity,
-        product:product[i].product_Id,
+        quantity: product[i].quantity,
+        product: product[i].product_Id,
       };
       carts.push(obj);
     }
@@ -361,7 +359,7 @@ exports.orderSummery = async (req, res) => {
 exports.editCart = async (req, res) => {
   try {
     const id = req.params.id;//cart-id
-    const { quantity,product_Id } = req.body;
+    const { quantity, product_Id } = req.body;
     if (!quantity) {
       return res
         .status(201)
@@ -374,7 +372,7 @@ exports.editCart = async (req, res) => {
       .status(200)
       .json(success(success(res.statusCode, "Success", { carts })));
   } catch (err) {
-    
+
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }

@@ -7,7 +7,7 @@ const path = require("path");
 const commonRoutes = require("./routes/commonRoutes");
 const cors = require("cors");
 //const multer = require("./middleware/multer");
-process.env["BASE_URL"] = "https://euser.techgropsedev.com:2087";
+process.env["BASE_URL"] = "https://ec2-52-66-186-107.ap-south-1.compute.amazonaws.com:2087";
 process.env["CDN_URL"] = "d37jiv91kn6vpg.cloudfront.net"
 const mongoose = require("mongoose");
 
