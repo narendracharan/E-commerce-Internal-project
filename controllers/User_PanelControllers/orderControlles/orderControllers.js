@@ -138,7 +138,7 @@ exports.createOrder = async (req, res) => {
       varient.stockQuantity = stock;
       await deletQuatity.save();
     }
-    const deleteCard = await cartsSchema.findOneAndDelete({ user_Id: user_Id });
+    const deleteCard = await cartsSchema.findOneAndDelete({_id: product.product_Id });
 
     const updated = await orderSchema
       .findOne({
@@ -340,9 +340,9 @@ exports.IndeliveryOrder = async (req, res) => {
     const approvedOrders = await orderSchema
       .find({
         user_Id: _id,
-        orderStatus: { $in: ["Pending"] }
+        orderStatus: { $in: [ "Pending"] }
       })
-     // .populate("products.product_Id");
+     .populate("products.product_Id");
 
     res.status(200).json(success(res.statusCode, "Success", { approvedOrders }));
   } catch (err) {

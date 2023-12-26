@@ -8,21 +8,15 @@ const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/revi
 const { error, success } = require("../../response");
 const moment = require("moment");
 
-
-
 exports.productList = async (req, res) => {
-  
     const productName_en = req.body.productName_en; 
     if (!productName_en) {
-      return res
-        .status(201)
-        .json(error("Please Provide Search Key", res.statusCode));
+      return res.status(201).json(error("Please Provide Search Key", res.statusCode));
     }
     const query = productName_en
       ? { productName_en: { $regex: productName_en, $options: "i" } }
       : {};
-      try {
-
+ try {
     const list = await productSchema
       .find(query)
       .sort({ _id: -1 })
@@ -32,7 +26,6 @@ exports.productList = async (req, res) => {
       .populate("subSubcategory_Id")
       .populate("Subcategory_Id")
       .populate("category_Id")
-    
       .populate("category_Id.categoryName_en");
 
     res.status(200).json(success(res.statusCode, "Success", { list }));
@@ -41,7 +34,7 @@ exports.productList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//=============================================================================================
 exports.userProductDetails = async (req, res) => {
   try {
     const list = await productSchema
