@@ -23,6 +23,7 @@ app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("dev"));
 app.set("view engine", "ejs");
+
 const staticPath = path.join(__dirname, "./public");
 
 app.use("/", commonRoutes);
