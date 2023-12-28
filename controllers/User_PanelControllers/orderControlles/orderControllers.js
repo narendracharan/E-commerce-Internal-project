@@ -94,6 +94,7 @@ exports.createOrder = async (req, res) => {
       object.quantity = carts[i].quantity;
       object.Price = carts[i].Price;
       object.varient_Id = carts[i].varient_Id;
+     
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({
         _id: carts[i].product_Id,
@@ -285,14 +286,25 @@ exports.orderSuccessDetails = async (req, res) => {
     const _id = req.params.id;
     const Delivered = await orderSchema
       .find({ user_Id: _id })
-    // .populate("products.product_Id");
-    console.log(Delivered);
-    const orderData = Delivered.filter((x) => x.orderStatus == "Delivered");
+     .populate("products.product_Id");
+  //  console.log(Delivered);
+    const orderData = Delivered.filter((x) => x.orderStatus == "Delivered")
+  orderData.forEach(order => {
+      let cartsTotal = 0; 
+      order.products.forEach(product => {
+        
+        const totalPriceForProduct = product.quantity * product.Price;
+        cartsTotal += totalPriceForProduct;
+      });
+      order.cartsTotal = cartsTotal; 
+    });
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 exports.orderReview = async (req, res) => {
   try {
@@ -309,8 +321,17 @@ exports.cancelledOrder = async (req, res) => {
     const _id = req.params.id;
     const cancelled = await orderSchema
       .find({ user_Id: _id })
-    // .populate("products.product_Id");
-    const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled");
+    .populate("products.product_Id");
+    
+    const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled")
+    orderData.forEach(order => {
+      let cartsTotal = 0; 
+      order.products.forEach(product => {
+        const totalPriceForProduct = product.quantity * product.Price;
+        cartsTotal -= totalPriceForProduct;
+      });
+      order.cartsTotal = cartsTotal; 
+    });
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -336,21 +357,55 @@ exports.cancelledOrder = async (req, res) => {
 //     res.status(400).json(error("Failed", res.statusCode));
 //   }
 // };
+/////////////////////////////////////////////////
+
+// exports.IndeliveryOrder = async (req, res) => {
+//   try {
+//     const _id = req.params.id;
+//     const approvedOrders = await orderSchema
+//       .find({
+//         user_Id: _id,
+//         orderStatus: { $in: [ "Pending"] }
+//       })
+//      .populate("products.product_Id");
+//      for (let i = 0; i < carts.length; i++) {
+//       const totalPriceForProduct = carts[i].quantity + carts[i].Price;
+//       cartsTotal += totalPriceForProduct;
+// }
+//     res.status(200).json(success(res.statusCode, "Success", { approvedOrders }));
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+///////////////////////////////////////////
 exports.IndeliveryOrder = async (req, res) => {
   try {
     const _id = req.params.id;
     const approvedOrders = await orderSchema
       .find({
         user_Id: _id,
-        orderStatus: { $in: [ "Pending"] }
+        orderStatus: { $in: ["Pending"] }
       })
-     .populate("products.product_Id");
+      .populate("products.product_Id");
+
+    
+    approvedOrders.forEach(order => {
+      let cartsTotal = 0; 
+      order.products.forEach(product => {
+        
+        const totalPriceForProduct = product.quantity * product.Price;
+        cartsTotal += totalPriceForProduct;
+      });
+      order.cartsTotal = cartsTotal; 
+    });
 
     res.status(200).json(success(res.statusCode, "Success", { approvedOrders }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
 
 //==============================================================================================
 

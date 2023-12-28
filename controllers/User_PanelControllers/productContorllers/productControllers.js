@@ -49,7 +49,7 @@ exports.userProductDetails = async (req, res) => {
   }
 };
 
-
+//===============================================================================================
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;
