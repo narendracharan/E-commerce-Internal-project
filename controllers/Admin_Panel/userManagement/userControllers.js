@@ -172,6 +172,7 @@ exports.userLogin = async (req, res) => {
         .json(error("User Email and Password Are Not Valid", res.statusCode));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

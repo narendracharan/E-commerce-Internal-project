@@ -10,9 +10,6 @@ const moment = require("moment");
 
 exports.productList = async (req, res) => {
     const productName_en = req.body.productName_en; 
-    if (!productName_en) {
-      return res.status(201).json(error("Please Provide Search Key", res.statusCode));
-    }
     const query = productName_en
       ? { productName_en: { $regex: productName_en, $options: "i" } }
       : {};
