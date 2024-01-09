@@ -269,6 +269,8 @@ exports.trandingProduct = async (req, res) => {
                 brandName_en: "$brandDetails.brandName_en",
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
+                "addVarient.Price":1,
+                "addVarient.stockQuantity":1,
                 "addVarient.values_Id": 1,
                 "addVarient.product_Pic":1,
                 "addVarient.valuesName_en":1
@@ -453,6 +455,64 @@ exports.DealsOfDay = async (req, res) => {
   }
 };
 
+// exports.discountProduct = async (req, res) => {
+//   try {
+//     const offerList = await offerSchema.aggregate([
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "products.product_Id",
+//           foreignField: "_id",
+//           as: "products",
+//         },
+//       },
+//       { $sort: { Discount: -1 } },
+//     ]);
+
+//     res.status(201).json(success(res.statusCode, "Success", { offerList }));
+//   } catch (err) {
+//     res.status(400).json(error("Error in Discount Product"));
+//   }
+// };
+
+
+
+// exports.discountProduct = async (req, res) => {
+//   try {
+//     const offerList = await offerSchema.aggregate([
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "products.product_Id",
+//           foreignField: "_id",
+//           as: "productDetails", 
+//         },
+//       },
+//       { $unwind: "$productDetails" }, 
+//       { $sort: { "productDetails.Discount": -1 } }, 
+//       {
+//         $project: {
+//           _id: "$productDetails._id",
+//           productName: "$productDetails.productName_en",
+//           productDescription: "$productDetails.Description",
+//           brand_Id:"$productDetails.brand_Id",
+
+//           product_Pic:"$productDetails.addVarient.product_Pic",
+//           discount: "$productDetails.Discount",
+          
+//         },
+//       },
+//     ]);
+
+//     res.status(201).json(success(res.statusCode, "Success", { offerList }));
+//   } catch (err) {
+//     res.status(400).json(error("Error in Discount Product"));
+//   }
+// };
+
+
+
+
 exports.discountProduct = async (req, res) => {
   try {
     const offerList = await offerSchema.aggregate([
@@ -461,10 +521,26 @@ exports.discountProduct = async (req, res) => {
           from: "products",
           localField: "products.product_Id",
           foreignField: "_id",
-          as: "products",
+          as: "productDetails",
         },
       },
-      { $sort: { Discount: -1 } },
+      
+      { $unwind: "$productDetails" },
+      
+      { $sort: { "productDetails.Discount": -1 } },
+      {
+        $project: {
+          _id: "$productDetails._id",
+          productName: "$productDetails.productName_en",
+          productDescription: "$productDetails.Description",
+          category_Id:"$productDetails.category_Id",
+          addVarient:"$productDetails.addVarient",
+          product_Pic:"$productDetails.addVarient.product_Pic",
+          brand_Id: "$productDetails.brand_Id",
+          discount: "$productDetails.Discount",
+         
+        },
+      },
     ]);
 
     res.status(201).json(success(res.statusCode, "Success", { offerList }));
