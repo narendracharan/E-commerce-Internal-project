@@ -48,6 +48,29 @@ exports.userProductDetails = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+//============
+exports.productSearch = async (req, res) => {
+  try {
+    const productName_en = req.body.productName_en;
+    
+    if (typeof productName_en === 'string') {
+      const productData = await productSchema.find({
+        productName_en: { $regex: new RegExp(productName_en, 'i') },
+      });
+
+      if (productData.length > 0) {
+        return res.status(200).json(success(res.statusCode, "Success", { productData }));
+      }
+    } else {
+      
+      return res.status(400).json(error("Invalid input", res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
 
 //===============================================================================================
 exports.productDetails = async (req, res) => {
@@ -88,7 +111,6 @@ exports.productDetails = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 
 exports.relatedProduct = async (req, res) => {
@@ -466,7 +488,7 @@ exports.similarProduct = async (req, res) => {
   } catch (err) {
     res.status(400).json(error("Error in Similar Product", res.statusCode));
   }
-};
+ };
 
 exports.newArriwalProduct = async (req, res) => {
   try {

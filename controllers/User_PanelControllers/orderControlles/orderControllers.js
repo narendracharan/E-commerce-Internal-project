@@ -94,7 +94,6 @@ exports.createOrder = async (req, res) => {
       object.quantity = carts[i].quantity;
       object.Price = carts[i].Price;
       object.varient_Id = carts[i].varient_Id;
-     
       const dis = await offerSchema.find({ product_Id: carts[i].product_Id });
       var deletQuatity = await productSchema.findById({
         _id: carts[i].product_Id,
@@ -139,8 +138,11 @@ exports.createOrder = async (req, res) => {
       varient.stockQuantity = stock;
       await deletQuatity.save();
     }
-    const productIdsToDelete = products.map(product => product.product_Id);
-    const deleteCard = await cartsSchema.findOneAndDelete({ user_Id: user_Id, 'products.product_Id':{ $in: productIdsToDelete}});
+    // const productIdsToDelete = products.map(product => product.product_Id);
+    // const deleteCard = await cartsSchema.deleteMany({product_Id:products.product_Id } );
+    const productIdsToDelete = products.filter(product => product.product_Id).map(product => product.product_Id);
+       const deleteCard = await cartsSchema.deleteMany({ product_Id: { $in: productIdsToDelete } });
+
 
     const updated = await orderSchema
       .findOne({
@@ -188,7 +190,7 @@ exports.createOrder = async (req, res) => {
     //   });
     res.status(200).json(success(res.statusCode, "Success", { newCarts }));
   } catch (err) {
-    console.log(err);
+  //  console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -233,7 +235,7 @@ exports.orderList = async (req, res) => {
           user_Id: orderList[i].user_Id,
           address_Id: orderList[i].address_Id,
           deliverdBy: orderList[i].deliverdBy,
-         taxPrice: orderList[i].taxPrice,
+          taxPrice: orderList[i].taxPrice,
           shippingPrice: orderList[i].shippingPrice,
           orderStatus: orderList[i].orderStatus,
           orderStatus_ar: orderList[i].orderStatus_ar,
@@ -324,6 +326,7 @@ exports.cancelledOrder = async (req, res) => {
     .populate("products.product_Id");
     
     const orderData = cancelled.filter((x) => x.orderStatus == "Cancelled")
+
     orderData.forEach(order => {
       let cartsTotal = 0; 
       order.products.forEach(product => {
@@ -332,6 +335,7 @@ exports.cancelledOrder = async (req, res) => {
       });
       order.cartsTotal = cartsTotal; 
     });
+    
     res.status(200).json(success(res.statusCode, "Success", { orderData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -388,7 +392,6 @@ exports.IndeliveryOrder = async (req, res) => {
       })
       .populate("products.product_Id");
 
-    
     approvedOrders.forEach(order => {
       let cartsTotal = 0; 
       order.products.forEach(product => {
@@ -404,8 +407,6 @@ exports.IndeliveryOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
-
 
 //==============================================================================================
 
