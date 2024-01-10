@@ -214,6 +214,7 @@ exports.trandingProduct = async (req, res) => {
             {
               $project: {
                 productName_en: 1,
+                like:1,
                 product_Id: 1,
                 brand_Id: 1,
                 attribute_Id: 1,
@@ -266,10 +267,12 @@ exports.trandingProduct = async (req, res) => {
                 product_Id: 1,
                 brand_Id: 1,
                 values_Id: 1,
+                like:1,
                 brandName_en: "$brandDetails.brandName_en",
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
                 "addVarient.Price":1,
+                "addVarient.oldPrice":1,
                 "addVarient.stockQuantity":1,
                 "addVarient.values_Id": 1,
                 "addVarient.product_Pic":1,
@@ -409,6 +412,7 @@ exports.popularProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 
 exports.categoryProduct = async (req, res) => {
   try {
