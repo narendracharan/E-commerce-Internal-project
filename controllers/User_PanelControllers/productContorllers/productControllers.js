@@ -48,7 +48,7 @@ exports.userProductDetails = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
-//============
+//============================================================================================
 exports.productSearch = async (req, res) => {
   try {
     const productName_en = req.body.productName_en;
@@ -214,6 +214,8 @@ exports.trandingProduct = async (req, res) => {
             {
               $project: {
                 productName_en: 1,
+                ratings: 1,
+                totalRating: 1,
                 like:1,
                 product_Id: 1,
                 brand_Id: 1,
@@ -231,7 +233,7 @@ exports.trandingProduct = async (req, res) => {
             },
             {
               $unwind: "$brandDetails" 
-                       },
+            },
             {
               $lookup: {
                 from: "attributes",
@@ -267,7 +269,9 @@ exports.trandingProduct = async (req, res) => {
                 product_Id: 1,
                 brand_Id: 1,
                 values_Id: 1,
+                ratings:1,
                 like:1,
+    
                 brandName_en: "$brandDetails.brandName_en",
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
