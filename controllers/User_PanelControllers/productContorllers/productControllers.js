@@ -194,6 +194,109 @@ exports.highDiscount = async (req, res) => {
   }
 };
 //===================================================================================
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const productlist = await orderSchema.aggregate([
+//       { $unwind: "$products" },
+//       {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: 1 },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "_id",
+//           foreignField: "_id",
+//           as: "productDetails",
+//           pipeline: [
+//             {
+//               $project: {
+//                 varient_Id:1,
+//                 productName_en: 1,
+//                 ratings: 1,
+//                 totalRating: 1,
+//                 like:1,
+//                 product_Id: 1,
+//                 brand_Id: 1,
+//                 attribute_Id: 1,
+//                 addVarient: 1 
+//               }
+//             },
+//             {
+//               $lookup: {
+//                 from: "brands",
+//                 localField: "brand_Id",
+//                 foreignField: "_id",
+//                 as: "brandDetails"
+//               }
+//             },
+//             {
+//               $unwind: "$brandDetails" 
+//             },
+//             {
+//               $lookup: {
+//                 from: "attributes",
+//                 localField: "addVarient.attribute_Id",
+//                 foreignField: "_id",
+//                 as: "attributeDetails"
+//               }
+//             },
+//             {
+//               $unwind: "$attributeDetails" 
+//             },
+//             {
+//               $lookup: {
+//                 from: "values",
+//                 localField: "addVarient.values_Id",
+//                 foreignField: "_id",
+//                 as: "valuesDetails"
+//               }
+//             },{
+//               $unwind: "$valuesDetails"
+//             },
+
+//             {
+//               $addFields: {
+//                 "addVarient.attributeName_en": "$attributeDetails.attributeName_en",
+//                 "addVarient.valuesName_en": "$valuesDetails.valuesName_en"
+                
+//               }
+//             },
+//             {
+//               $project: {
+                
+//                 productName_en: 1,
+//                 product_Id: 1,
+//                 brand_Id: 1,
+//                 values_Id: 1,
+//                 ratings:1,
+//                 like:1,
+//                 brandName_en: "$brandDetails.brandName_en",
+
+//                 "addVarient.attribute_Id": 1,
+//                 "addVarient.attributeName_en": 1,
+//                 "addVarient.Price":1,
+//                 "addVarient.oldPrice":1,
+//                 "addVarient.stockQuantity":1,
+//                 "addVarient.values_Id": 1,
+//                 "addVarient.product_Pic":1,
+//                 "addVarient.valuesName_en":1
+//               }
+//             }
+//           ]
+//         }
+//       }
+//     ]);
+    
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+//=============================================================rest api=====================
 exports.trandingProduct = async (req, res) => {
   try {
     const productlist = await orderSchema.aggregate([
@@ -214,73 +317,22 @@ exports.trandingProduct = async (req, res) => {
             {
               $project: {
                 productName_en: 1,
-                ratings: 1,
-                totalRating: 1,
-                like:1,
-                product_Id: 1,
-                brand_Id: 1,
-                attribute_Id: 1,
-                addVarient: 1 
-              }
-            },
-            {
-              $lookup: {
-                from: "brands",
-                localField: "brand_Id",
-                foreignField: "_id",
-                as: "brandDetails"
-              }
-            },
-            {
-              $unwind: "$brandDetails" 
-            },
-            {
-              $lookup: {
-                from: "attributes",
-                localField: "addVarient.attribute_Id",
-                foreignField: "_id",
-                as: "attributeDetails"
-              }
-            },
-            {
-              $unwind: "$attributeDetails" 
-            },
-            {
-              $lookup: {
-                from: "values",
-                localField: "addVarient.values_Id",
-                foreignField: "_id",
-                as: "valuesDetails"
-              }
-            },{
-              $unwind: "$valuesDetails"
-            },
-
-            {
-              $addFields: {
-                "addVarient.attributeName_en": "$attributeDetails.attributeName_en",
-                "addVarient.valuesName_en": "$valuesDetails.valuesName_en"
-                
-              }
-            },
-            {
-              $project: {
-                productName_en: 1,
                 product_Id: 1,
                 brand_Id: 1,
                 values_Id: 1,
-                ratings:1,
-                like:1,
-    
+                ratings: 1,
+                like: 1,
                 brandName_en: "$brandDetails.brandName_en",
+
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
-                "addVarient.Price":1,
-                "addVarient.oldPrice":1,
-                "addVarient.stockQuantity":1,
+                "addVarient.Price": 1,
+                "addVarient.oldPrice": 1,
+                "addVarient.stockQuantity": 1,
                 "addVarient.values_Id": 1,
-                "addVarient.product_Pic":1,
-                "addVarient.valuesName_en":1
+                "addVarient.product_Pic": 1,
+                "addVarient.valuesName_en": 1,
+                "addVarient.varient_Id": "$addVarient._id", 
               }
             }
           ]
@@ -294,7 +346,6 @@ exports.trandingProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-//=============================================================rest api=====================
 
 //===============================================================================================
 exports.productDiscount = async (req, res) => {
