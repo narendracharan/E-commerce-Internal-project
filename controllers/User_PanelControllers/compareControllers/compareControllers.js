@@ -36,7 +36,7 @@ exports.compareList = async (req, res) => {
     const comparelist = await compareSchema.find({})
       .populate([{
         path: "product_Id",
-        select: "productName_en  addVarient    product_Pic  Price  category_Id  brand_Id",
+        select: "productName_en  addVarient ratings   product_Pic  Price  category_Id  brand_Id",
         populate: {
           path: "brand_Id category_Id addVarient", 
           select: "brandName_en  categoryName_en  attribute_Id", 
