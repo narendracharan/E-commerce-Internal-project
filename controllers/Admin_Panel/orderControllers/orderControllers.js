@@ -49,13 +49,15 @@ exports.orderSearch = async (req, res) => {
 
 exports.orderDetails = async (req, res) => {
   try {
-    const id = req.params.id;
+    const _id = req.params.id;
     const orderDetails = await orderSchema
-      .findById(id)
+      .findById(_id)
       .populate("products.product_Id")
+      .populate("user_Id")
       .populate("address_Id");
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
