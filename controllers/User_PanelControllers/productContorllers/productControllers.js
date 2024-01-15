@@ -379,11 +379,12 @@ exports.ratingProduct = async (req, res) => {
 exports.rating = async (req, res) => {
   try {
     const { _id } = req.body;
+    
     const { star, product_Id } = req.body;
     const product = await productSchema.findById(product_Id);
     let alreadyRated = product.ratings.find((user_Id) => user_Id.postedby);
     if (alreadyRated) {
-      const updateRating = await product.updateOne(
+      const updateRating = await product.findById(  
         {
           ratings: { $elemMatch: alreadyRated },
         },
@@ -397,12 +398,14 @@ exports.rating = async (req, res) => {
       res
         .status(200)
         .json(success(res.statusCode, "Success", { updateRating }));
-    } else {
+  }
+  else {
       let totalRating = 0;
       const ralatedProduct = await productSchema.findByIdAndUpdate(
         product_Id,
         {
-          $push: {
+          $set: { 
+        
             ratings: {
               star: star,
               postedby: _id,
@@ -432,8 +435,9 @@ exports.rating = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+  };
+}
+
 
 exports.Brandlist = async (req, res) => {
   try {
