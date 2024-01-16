@@ -431,7 +431,7 @@ exports.rating = async (req, res) => {
       res
         .status(200)
         .json(success(res.statusCode, "Success", { ralatedProduct }));
-    }
+     }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

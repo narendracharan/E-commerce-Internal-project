@@ -9,6 +9,7 @@ const {
   coupanDetails,
   editCart,
   applyCoupanToAll,
+  updateQuatity,
   addProducts,
 } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
@@ -22,6 +23,7 @@ router.post("/carts-summery/:id", tokenAuthorisationUser, orderSummery);
 router.post("/cart-count/:id", tokenAuthorisationUser, cartCount);
 router.post("/coupan-details", tokenAuthorisationUser, coupanDetails);
 router.post("/edit-card/:id",tokenAuthorisationUser,editCart)
+router.post("/updateQuatity",tokenAuthorisationUser,updateQuatity)
 router.post("/apply-coupan-to-all/:id", tokenAuthorisationUser, applyCoupanToAll);
 
 module.exports = router;

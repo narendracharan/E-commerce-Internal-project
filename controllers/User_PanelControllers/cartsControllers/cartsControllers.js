@@ -395,7 +395,7 @@ exports.updateQuatity = async (req, res) => {
     const carts = await cartSchema.findOne({ product_Id: prod_Id });
     carts.quantity = carts.quantity + +quantity;
     await carts.save();
-    res.status(200).json(success(res.statusCode, "Quantity Updated", {}));
+    res.status(200).json(success(res.statusCode, "Quantity Updated", {carts}));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Update quantity", res.statusCode));
