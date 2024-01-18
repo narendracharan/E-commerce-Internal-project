@@ -87,6 +87,7 @@ exports.userLogin = async (req, res) => {
       res.status(400).json(error("Block By Admin"));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -43,7 +43,7 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  quantity:{
+  quantity: {
     type:Number,
     default:1,
   },
