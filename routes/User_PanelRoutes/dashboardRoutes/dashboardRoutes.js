@@ -12,6 +12,6 @@ const router = express.Router();
 router.post("/count-wishlist/:id", tokenAuthorisationUser, countWishList);
 router.post("/pending-order", tokenAuthorisationUser, allPendingOrder);
 router.post("/total-order/:id", tokenAuthorisationUser, totalOrder);
-router.post("/home-banner", tokenAuthorisationUser, bannerlist);
+router.post("/home-banner", bannerlist);
 router.post("/notification-list", tokenAuthorisationUser, notificationList);
 module.exports = router;

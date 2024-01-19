@@ -46,31 +46,26 @@ const { s3upload } = require("../../../middleware/multer");
 
 router.post(
   "/ScreenOne",
-  tokenAuthorisationUser,
   s3upload.single("homeScreenOne"),
   createBannerOne
 );
 router.post(
   "/ScreenTwo",
-  tokenAuthorisationUser,
   s3upload.single("homeScreenTwo"),
   createBannerTwo
 );
 router.post(
   "/ScreenThree",
-  tokenAuthorisationUser,
   s3upload.single("homeScreenThree"),
   createBannerThree
 );
 router.post(
   "/ScreenFour",
-  tokenAuthorisationUser,
   s3upload.single("homeScreenFour"),
   createBannerFour
 );
 router.post(
   "/ScreenFive",
-  tokenAuthorisationUser,
   s3upload.single("homeScreenFive"),
   createBannerFive
 );

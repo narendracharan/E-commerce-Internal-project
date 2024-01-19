@@ -40,7 +40,7 @@ router.post("/low-price", tokenAuthorisationUser, lowPrice);
 router.post("/high-price", tokenAuthorisationUser, highPrice);
 router.post("/asending-product", tokenAuthorisationUser, asendingProduct);
 router.post("/descending-product", tokenAuthorisationUser, descendingProduct);
-router.post("/tranding-product", tokenAuthorisationUser, trandingProduct);
+router.post("/tranding-product",  trandingProduct);
 router.post("/review", tokenAuthorisationUser, productDiscount);
 router.post("/rating-product", tokenAuthorisationUser, ratingProduct);
 router.post("/high-Discount-list", tokenAuthorisationUser, highDiscount);
