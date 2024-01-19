@@ -33,7 +33,7 @@ const router = express.Router();
 router.post("/list", productList);
 router.post("/details/:id", tokenAuthorisationUser, productDetails);;
 router.post("/releted-product/:id", tokenAuthorisationUser, relatedProduct);
-router.post("/search-product",tokenAuthorisationUser,productSearch)
+router.post("/search-product",productSearch)
 router.post("/product-rating", tokenAuthorisationUser, rating);
 router.post("/price", tokenAuthorisationUser, filterPrice);
 router.post("/low-price", tokenAuthorisationUser, lowPrice);

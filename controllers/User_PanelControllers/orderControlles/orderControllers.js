@@ -101,7 +101,7 @@ exports.createOrder = async (req, res) => {
       //object.Disount = dis.map((x) => x.Discount);
       products.push(object);
     }
-    console.log(products);
+    //console.log(products);
     const dd = await userSchema.find({ _id: user_Id });
     let newCarts = new orderSchema({
       products,
@@ -341,7 +341,7 @@ exports.cancelledOrder = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//============================================================================================
 // exports.IndeliveryOrder = async (req, res) => {
 //   try {
 //     const _id = req.params.id;
@@ -427,7 +427,7 @@ exports.orderShipped = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//=================================================================================================
 exports.userCancelledOrder = async (req, res) => {
   try {
     const id = req.params.id;
