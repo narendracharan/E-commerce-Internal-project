@@ -17,7 +17,7 @@ const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const { categoryProduct } = require("../../../controllers/User_PanelControllers/productContorllers/productControllers");
 const router = express.Router();
 
-router.post("/category-list", tokenAuthorisationUser, categoryList);
+router.post("/category-list",  categoryList);
 router.post(
   "/category-subCategory/:id",
   tokenAuthorisationUser,
