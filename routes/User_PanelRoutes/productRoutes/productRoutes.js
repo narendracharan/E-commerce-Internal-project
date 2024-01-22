@@ -35,11 +35,11 @@ router.post("/details/:id", tokenAuthorisationUser, productDetails);;
 router.post("/releted-product/:id", tokenAuthorisationUser, relatedProduct);
 router.post("/search-product",productSearch)
 router.post("/product-rating", tokenAuthorisationUser, rating);
-router.post("/price", tokenAuthorisationUser, filterPrice);
-router.post("/low-price", tokenAuthorisationUser, lowPrice);
-router.post("/high-price", tokenAuthorisationUser, highPrice);
-router.post("/asending-product", tokenAuthorisationUser, asendingProduct);
-router.post("/descending-product", tokenAuthorisationUser, descendingProduct);
+router.post("/price",  filterPrice);
+router.post("/low-price", lowPrice);
+router.post("/high-price",  highPrice);
+router.post("/asending-product",  asendingProduct);
+router.post("/descending-product", descendingProduct);
 router.post("/tranding-product",  trandingProduct);
 router.post("/review", productDiscount);
 router.post("/rating-product", tokenAuthorisationUser, ratingProduct);
