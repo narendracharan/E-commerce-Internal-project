@@ -16,14 +16,14 @@ const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
 router.post("/add-cart", tokenAuthorisationUser, addToCart);
-router.delete("/delete-product/:id", tokenAuthorisationUser, deleteProduct);
+router.delete("/delete-product/:id",  deleteProduct);
 router.post("/carts-list/:id", cartsList);
-router.post("/apply-coupan", tokenAuthorisationUser, applyCoupan);
-router.post("/carts-summery/:id", tokenAuthorisationUser, orderSummery);
+router.post("/apply-coupan",  applyCoupan);
+router.post("/carts-summery/:id",  orderSummery);
 router.post("/cart-count/:id", tokenAuthorisationUser, cartCount);
-router.post("/coupan-details", tokenAuthorisationUser, coupanDetails);
+router.post("/coupan-details",  coupanDetails);
 router.post("/edit-card/:id",tokenAuthorisationUser,editCart)
-router.post("/updateQuatity",tokenAuthorisationUser,updateQuatity)
-router.post("/apply-coupan-to-all/:id", tokenAuthorisationUser, applyCoupanToAll);
+router.post("/updateQuatity",updateQuatity)
+router.post("/apply-coupan-to-all/:id",  applyCoupanToAll);
 
 module.exports = router;

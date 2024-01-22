@@ -8,8 +8,8 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/add-wish", tokenAuthorisationUser, createWish);
-router.post("/wish-List/:id", tokenAuthorisationUser, wishlist);
-router.delete("/wish-delete/:id", tokenAuthorisationUser, deleteWishList);
-router.delete("/remove-product/:id", tokenAuthorisationUser, removeProduct);
+router.post("/add-wish",  createWish);
+router.post("/wish-List/:id",  wishlist);
+router.delete("/wish-delete/:id",  deleteWishList);
+router.delete("/remove-product/:id",  removeProduct);
 module.exports = router;

@@ -31,10 +31,10 @@ const { updateQuatity } = require("../../../controllers/User_PanelControllers/ca
 const router = express.Router();
 
 router.post("/list", productList);
-router.post("/details/:id", tokenAuthorisationUser, productDetails);;
-router.post("/releted-product/:id", tokenAuthorisationUser, relatedProduct);
+router.post("/details/:id",  productDetails);;
+router.post("/releted-product/:id",  relatedProduct);
 router.post("/search-product",productSearch)
-router.post("/product-rating", tokenAuthorisationUser, rating);
+router.post("/product-rating", rating);
 router.post("/price",  filterPrice);
 router.post("/low-price", lowPrice);
 router.post("/high-price",  highPrice);
@@ -42,18 +42,18 @@ router.post("/asending-product",  asendingProduct);
 router.post("/descending-product", descendingProduct);
 router.post("/tranding-product",  trandingProduct);
 router.post("/review", productDiscount);
-router.post("/rating-product", tokenAuthorisationUser, ratingProduct);
-router.post("/high-Discount-list", tokenAuthorisationUser, highDiscount);
-router.post("/brand-list", tokenAuthorisationUser, Brandlist);
-router.post("/brand-product/:id", tokenAuthorisationUser, brandProduct);
-router.post("/popular-product/:id", tokenAuthorisationUser, popularProduct);
-router.post("/category-product/:id",tokenAuthorisationUser,categoryProduct)
-router.post("/search-category",tokenAuthorisationUser,searchCategory)
-router.post("/deals-of-day",tokenAuthorisationUser,DealsOfDay)
+router.post("/rating-product",  ratingProduct);
+router.post("/high-Discount-list",  highDiscount);
+router.post("/brand-list", Brandlist);
+router.post("/brand-product/:id",  brandProduct);
+router.post("/popular-product/:id", popularProduct);
+router.post("/category-product/:id",categoryProduct)
+router.post("/search-category",searchCategory)
+router.post("/deals-of-day",DealsOfDay)
 router.post("/Discount-product",discountProduct)
-router.post("/similar-product/:id",tokenAuthorisationUser,similarProduct)
-router.post("/newProduct",tokenAuthorisationUser,newArriwalProduct)
-router.post("/indemand-product",tokenAuthorisationUser,indemandProducts)
-router.post("/userProductDetails/:id",tokenAuthorisationUser,userProductDetails)
+router.post("/similar-product/:id",similarProduct)
+router.post("/newProduct",newArriwalProduct)
+router.post("/indemand-product",indemandProducts)
+router.post("/userProductDetails/:id",userProductDetails)
 router.post("/update-qty",updateQuatity)
 module.exports = router;

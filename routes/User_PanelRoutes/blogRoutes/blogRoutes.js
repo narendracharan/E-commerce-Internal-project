@@ -9,7 +9,7 @@ const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
 router.post("/blog-list", blogList);
-router.post("/blog-search", tokenAuthorisationUser, blogSearch);
-router.post("/blog-comments", tokenAuthorisationUser, blogComment);
-router.post("/comments-list", tokenAuthorisationUser, commnetsList);
+router.post("/blog-search",  blogSearch);
+router.post("/blog-comments",  blogComment);
+router.post("/comments-list", commnetsList);
 module.exports = router;

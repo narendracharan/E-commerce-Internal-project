@@ -20,16 +20,16 @@ const router = express.Router();
 router.post("/category-list",  categoryList);
 router.post(
   "/category-subCategory/:id",
-  tokenAuthorisationUser,
+  
   subCatagoryList
 );
 router.post(
   "/category-product/:id",
-  tokenAuthorisationUser,
+
   checkCategoryProduct
 );
-router.post("/search-category", tokenAuthorisationUser, searchCategory);
-router.post("/top-category", tokenAuthorisationUser, topCategory);
+router.post("/search-category", searchCategory);
+router.post("/top-category",  topCategory);
 router.post("/subCategory-product/:id", checkSubCategoryProduct);
 router.post("/subSubCategoryList/:id",subSubCategoryList)
 router.post("/categoryProductList/:id",categoryProductList)

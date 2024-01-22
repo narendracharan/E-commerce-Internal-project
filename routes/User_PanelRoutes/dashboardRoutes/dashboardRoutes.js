@@ -9,9 +9,9 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/count-wishlist/:id", tokenAuthorisationUser, countWishList);
-router.post("/pending-order", tokenAuthorisationUser, allPendingOrder);
-router.post("/total-order/:id", tokenAuthorisationUser, totalOrder);
+router.post("/count-wishlist/:id", countWishList);
+router.post("/pending-order",  allPendingOrder);
+router.post("/total-order/:id",  totalOrder);
 router.post("/home-banner", bannerlist);
-router.post("/notification-list", tokenAuthorisationUser, notificationList);
+router.post("/notification-list", notificationList);
 module.exports = router;

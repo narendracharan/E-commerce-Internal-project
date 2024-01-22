@@ -6,7 +6,7 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/add-review", tokenAuthorisationUser, createReview);
-router.post("/review-list", tokenAuthorisationUser, reviewList);
+router.post("/add-review", createReview);
+router.post("/review-list", reviewList);
 
 module.exports = router;

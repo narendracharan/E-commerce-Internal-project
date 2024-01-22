@@ -8,8 +8,8 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/create-contact", tokenAuthorisationUser, createContact);
-router.post("/aboutUs", tokenAuthorisationUser, aboutUsList);
+router.post("/create-contact",  createContact);
+router.post("/aboutUs",  aboutUsList);
 router.post("/privacy", tokenAuthorisationUser, privacyList);
-router.post("/faq", tokenAuthorisationUser, faqs);
+router.post("/faq",  faqs);
 module.exports = router;

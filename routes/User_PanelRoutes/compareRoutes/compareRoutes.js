@@ -7,7 +7,7 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/add-compare", tokenAuthorisationUser, compareProduct);
-router.post("/compare-list", tokenAuthorisationUser, compareList);
-router.post("/compare-delete/:id", tokenAuthorisationUser, compareDelete);
+router.post("/add-compare", compareProduct);
+router.post("/compare-list",compareList);
+router.post("/compare-delete/:id",  compareDelete);
 module.exports = router;
