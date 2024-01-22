@@ -13,9 +13,11 @@ exports.createCarts = async (req, res) => {
 
 exports.CartsList = async (req, res) => {
   try {
-    const list = await cartsSchema.find({});
+    const id=req.params.id;
+    const list = (await cartsSchema.find({id}));
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

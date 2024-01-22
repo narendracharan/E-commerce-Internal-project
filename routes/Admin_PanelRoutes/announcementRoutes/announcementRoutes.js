@@ -17,5 +17,5 @@ router.post(
 );
 router.post("/search", tokenAuthorisationUser, searchAnnouncement);
 router.post("/list", tokenAuthorisationUser, announcementList);
-router.post("/delete-announcement/:id",tokenAuthorisationUser,deleteAnnouncement)
+router.post("/delete-announcement/:id",tokenAuthorisationUser,deleteAnnouncement);
 module.exports = router;

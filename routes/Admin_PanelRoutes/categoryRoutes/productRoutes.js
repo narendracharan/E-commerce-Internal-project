@@ -25,8 +25,8 @@ router.post(
   s3upload.any(),
   createProduct
 );
-router.post("/productList", tokenAuthorisationUser, productList);
-router.post("/productSearch", tokenAuthorisationUser, productSearch);
+router.post("/productList",  productList);
+router.post("/productSearch",  productSearch);
 router.patch("/updateProduct/:id", tokenAuthorisationUser,s3upload.any(), updateProduct);
 router.delete("/delete-product/:id",tokenAuthorisationUser,productDelete)
 router.post("/addBrand",tokenAuthorisationUser,s3upload.single("brandPic"),addBrand)
