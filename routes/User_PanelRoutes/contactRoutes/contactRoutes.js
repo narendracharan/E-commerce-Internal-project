@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.post("/create-contact",  createContact);
 router.post("/aboutUs",  aboutUsList);
-router.post("/privacy", tokenAuthorisationUser, privacyList);
+router.post("/privacy",privacyList)
 router.post("/faq",  faqs);
 module.exports = router;

@@ -25,7 +25,7 @@ exports.categoryList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//=========================================================================================================
 exports.subCatagoryList = async (req, res) => {
   try {
     const id = req.params.id;
@@ -47,7 +47,7 @@ exports.subSubCategoryList = async (req, res) => {
     const id = req.params.id; 
     const subSubCategoryData = await subSubCategorySchema
       .find({ subCategory_Id: id }) 
-      .sort({ _id: -1 });
+      .sort({ _id: -1 }); 
 
     if (subSubCategoryData.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { subSubCategoryData }));
@@ -75,7 +75,7 @@ exports.checkSubCategoryProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//================================================================================================
 exports.checkCategoryProduct = async (req, res) => {
   try {
     const id = req.params.id;
@@ -183,7 +183,7 @@ exports.productBanner = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//===========================================================
 exports.BannerList = async (req, res) => {
   try {
     const id = req.params.id;
@@ -217,7 +217,7 @@ exports.BannerList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-//==========================================================
+//==============================================================
 exports.categoryProductList = async (req, res) => {
   try {
     const categoriesWithProducts = await productSchema.find({})
