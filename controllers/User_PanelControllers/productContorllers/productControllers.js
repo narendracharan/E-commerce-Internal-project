@@ -55,9 +55,12 @@ exports.productSearch = async (req, res) => {
       ? { productName_en: { $regex: productName_en, $options: "i" } }
       : {};
   try {
-    const list = await productSchema.find(query)
-    res.status(200).json(success(res.statusCode, "Success", { list }));
-  } catch (err) {
+    const productData = await productSchema.find(query)
+   if(productName_en.length===0){
+    res.status(200).json(success(res.statusCode, "No matching products found", { productData:[]}));
+   }else{
+    res.status(200).json(success(res.statusCode, "Success", { productData }));
+ } } catch (err) {
     console.log(err);
     res.status(500).json(error("Failed", res.statusCode));
   }
