@@ -54,7 +54,7 @@ exports.productSearch = async (req, res) => {
     const productName_en = req.body.productName_en;
     
     if (typeof productName_en === 'string') {
-      // Check if productName_en contains a forward slash
+      
       if (productName_en.includes('/')) {
         return res.status(400).json(error("Invalid input. Forward slash not allowed in product name.", res.statusCode));
       }
