@@ -13,7 +13,8 @@ exports.createCarts = async (req, res) => {
 //==========================================================================================
 exports.CartsList = async (req, res) => {
   try {
-    const list = await cartsSchema.find({});
+    const user_Id=req.params.id;
+    const list = await cartsSchema.find({user_Id:user_Id});
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err)

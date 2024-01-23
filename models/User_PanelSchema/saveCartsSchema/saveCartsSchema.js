@@ -17,6 +17,11 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  user_Id:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"userPanel",
+    require:true,
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("saveCarts", schema);
