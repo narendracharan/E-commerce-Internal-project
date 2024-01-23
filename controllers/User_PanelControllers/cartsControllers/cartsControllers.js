@@ -305,7 +305,7 @@ exports.applyCoupanToAll = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
+//=============================================================================
 exports.coupanDetails = async (req, res) => {
   try {
     const details = await coupanSchema.find();
