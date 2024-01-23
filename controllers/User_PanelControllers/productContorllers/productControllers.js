@@ -58,6 +58,10 @@ exports.productSearch = async (req, res) => {
       if (productName_en.includes('/')) {
         return res.status(400).json(error("Invalid input. Forward slash not allowed in product name.", res.statusCode));
       }
+       
+      if (productName_en.includes('')) {
+        return res.status(400).json(error("Invalid input. empty data not allowed", res.statusCode));
+      }
 
       const productData = await productSchema.find({
         productName_en: { $regex: new RegExp(productName_en, 'i') },
