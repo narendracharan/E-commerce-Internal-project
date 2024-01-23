@@ -50,31 +50,13 @@ exports.userProductDetails = async (req, res) => {
 };
 //============================================================================================
 exports.productSearch = async (req, res) => {
+  const productName_en = req.body.productName_en; 
+    const query = productName_en
+      ? { productName_en: { $regex: productName_en, $options: "i" } }
+      : {};
   try {
-    const productName_en = req.body.productName_en;
-    
-    if (typeof productName_en === 'string') {
-      
-      if (productName_en.includes('/')) {
-        return res.status(400).json(error("Invalid input. Forward slash not allowed in product name.", res.statusCode));
-      }
-       
-      if (productName_en.includes('')) {
-        return res.status(400).json(error("Invalid input. empty data not allowed", res.statusCode));
-      }
-
-      const productData = await productSchema.find({
-        productName_en: { $regex: new RegExp(productName_en, 'i') },
-      });
-
-      if (productData.length > 0) {
-        return res.status(200).json(success(res.statusCode, "Success", { productData }));
-      } else {
-        return res.status(404).json(error("No matching products found", res.statusCode));
-      }
-    } else {
-      return res.status(400).json(error("Invalid input. Product name must be a string.", res.statusCode));
-    }
+    const list = await productSchema.find(query)
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     console.log(err);
     res.status(500).json(error("Failed", res.statusCode));
