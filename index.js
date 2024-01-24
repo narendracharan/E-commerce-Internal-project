@@ -46,7 +46,6 @@ socket.on("disconnect", () => {
 });
 });
 //=======================================================================================================
-
 mongoose.connect(
   "mongodb+srv://narendracharan:MwXDBJTWBx3jPfQq@ecommerce.yonhe3a.mongodb.net/",
   { useNewUrlParser: true }

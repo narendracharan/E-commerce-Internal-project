@@ -66,8 +66,6 @@ exports.productSearch = async (req, res) => {
   }
 };
 
-
-
 //===============================================================================================
 exports.productDetails = async (req, res) => {
   try {
