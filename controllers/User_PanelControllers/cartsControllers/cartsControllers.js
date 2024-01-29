@@ -111,6 +111,15 @@ exports.deleteProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }};
 
+  exports.deleteProductWithId = async (req, res) => {
+    try {
+      const product_Id = req.params.id;
+      const item = await cartsSchema.findOneAndDelete({product_Id:product_Id});
+      res.status(200).json(success(res.statusCode, " Product delete Successfully"));
+    } catch (err) {
+      console.log(err)
+      res.status(400).json(error("Failed", res.statusCode));
+    }};
 // exports.cartsList = async (req, res) => {
 //   try {
 //     const _id = req.params.id;

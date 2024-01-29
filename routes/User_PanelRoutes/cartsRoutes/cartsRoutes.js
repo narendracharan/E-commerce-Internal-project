@@ -11,12 +11,14 @@ const {
   applyCoupanToAll,
   updateQuatity,
   addProducts,
+  deleteProductWithId,
 } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
 router.post("/add-cart", addToCart);
 router.delete("/delete-product/:id",  deleteProduct);
+router.delete("/delete-product-with-id/:id",  deleteProductWithId);
 router.post("/carts-list/:id", cartsList);
 router.post("/apply-coupan",  applyCoupan);
 router.post("/carts-summery/:id",  orderSummery);
