@@ -372,62 +372,7 @@ exports.productDiscount = async (req, res) => {
 //   }
 // };
 
-
-exports.ratingProduct = async (req, res) => {
-
-  try {
-    const { _id } = req.body;
-    const { star, product_Id } = req.body;
-    const product = await productSchema.findById(product_Id);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-
-  
-    const alreadyRated = product.ratings.find((rating) => rating.postedby.equals(_id));
-
-    if (alreadyRated) {
-  
-      const updatedRating = await productSchema.updateOne(
-        { _id: product_Id, "ratings.postedby": _id },
-        { $set: { "ratings.$.star": star } },
-        { new: true }
-      );
-
-      res.status(200).json({ success: true, message: "Rating updated", data: updatedRating });
-    } else {
-    
-      const newRating = {
-        star: star,
-        postedby: _id,
-      };
-
-      const updatedProduct = await productSchema.findByIdAndUpdate(
-        product_Id,
-        { $push: { ratings: newRating } },
-        { new: true }
-      );
-
-      
-      const totalRating = updatedProduct.ratings.reduce((sum, rating) => sum + rating.star, 0);
-
-      
-      await productSchema.findByIdAndUpdate(
-        product_Id,
-        { totalRating: totalRating },
-        { new: true }
-      );
-
-      res.status(200).json({ success: true, message: "Rating added", data: updatedProduct });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-
-exports.rating = async (req, res) => {
+exports.updateRating = async (req, res) => {
   try {
     const { _id } = req.body;
     
@@ -488,6 +433,27 @@ exports.rating = async (req, res) => {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   };
+}
+exports.createrating=async (req,res)=>{
+  try{
+    const { product_Id, star} = req.body;
+
+    
+    if (!product_Id || !star || isNaN(star) || star < 1 || star > 5) {
+      return res.status(400).json({ error: 'Invalid input' });
+    }
+
+    
+    const rating = new productSchema({ product_Id, star });
+    await rating.save();
+
+    res.status(201).json({ message: 'Rating added successfully' });
+  }
+  catch{
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+
 }
 
 

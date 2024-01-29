@@ -4,7 +4,7 @@ const {
   productList,
   productDetails,
   relatedProduct,
-  rating,
+  //rating,
   filterPrice,
   lowPrice,
   highPrice,
@@ -12,7 +12,7 @@ const {
   descendingProduct,
   trandingProduct,
   productDiscount,
-  ratingProduct,
+  updateRating,
   highDiscount,
   Brandlist,
   brandProduct,
@@ -24,7 +24,8 @@ const {
   similarProduct,
   newArriwalProduct,
   indemandProducts,
-  userProductDetails
+  userProductDetails,
+  createrating
 } = require("../../../controllers/User_PanelControllers/productContorllers/productControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const { updateQuatity } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
@@ -34,15 +35,16 @@ router.post("/list", productList);
 router.post("/details/:id",  productDetails);;
 router.post("/releted-product/:id",  relatedProduct);
 router.post("/search-product",productSearch)
-router.post("/product-rating", rating);
+router.post("/updateRating", updateRating);
 router.post("/price",  filterPrice);
 router.post("/low-price", lowPrice);
 router.post("/high-price",  highPrice);
+router.post("/create-rating",createrating);
 router.post("/asending-product",  asendingProduct);
 router.post("/descending-product", descendingProduct);
 router.post("/tranding-product",  trandingProduct);
 router.post("/review", productDiscount);
-router.post("/rating-product",  ratingProduct);
+//router.post("/rating-product",  ratingProduct);
 router.post("/high-Discount-list",  highDiscount);
 router.post("/brand-list", Brandlist);
 router.post("/brand-product/:id",  brandProduct);
