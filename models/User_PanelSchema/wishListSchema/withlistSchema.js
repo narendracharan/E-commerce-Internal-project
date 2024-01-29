@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   like:{
-    type:String,
+    type:Boolean,
     default:false
   },
   user_Id:{

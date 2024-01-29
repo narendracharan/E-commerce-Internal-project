@@ -356,19 +356,76 @@ exports.productDiscount = async (req, res) => {
   }
 };
 
+// exports.ratingProduct = async (req, res) => {
+//   try {
+//     const { star } = req.query;
+//     const quearyObjetct = {};
+//     if (star) {
+//       quearyObjetct.star = star;
+//     } 
+    
+//     const productData = await productSchema.find(quearyObjetct);
+//     const numberOfRatings = productData.length;
+//     res.status(200).json(success(res.statusCode, "Success", { productData ,numberOfRatings}));
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+
+
 exports.ratingProduct = async (req, res) => {
+
   try {
-    const { star } = req.query;
-    const quearyObjetct = {};
-    if (star) {
-      quearyObjetct.star = star;
+    const { _id } = req.body;
+    const { star, product_Id } = req.body;
+    const product = await productSchema.findById(product_Id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
     }
-    const productData = await productSchema.find(quearyObjetct);
-    res.status(200).json(success(res.statusCode, "Success", { productData }));
+
+  
+    const alreadyRated = product.ratings.find((rating) => rating.postedby.equals(_id));
+
+    if (alreadyRated) {
+  
+      const updatedRating = await productSchema.updateOne(
+        { _id: product_Id, "ratings.postedby": _id },
+        { $set: { "ratings.$.star": star } },
+        { new: true }
+      );
+
+      res.status(200).json({ success: true, message: "Rating updated", data: updatedRating });
+    } else {
+    
+      const newRating = {
+        star: star,
+        postedby: _id,
+      };
+
+      const updatedProduct = await productSchema.findByIdAndUpdate(
+        product_Id,
+        { $push: { ratings: newRating } },
+        { new: true }
+      );
+
+      
+      const totalRating = updatedProduct.ratings.reduce((sum, rating) => sum + rating.star, 0);
+
+      
+      await productSchema.findByIdAndUpdate(
+        product_Id,
+        { totalRating: totalRating },
+        { new: true }
+      );
+
+      res.status(200).json({ success: true, message: "Rating added", data: updatedProduct });
+    }
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 exports.rating = async (req, res) => {
   try {
@@ -378,7 +435,7 @@ exports.rating = async (req, res) => {
     const product = await productSchema.findById(product_Id);
     let alreadyRated = product.ratings.find((user_Id) => user_Id.postedby);
     if (alreadyRated) {
-      const updateRating = await product.findById(  
+      const updateRating = await product.updateOne(  
         {
           ratings: { $elemMatch: alreadyRated },
         },
@@ -411,11 +468,12 @@ exports.rating = async (req, res) => {
       for (let i = 0; i < ralatedProduct.ratings.length; i++) {
         totalRating = totalRating + ralatedProduct.ratings[i].star;
       }
-      console.log(totalRating);
+      //console.log(totalRating);
       const rating = await productSchema.findByIdAndUpdate(
-        { _id: product_Id },
+       { _id: product_Id },
         { totalRating: totalRating },
         { new: true }
+      
       );
 
       // let newrating = await productSchema({

@@ -182,6 +182,7 @@ exports.userDetails = async (req, res) => {
     const id = req.params.id;
     const list = await Userschema.findById(id).populate("address_Id");
     const address = await addressSchema.find({ user_Id: id });
+    console.log(address);
     const order = await orderSchema.find({ user_Id: id });
     var compltedOrder = 0;
     const status = order.map((x) => x.orderStatus == "Delivered");

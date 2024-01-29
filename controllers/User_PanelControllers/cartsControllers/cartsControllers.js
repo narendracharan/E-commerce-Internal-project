@@ -11,20 +11,6 @@ const mongoose = require("mongoose");
 exports.addToCart = async (req, res) => {
   try {
     const { product_Id, quantity, varient_Id, Price, user_Id } = req.body;
-    // let products = [];
-    // for (let i = 0; i < carts.length; i++) {
-    //   let object = {};
-    //   object.product_Id = carts[i].product_Id;
-    //   object.quantity = carts[i].quantity;
-    //   // console.log(carts[i].product_Id);
-    //   object.Price = parseInt(carts[i].Price);
-    //   products.push(object);
-    // }
-    // // let cartsTotal=0
-    // // for (let i = 0; i < products.length; i++) {
-    // //   console.log(cartsTotal);
-    // //     cartsTotal =+ products[i].Price * products[i].quantity
-    // // }
     if (!product_Id) {
       return res
         .status(201)
@@ -41,25 +27,8 @@ exports.addToCart = async (req, res) => {
         .json(error("Please provide user_Id!", res.statusCode));
     }
     let carts; 
-  //cartlist  
-    // carts = await cartSchema.findOne({ user_Id: user_Id });
-    // if (carts) {
-    //   const newproducts = carts.products.filter(
-    //     (product) => product.product_Id == product_Id
-    //   );
-    //   if (newproducts.length) {
-    //     newproducts[0].quantity = newproducts[0].quantity + +quantity;
-    //     console.log(newproducts);
-    //     await carts.save();
-
-    //     return res
-    //       .status(201)
-    //       .json(success(res.statusCode, "Product Added", { carts }));
-    //   }
-    // }
+  
     carts = await new cartSchema({
-      // products: [
-      //   {
       
       product_Id: product_Id,
       quantity: quantity,
@@ -191,10 +160,10 @@ exports.cartsList = async (req, res) => {
       .populate(["product_Id"]);
     let carts = [];
     for (let i = 0; i < list.length; i++) {
+     // console.log(list[i].varient_Id);
       const varient = list[i].product_Id.addVarient.find(
         (varient) => String(varient._id) === String(list[i].varient_Id)
       );
-
       const obj = {
         varient: varient,
         product_Id: list[i].product_Id,

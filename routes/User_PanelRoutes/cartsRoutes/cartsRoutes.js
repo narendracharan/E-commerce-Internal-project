@@ -15,7 +15,7 @@ const {
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const router = express.Router();
 
-router.post("/add-cart", tokenAuthorisationUser, addToCart);
+router.post("/add-cart", addToCart);
 router.delete("/delete-product/:id",  deleteProduct);
 router.post("/carts-list/:id", cartsList);
 router.post("/apply-coupan",  applyCoupan);

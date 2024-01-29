@@ -10,6 +10,17 @@ exports.blogList = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+exports.blogDetails = async (req, res) => {
+  try {
+    const list = await blogSchema.findById(req.params.id);
+    res.status(200).json(success(res.statusCode, "Success", { list }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+
 
 exports.blogSearch = async (req, res) => {
   try {
