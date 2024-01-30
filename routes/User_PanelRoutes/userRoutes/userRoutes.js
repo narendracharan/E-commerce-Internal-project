@@ -12,6 +12,8 @@ const {
   profilePic,
   notificationUpdate,
   verifyOtp,
+  otpGenerate,
+  verifyOtpwitmobilenumber,
 } = require("../../../controllers/User_PanelControllers/userControllers/userControllers");
 const { signupValidation } = require("../../../validation/userValidation");
 const router = express.Router();
@@ -29,6 +31,7 @@ router.post(
   s3upload.single("profile_Pic"),
   profilePic
 );
+router.post("/verifyOtp",verifyOtpwitmobilenumber)
 router.post(
   "/edit-profile/:id",
   
@@ -44,6 +47,7 @@ router.patch(
   "/update-notification/:id",
   notificationUpdate
 );
+router.post("/otp-Generate",otpGenerate)
 
 router.post("/user-reports",userReports)
 router.post("/order-reports",orderReports)

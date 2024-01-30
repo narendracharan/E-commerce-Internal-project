@@ -304,3 +304,53 @@ exports.blockUser = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+exports.otpGenerate = async (req, res) => {
+  try {
+    const { mobileNumber } = req.body;
+
+    if (!mobileNumber) {
+      return res.status(400).json({ error: 'Mobile number is required' });
+    }
+
+    let user = await User.findOne({ mobileNumber });
+
+    if (!user) {
+      user = await User.create({ mobileNumber });
+    }
+
+    const OTP = generateOTP();
+    user.otp = OTP;
+    await user.save();
+
+    
+
+    res.status(200).json({ success: true, message: 'OTP generated and sent successfully',OTP });
+
+  } catch (error) {
+    console.log('Error generating OTP:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+exports.verifyOtpwitmobilenumber = async (req, res) => {
+  try {
+    const { otp, mobileNumber } = req.body;
+    const user = await User.findOne({ mobileNumber });
+
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    if (user.otp == otp) {
+      res.status(200).json({ success: true, message: 'OTP verification successful' });
+    } else {
+      res.status(400).json({ error: 'Invalid OTP' });
+    }
+  } catch (err) {
+    console.error('Error verifying OTP:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+const generateOTP = () => {
+  
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};

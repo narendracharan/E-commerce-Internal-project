@@ -456,7 +456,6 @@ exports.createrating=async (req,res)=>{
 
 }
 
-
 exports.Brandlist = async (req, res) => {
   try {
     const brandlist = await brandSchema.find({});
