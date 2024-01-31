@@ -434,27 +434,42 @@ exports.updateRating = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   };
 }
-exports.createrating=async (req,res)=>{
-  try{
-    const { product_Id, star} = req.body;
+exports.createrating = async (req, res) => {
+  try {
+    const { Name, email, comment, ratings, website, user_Id, product_Id, star } = req.body;
 
-    
     if (!product_Id || !star || isNaN(star) || star < 1 || star > 5) {
       return res.status(400).json({ error: 'Invalid input' });
     }
 
-    
-    const rating = new productSchema({ product_Id, star });
-    await rating.save();
+    const product = await productSchema.findById(product_Id);
 
-    res.status(201).json({ message: 'Rating added successfully' });
-  }
-  catch{
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const newRating = {
+      star,
+      postedby: user_Id,
+      Name,
+      email,
+      comment,
+      website,
+      user_Id,
+    };
+
+    product.ratings.push(newRating);
+    product.totalRating += star;
+
+    await product.save();
+
+    res.status(201).json({ message: 'Rating added successfully', rating: newRating });
+  } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' })
+    res.status(500).json({ error: 'Internal Server Error' });
   }
+};
 
-}
 
 exports.Brandlist = async (req, res) => {
   try {

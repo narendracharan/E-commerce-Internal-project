@@ -321,9 +321,6 @@ exports.otpGenerate = async (req, res) => {
     const OTP = generateOTP();
     user.otp = OTP;
     await user.save();
-
-    
-
     res.status(200).json({ success: true, message: 'OTP generated and sent successfully',OTP });
 
   } catch (error) {
@@ -331,6 +328,7 @@ exports.otpGenerate = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+//==========================================================================================
 exports.verifyOtpwitmobilenumber = async (req, res) => {
   try {
     const { otp, mobileNumber } = req.body;

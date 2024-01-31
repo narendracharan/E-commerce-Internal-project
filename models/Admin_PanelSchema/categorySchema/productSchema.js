@@ -41,6 +41,27 @@ const schema = new mongoose.Schema({
         ref: "user",
         require: true,
       },
+      Name:{
+        type:String,
+        require:true,
+      },
+      email:{
+        type:String,
+        require:true,
+      },
+      comment:{
+        type:String,
+        require:true,
+      },
+      website:{
+        type:String,
+        require:true,
+      },
+      user_Id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userPanels",
+        require: true,
+      },
     },
   ],
   // quantity: {
