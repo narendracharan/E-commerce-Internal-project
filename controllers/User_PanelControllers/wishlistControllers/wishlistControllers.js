@@ -14,7 +14,7 @@ exports.createWish = async (req, res) => {
     await productSchema.findByIdAndUpdate({_id:product_Id},{like:like},{new:true})
     res.status(201).json(success(res.statusCode, "Add to wishList", { wishs }));
   } catch (err) {
-      conlsole.log(err)
+      console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

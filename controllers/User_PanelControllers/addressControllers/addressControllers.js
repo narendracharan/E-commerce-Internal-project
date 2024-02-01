@@ -4,12 +4,14 @@ const { error, success } = require("../../response");
 
 exports.createAddress = async (req, res) => {
   try {
-    const {title,title_ar,address,address_ar,locality,locality_ar,city,city_ar,country,country_ar,fullName,fullName_ar,mobileNumber,Email,addressTwo,addressTwo_ar,pinCode,user_Id} = new addressSchema(req.body);
+    const {title,title_ar,address,address_ar,locality,locality_ar,city,city_ar,
+      state,country,country_ar,fullName,fullName_ar,mobileNumber,Email,addressTwo,addressTwo_ar,pinCode,user_Id} = new addressSchema(req.body);
     const newAddress = new addressSchema({
       title:title,
       address:address,
       locality:locality,
       city:city,
+      state:state,
       country:country,
       fullName:fullName,
       mobileNumber:mobileNumber,

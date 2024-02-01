@@ -299,6 +299,7 @@ exports.trandingProduct = async (req, res) => {
         $group: {
           _id: "$products.product_Id",
           count: { $sum: 1 },
+          quantity: { $sum: "$products.quantity" },
         }
       },
       {
@@ -317,7 +318,6 @@ exports.trandingProduct = async (req, res) => {
                 ratings: 1,
                 like: 1,
                 brandName_en: "$brandDetails.brandName_en",
-
                 "addVarient.attribute_Id": 1,
                 "addVarient.attributeName_en": 1,
                 "addVarient.Price": 1,
@@ -326,20 +326,38 @@ exports.trandingProduct = async (req, res) => {
                 "addVarient.values_Id": 1,
                 "addVarient.product_Pic": 1,
                 "addVarient.valuesName_en": 1,
-                "addVarient.varient_Id": "$addVarient._id", 
+                "addVarient.varient_Id": "$addVarient._id",
               }
             }
           ]
         }
+      },
+      {
+        $lookup: {
+          from: "cartsSchema",
+          localField: "_id",
+          foreignField: "product_Id",
+          as: "cartDetails",
+        }
       }
     ]);
-    
-    res.status(200).json(success(res.statusCode, "Success", { productlist }));
+
+    // Combine quantity from cartsSchema with productDetails
+    const updatedProductList = productlist.map(product => {
+      const cartInfo = product.cartDetails[0] || {}; // Assuming there's only one cart entry per product
+      return {
+        ...product,
+        quantityInCart: cartInfo.quantity || 0,
+      };
+    });
+
+    res.status(200).json(success(res.statusCode, "Success", { productlist: updatedProductList }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 
 //===============================================================================================
 exports.productDiscount = async (req, res) => {
@@ -374,9 +392,12 @@ exports.productDiscount = async (req, res) => {
 
 exports.updateRating = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const {user_Id } = req.body;
     
     const { star, product_Id } = req.body;
+    if(!user_Id){
+      return res.status(400).json({ error: 'pls provide user_id ' })
+    }
     const product = await productSchema.findById(product_Id);
     let alreadyRated = product.ratings.find((user_Id) => user_Id.postedby);
     if (alreadyRated) {
@@ -404,7 +425,7 @@ exports.updateRating = async (req, res) => {
         
             ratings: {
               star: star,
-              postedby: _id,
+              postedby: user_Id,
             },
           },
         },
@@ -415,7 +436,7 @@ exports.updateRating = async (req, res) => {
       }
       //console.log(totalRating);
       const rating = await productSchema.findByIdAndUpdate(
-       { _id: product_Id },
+       {user_Id: product_Id },
         { totalRating: totalRating },
         { new: true }
       
@@ -427,7 +448,7 @@ exports.updateRating = async (req, res) => {
       // }).save();
       res
         .status(200)
-        .json(success(res.statusCode, "Success", { ralatedProduct }));
+        .json(success(res.statusCode, "Success", { ralatedProduct ,rating}));
      }
   } catch (err) {
     console.log(err);

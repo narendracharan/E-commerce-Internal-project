@@ -244,7 +244,7 @@ exports.addVarient = async (req, res) => {
     if (!values_Id) {
       res.status(400).json(error("please provide values_Id", res.statusCode));
     }
-    console.log(req.files);
+    //console.log(req.files);
     let pic = [];
     // if (newVarient.addVarient.length) {
     for (let i = 0; i < req.files.length; i++) {
@@ -254,7 +254,7 @@ exports.addVarient = async (req, res) => {
         process.env.CDN_URL
       ));
     }
-    // }
+    
     newVarient.addVarient.push({
       Price: Price,
       oldPrice: oldPrice,
@@ -267,7 +267,7 @@ exports.addVarient = async (req, res) => {
       values_Id: values_Id,
       retanable: retanable,
     });
-    console.log(newVarient);
+    //console.log(newVarient);
     const saveVarient = await newVarient.save();
     res.status(200).json(success(res.statusCode, "Success", { saveVarient }));
   } catch (err) {
