@@ -5,6 +5,7 @@ const dealsSchema = require("../../../models/Admin_PanelSchema/dealsSchema");
 const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offerSchema");
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
+const axios=require('axios');
 const { error, success } = require("../../response");
 const moment = require("moment");
 
@@ -291,6 +292,56 @@ exports.highDiscount = async (req, res) => {
 //   }
 // };
 //=============================================================rest api=====================
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const productlist = await orderSchema.aggregate([
+//       { $unwind: "$products" },
+//       {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: 1 },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "_id",
+//           foreignField: "_id",
+//           as: "productDetails",
+//           pipeline: [
+//             {
+//               $project: {
+//                 productName_en: 1,
+//                 product_Id: 1,
+//                 brand_Id: 1,
+//                 values_Id: 1,
+//                 ratings: 1,
+//                 like: 1,
+//                 brandName_en: "$brandDetails.brandName_en",
+
+//                 "addVarient.attribute_Id": 1,
+//                 "addVarient.attributeName_en": 1,
+//                 "addVarient.Price": 1,
+//                 "addVarient.oldPrice": 1,
+//                 "addVarient.stockQuantity": 1,
+//                 "addVarient.values_Id": 1,
+//                 "addVarient.product_Pic": 1,
+//                 "addVarient.valuesName_en": 1,
+//                 "addVarient.varient_Id": "$addVarient._id", 
+//               }
+//             }
+//           ]
+//         }
+//       }
+//     ]);
+    
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// }; 
+//=========================================================================
 exports.trandingProduct = async (req, res) => {
   try {
     const productlist = await orderSchema.aggregate([
@@ -298,8 +349,7 @@ exports.trandingProduct = async (req, res) => {
       {
         $group: {
           _id: "$products.product_Id",
-          count: { $sum: 1 },
-          quantity: { $sum: "$products.quantity" },
+          count: { $sum: "$products.quantity" },
         }
       },
       {
@@ -328,35 +378,34 @@ exports.trandingProduct = async (req, res) => {
                 "addVarient.valuesName_en": 1,
                 "addVarient.varient_Id": "$addVarient._id",
               }
+            },
+            {
+              $lookup: {
+                from: "cartsSchema",
+                localField: "product_Id",
+                foreignField: "product_Id",
+                as: "cartDetails",
+              }
+            },
+            {
+              $addFields: {
+                quantity: { $ifNull: [ { $arrayElemAt: ["$cartDetails.quantity", 0] }, 0 ] }
+              }
             }
           ]
         }
       },
-      {
-        $lookup: {
-          from: "cartsSchema",
-          localField: "_id",
-          foreignField: "product_Id",
-          as: "cartDetails",
-        }
-      }
     ]);
 
-    // Combine quantity from cartsSchema with productDetails
-    const updatedProductList = productlist.map(product => {
-      const cartInfo = product.cartDetails[0] || {}; // Assuming there's only one cart entry per product
-      return {
-        ...product,
-        quantityInCart: cartInfo.quantity || 0,
-      };
-    });
-
-    res.status(200).json(success(res.statusCode, "Success", { productlist: updatedProductList }));
+    res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+
 
 
 //===============================================================================================
