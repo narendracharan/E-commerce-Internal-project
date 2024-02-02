@@ -64,6 +64,8 @@ exports.productSearch = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
+    const product=await productSchema.findById(id)
+    console.log(product)
     const data = {
       productName_en: req.body.productName_en,
       productName_ar: req.body.productName_ar,
@@ -94,16 +96,20 @@ exports.updateProduct = async (req, res) => {
       brand_Id: req.body.brand_Id,
       category_Id: req.body.category_Id,
       Subcategory_Id: req.body.Subcategory_Id,
-      product_Pic: req.file.location.replace(
-        "ecommercemedia.s3.ap-south-1.amazonaws.com",
+      product_Pic: req.files.location
+      .replace(
+"ecommercemedia.s3.ap-south-1.amazonaws.com",
         process.env.CDN_URL
       )
+    
     };
+   
     const updateData = await productSchema.findByIdAndUpdate(id, data, {
       new: true,
     });
     res.status(200).json(success(res.statusCode, "Success", { updateData }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

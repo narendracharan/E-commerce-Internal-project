@@ -6,6 +6,7 @@ const offerSchema = require("../../../models/Admin_PanelSchema/offerSchema/offer
 const orderSchema = require("../../../models/User_PanelSchema/orderSchema/orderSchema");
 const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 const axios=require('axios');
+const mongoose=require('mongoose');
 const { error, success } = require("../../response");
 const moment = require("moment");
 
@@ -344,6 +345,7 @@ exports.highDiscount = async (req, res) => {
 //=========================================================================
 exports.trandingProduct = async (req, res) => {
   try {
+    const {userId}=req.body;
     const productlist = await orderSchema.aggregate([
       { $unwind: "$products" },
       {
@@ -369,6 +371,7 @@ exports.trandingProduct = async (req, res) => {
           localField: "_id",
           foreignField: "product_Id",
           as: "cartDetails",
+         pipeline:[{$match:{$and:[userId?{user_Id:mongoose.Types.ObjectId(userId)}:{}]}}]
         }
       },
       {
@@ -376,30 +379,7 @@ exports.trandingProduct = async (req, res) => {
           quantity: { $ifNull: [{ $arrayElemAt: ["$cartDetails.quantity", 0] }, 0] }
         }
       },
-//=====================================================================================================
-{
-  $lookup: {
-    from: "userpanels",
-    let: { token: "$x-auth-token-user" },  
-    pipeline: [
-      {
-        $match: {
-          $expr: { $eq: ["$token", "$$token"] }
-        }
-      },
-      {
-        $project: {
-          _id: 1,
-          user_Id: "$_id"  
-        }
-      }
-    ],
-    as: "userDetails"
-  }
-},
-{
-  $unwind: "$userDetails"
-},
+
     ]);
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
@@ -407,6 +387,7 @@ exports.trandingProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+//================================================================================================
 
 //===============================================================================================
 exports.productDiscount = async (req, res) => {
