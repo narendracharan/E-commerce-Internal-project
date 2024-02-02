@@ -42,7 +42,7 @@ router.post("/high-price",  highPrice);
 router.post("/create-rating",createrating);
 router.post("/asending-product",  asendingProduct);
 router.post("/descending-product", descendingProduct);
-router.post("/tranding-product", tokenAuthorisationUser, trandingProduct);
+router.post("/tranding-product",trandingProduct);
 router.post("/review", productDiscount);
 //router.post("/rating-product",  ratingProduct);
 router.post("/high-Discount-list",  highDiscount);
