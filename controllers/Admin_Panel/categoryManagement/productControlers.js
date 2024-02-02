@@ -65,7 +65,19 @@ exports.updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
     const product=await productSchema.findById(id)
-    console.log(product)
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "product_Pic") {
+         product.product_Pic =  req.files.location
+         //replace(
+   //"ecommercemedia.s3.ap-south-1.amazonaws.com",
+         //  process.env.CDN_URL
+        // )
+        }
+      }
+      
+    }
+    await product.save()
     const data = {
       productName_en: req.body.productName_en,
       productName_ar: req.body.productName_ar,
@@ -96,11 +108,11 @@ exports.updateProduct = async (req, res) => {
       brand_Id: req.body.brand_Id,
       category_Id: req.body.category_Id,
       Subcategory_Id: req.body.Subcategory_Id,
-      product_Pic: req.files.location
-      .replace(
-"ecommercemedia.s3.ap-south-1.amazonaws.com",
-        process.env.CDN_URL
-      )
+//       product_Pic: req.files.location
+//       .replace(
+// "ecommercemedia.s3.ap-south-1.amazonaws.com",
+//         process.env.CDN_URL
+//       )
     
     };
    
