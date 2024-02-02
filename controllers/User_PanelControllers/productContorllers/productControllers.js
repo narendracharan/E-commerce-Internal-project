@@ -375,19 +375,38 @@ exports.trandingProduct = async (req, res) => {
         $addFields: {
           quantity: { $ifNull: [{ $arrayElemAt: ["$cartDetails.quantity", 0] }, 0] }
         }
+      },
+//=====================================================================================================
+{
+  $lookup: {
+    from: "userpanels",
+    let: { token: "$x-auth-token-user" },  
+    pipeline: [
+      {
+        $match: {
+          $expr: { $eq: ["$token", "$$token"] }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          user_Id: "$_id"  
+        }
       }
+    ],
+    as: "userDetails"
+  }
+},
+{
+  $unwind: "$userDetails"
+},
     ]);
-    
-
     res.status(200).json(success(res.statusCode, "Success", { productlist }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
-
-
 
 //===============================================================================================
 exports.productDiscount = async (req, res) => {
