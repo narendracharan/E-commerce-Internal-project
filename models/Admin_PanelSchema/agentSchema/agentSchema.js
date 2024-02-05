@@ -30,6 +30,7 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+
   profile_Pic: {
     type: String,
     require: true,

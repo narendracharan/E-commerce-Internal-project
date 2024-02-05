@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
     require: true,
   },
   code: {
-    type: Number,
+    type: String,
     require: true,
   },
   Discount: {

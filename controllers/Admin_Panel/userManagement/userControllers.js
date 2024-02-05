@@ -182,7 +182,7 @@ exports.userDetails = async (req, res) => {
     const id = req.params.id;
     const list = await Userschema.findById(id).populate("address_Id");
     const address = await addressSchema.find({ user_Id: id });
-    console.log(address);
+   // console.log(address);
     const order = await orderSchema.find({ user_Id: id });
     var compltedOrder = 0;
     const status = order.map((x) => x.orderStatus == "Delivered");
@@ -201,9 +201,10 @@ exports.userDetails = async (req, res) => {
       //   }
       // }
     }
-    console.log(totalSpent);
+    //console.log(totalSpent);
     const orderValue = compltedOrder / totalSpent;
     const review = await reviewSchema.find({ user_Id: id });
+    //console.log(review);
     res.status(200).json(
       success(res.statusCode, "Success", {
         list,

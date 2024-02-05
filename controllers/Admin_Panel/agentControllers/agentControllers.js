@@ -11,6 +11,7 @@ const { Notification } = require("../../notificationControllers");
 const FCM = require("fcm-node");
 const admin = require("firebase-admin");
 const service = require("../../../config/firebase.json");
+const reviewSchema = require("../../../models/User_PanelSchema/reviewSchema/reviewSchema");
 
 admin.initializeApp({
   credential: admin.credential.cert(service),
@@ -174,16 +175,19 @@ exports.userDetails = async (req, res) => {
     for (let i = 0; i < shiping.length; i++) {
       totalearning += shiping[i];
     }
-    const userDetail = await agentSchema.findById(id);
+    const userDetail = await agentSchema.findById(id)
+    //const review=await reviewSchema.findById(id)
     res.status(200).json(
       success(res.statusCode, "Success", {
         userDetail,
         details,
+        review,
         totalearning,
         compltedOrder,
       })
     );
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -6,11 +6,13 @@ const {
   staffList,
   staffSearch,
   updateStaff,
+  stafstatus,
 } = require("../../../controllers/Admin_Panel/staffControllers/staffControllers");
 
 router.post("/createStaff", tokenAuthorisationUser, createStaff);
 router.post("/list", tokenAuthorisationUser, staffList);
 router.post("/staffSearch", tokenAuthorisationUser, staffSearch);
 router.patch("/updateStaff/:id", tokenAuthorisationUser, updateStaff);
+router.post('/stafstatus',tokenAuthorisationUser,stafstatus)
 
 module.exports = router;

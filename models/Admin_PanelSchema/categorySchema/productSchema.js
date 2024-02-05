@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  AdditionalInfo:{
+   type:String,
+   require:true ,
+  },
   totalRating: {
     type: String,
     default: 0,

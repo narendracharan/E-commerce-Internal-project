@@ -60,3 +60,13 @@ exports.updateStaff = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.stafstatus=async (req,res)=>{
+  try{
+    const staffstetus=await staffSchema.find({},'userName status')
+res.status(200).json(success(res.statusCode,"success",{staffstetus}))
+  }
+  catch(err){
+     res.status(400).json(error("Failed",res.statusCode))
+  }
+}
