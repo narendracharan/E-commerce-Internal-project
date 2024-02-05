@@ -343,50 +343,50 @@ exports.trandingProduct = async (req, res) => {
   }
 }; 
 //=========================================================================
-exports.trandingProduct = async (req, res) => {
-  try {
-    const {userId}=req.body;
-    const productlist = await orderSchema.aggregate([
-      { $unwind: "$products" },
-      {
-        $group: {
-          _id: "$products.product_Id",
-          count: { $sum: "$products.quantity" },
-        }
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "_id",
-          foreignField: "_id",
-          as: "productDetails",
-        }
-      },
-      {
-        $unwind: "$productDetails"
-      },
-      {
-        $lookup: {
-          from: "carts",
-          localField: "_id",
-          foreignField: "product_Id",
-          as: "cartDetails",
-         pipeline:[{$match:{$and:[userId?{user_Id:mongoose.Types.ObjectId(userId)}:{}]}}]
-        }
-      },
-      {
-        $addFields: {
-          quantity: { $ifNull: [{ $arrayElemAt: ["$cartDetails.quantity", 0] }, 0] }
-        }
-      },
+// exports.trandingProduct = async (req, res) => {
+//   try {
+//     const {userId}=req.body;
+//     const productlist = await orderSchema.aggregate([
+//       { $unwind: "$products" },
+//       {
+//         $group: {
+//           _id: "$products.product_Id",
+//           count: { $sum: "$products.quantity" },
+//         }
+//       },
+//       {
+//         $lookup: {
+//           from: "products",
+//           localField: "_id",
+//           foreignField: "_id",
+//           as: "productDetails",
+//         }
+//       },
+//       {
+//         $unwind: "$productDetails"
+//       },
+//       {
+//         $lookup: {
+//           from: "carts",
+//           localField: "_id",
+//           foreignField: "product_Id",
+//           as: "cartDetails",
+//          pipeline:[{$match:{$and:[userId?{user_Id:mongoose.Types.ObjectId(userId)}:{}]}}]
+//         }
+//       },
+//       {
+//         $addFields: {
+//           quantity: { $ifNull: [{ $arrayElemAt: ["$cartDetails.quantity", 0] }, 0] }
+//         }
+//       },
 
-    ]);
-    res.status(200).json(success(res.statusCode, "Success", { productlist }));
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+//     ]);
+//     res.status(200).json(success(res.statusCode, "Success", { productlist }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 //================================================================================================
 
 //===============================================================================================

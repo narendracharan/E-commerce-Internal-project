@@ -84,7 +84,7 @@ exports.orderUpdate = async (req, res) => {
         { orderStatus: orderStatus, orderStatus_ar: orderStatus_ar },
         { new: true }
       )
-      .populate("user_Id");
+      .populate("user_Id")
     const order = await orderSchema.findById(id);
     order.orderStatus = orderStatus;
     const date = moment(order.createdAt).format("MM/DD/YYYY");
@@ -118,9 +118,11 @@ exports.orderUpdate = async (req, res) => {
   Item(s) Ordered: ${updateOrder.products.length}
   Thank you`,
     };
-    await transporter.sendMail(mailOptions);
+    
+   await transporter.sendMail(mailOptions);
     res.status(200).json(success(res.statusCode, "Success", { updateOrder }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -60,6 +60,33 @@ exports.productSearch = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+exports.productDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const details = await productSchema.findById(id)
+      .populate("brand_Id")
+      .populate("addVarient.values_Id")
+      .populate("addVarient.attribute_Id")
+      .populate("subSubcategory_Id")
+      .populate("Subcategory_Id")
+      .populate("category_Id");
+
+    if (details.stockQuantity == 0) {
+      return res.status(400).json(error("Product Out of Stock", res.statusCode));
+    }
+
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        details,
+        
+      })
+    );
+  } catch (err) {
+    
+    console.error(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
 
 exports.updateProduct = async (req, res) => {
   try {

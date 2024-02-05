@@ -15,6 +15,7 @@ const {
   addVarient,
   selectBrand,
   addDealsProduct,
+  productDetails,
 } = require("../../../controllers/Admin_Panel/categoryManagement/productControlers");
 const { s3upload } = require("../../../middleware/multer");
 const { multiPleAttribute } = require("../../../controllers/Admin_Panel/categoryManagement/attributeControllers");
@@ -26,6 +27,7 @@ router.post(
   createProduct
 );
 router.post("/productList",  productList);
+router.post("/product-details/:id",productDetails)
 router.post("/productSearch",  productSearch);
 router.patch("/updateProduct/:id", tokenAuthorisationUser,s3upload.any(), updateProduct);
 router.delete("/delete-product/:id",tokenAuthorisationUser,productDelete)
