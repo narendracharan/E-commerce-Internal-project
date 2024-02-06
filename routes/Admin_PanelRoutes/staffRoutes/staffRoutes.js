@@ -13,6 +13,6 @@ router.post("/createStaff", tokenAuthorisationUser, createStaff);
 router.post("/list", tokenAuthorisationUser, staffList);
 router.post("/staffSearch", tokenAuthorisationUser, staffSearch);
 router.patch("/updateStaff/:id", tokenAuthorisationUser, updateStaff);
-router.post('/stafstatus',tokenAuthorisationUser,stafstatus)
+router.post('/stafstatus/:id',tokenAuthorisationUser,stafstatus)
 
 module.exports = router;

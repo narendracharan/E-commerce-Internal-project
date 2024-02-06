@@ -336,3 +336,19 @@ exports.addDealsProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+exports.addRecommendedProduct=async(req,res)=>{
+  try{
+    const id =req.params.id
+const Recommendedproduct=await productSchema.findById(id)
+if(!Recommendedproduct){
+  return res.status(404).json({ message: 'Product not found' });
+}
+Recommendedproduct.Recommended = true;
+await Recommendedproduct.save();
+res.status(200).json(success(res.statusCode,"success",{Recommendedproduct}))
+  }
+  catch(err){
+    res.status(400).json(error("Failed",res.statusCode))
+  }
+}

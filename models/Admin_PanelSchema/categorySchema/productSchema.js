@@ -13,6 +13,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  Recommended:{
+    type:Boolean,
+    default:false,
+  },
   Description: {
     type: String,
     require: true,

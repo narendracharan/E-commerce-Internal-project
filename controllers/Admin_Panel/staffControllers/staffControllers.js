@@ -63,7 +63,8 @@ exports.updateStaff = async (req, res) => {
 
 exports.stafstatus=async (req,res)=>{
   try{
-    const staffstetus=await staffSchema.find({},'userName status')
+    const id=req.params.id;
+    const staffstetus=await staffSchema.findByIdAndUpdate(id,req.body,{new:true,})
 res.status(200).json(success(res.statusCode,"success",{staffstetus}))
   }
   catch(err){
