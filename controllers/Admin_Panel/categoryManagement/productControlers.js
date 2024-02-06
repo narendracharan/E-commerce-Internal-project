@@ -113,6 +113,8 @@ exports.updateProduct = async (req, res) => {
       Description_ar: req.body.Description_ar,
       careInstuctions: req.body.careInstuctions,
       careInstuctions_ar: req.body.careInstuctions_ar,
+      AdditionalInfo:req.body.AdditionalInfo,
+      AdditionalInfo_ar:req.body.AdditionalInfo_ar,
       Price: req.body.Price,
       oldPrice: req.body.oldPrice,
       dollarPrice: req.body.dollarPrice,
