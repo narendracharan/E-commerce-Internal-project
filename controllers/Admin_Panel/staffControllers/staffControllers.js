@@ -70,20 +70,41 @@ res.status(200).json(success(res.statusCode,"success",{staffstetus}))
   catch(err){
      res.status(400).json(error("Failed",res.statusCode))
   }
-}    
-exports.assignmodules=async(req,res)=>{
-  try{
-       const id=req.params.id
-       const {modules}=req.body
-       const staffmember=await staffSchema.findById(id)
-       if(!staffmember){
-        res.status(400).json(error(res.statusCode,"staff member not found"))
-       }
-       staffmember.modules = modules;
-    await staffmember.save();
-    res.status(200).json(success(res.statusCode, "Modules assigned successfully", { staffMember }));
+}  
+exports.StaffDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const staffMember = await staffSchema.findById(id);
+
+    if (!staffMember) {
+      return res.status(404).json(error("Staff member not found", res.statusCode));
+    }
+
+    res.status(200).json(success(res.statusCode, "Staff details retrieved successfully", { staffMember }));
+  } catch (err) {
+    res.status(400).json(error("Failed to retrieve staff details", res.statusCode));
   }
-  catch(err){
-    res.status(400).json(error("Failed to assign modules", res.statusCode));
-  }
-}
+};
+
+
+
+
+
+
+// exports.assignmodules=async(req,res)=>{
+//   try{
+//        const id=req.params.id
+//        const {modules}=req.body
+//        const staffmember=await staffSchema.findById(id)
+//        if(!staffmember){
+//         res.status(400).json(error(res.statusCode,"staff member not found"))
+//        }
+//        staffmember.modules = modules;
+//     await staffmember.save();
+//     res.status(200).json(success(res.statusCode, "Modules assigned successfully", { staffmember }));
+//   }
+//   catch(err){
+//     res.status(400).json(error("Failed to assign modules", res.statusCode));
+//   }
+// }

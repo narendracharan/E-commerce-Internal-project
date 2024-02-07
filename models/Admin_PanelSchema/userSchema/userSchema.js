@@ -50,6 +50,36 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  access: [
+    {
+      type: String,
+      enum: [
+        "dashboard",
+        "user",
+        "category",
+        "offer",
+        "order",
+        "staff",
+        "transaction",
+        "report",
+        "banner",
+        "notification",
+        "announcement",
+        "thoughts",
+        "content",
+        "information",
+        "contactus",
+        "help",
+      ],
+    },
+  ],
+
+
+
+
+
+
+
 });
 schema.set("timestamps", true);
 schema.methods.generateUserAuthToken = function () {
