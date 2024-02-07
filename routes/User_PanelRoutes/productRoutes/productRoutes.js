@@ -25,7 +25,8 @@ const {
   newArriwalProduct,
   indemandProducts,
   userProductDetails,
-  createrating
+  createrating,
+  recommendedProductList
 } = require("../../../controllers/User_PanelControllers/productContorllers/productControllers");
 const tokenAuthorisationUser = require("../../../middleware/userAuth");
 const { updateQuatity } = require("../../../controllers/User_PanelControllers/cartsControllers/cartsControllers");
@@ -58,4 +59,5 @@ router.post("/newProduct",newArriwalProduct)
 router.post("/indemand-product",indemandProducts)
 router.post("/userProductDetails/:id",userProductDetails)
 router.post("/update-qty",updateQuatity)
+router.post('/recommendedProductList',recommendedProductList)
 module.exports = router;

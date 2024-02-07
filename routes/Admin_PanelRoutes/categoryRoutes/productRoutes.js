@@ -17,6 +17,7 @@ const {
   addDealsProduct,
   productDetails,
   addRecommendedProduct,
+  recommendedProductList,
 } = require("../../../controllers/Admin_Panel/categoryManagement/productControlers");
 const { s3upload } = require("../../../middleware/multer");
 const { multiPleAttribute } = require("../../../controllers/Admin_Panel/categoryManagement/attributeControllers");
@@ -42,4 +43,5 @@ router.post("/new-varient/:id",tokenAuthorisationUser,s3upload.any(),addVarient)
 router.post("/select-brand/:id",tokenAuthorisationUser,selectBrand)
 router.post("/add-deals",tokenAuthorisationUser,addDealsProduct)
 router.post("/addRecommendedProduct/:id",addRecommendedProduct)
+
 module.exports = router;

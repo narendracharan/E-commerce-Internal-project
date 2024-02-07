@@ -1,3 +1,4 @@
+const mongoose=require('mongoose')
 const wishSchema = require("../../../models/User_PanelSchema/wishListSchema/withlistSchema");
 const { error, success } = require("../../response");
 const productSchema=require("../../../models/Admin_PanelSchema/categorySchema/productSchema")
@@ -18,18 +19,45 @@ exports.createWish = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+// exports.wishlist = async (req, res) => {
+//   try {
+//    const _id=req.params.id;
+   
+//     const list = await wishSchema.find({user_Id:_id}).populate("product_Id");
+    
+//     res.status(200).json(success(res.statusCode, "Wish List", { list }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 
 exports.wishlist = async (req, res) => {
   try {
-   const _id=req.params.id;
-   console.log(_id);
-    const list = await wishSchema.find({user_Id:_id}).populate("product_Id");
+    const _id = req.params.id;
+
+    const list = await wishSchema.aggregate([
+      { $match: { user_Id:new mongoose.Types.ObjectId(_id) } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "product_Id",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      {
+        $unwind: "$product"
+      }
+    ]);
+
     res.status(200).json(success(res.statusCode, "Wish List", { list }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 
 exports.deleteWishList = async (req, res) => {
   try {
@@ -56,3 +84,4 @@ exports.removeProduct = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+ 

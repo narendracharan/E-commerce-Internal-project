@@ -208,6 +208,7 @@ exports.logOut = async (req, res) => {
       {
         expiresIn: 1,
       },
+
       (logout, err) => {
         if (logout) {
           res.status(200).json(success(res.statusCode, "Successfully Logout "));

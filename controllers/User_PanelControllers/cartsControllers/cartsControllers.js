@@ -193,17 +193,16 @@ exports.deleteProduct = async (req, res) => {
 //     res.status(400).json({ success: false, message: err.message });
 //   }
 // }
-/////////////////////////////////////////////////////////////
-
-
-
-
-
+//////////////////////////////////////////////////////////////////
 
 
 exports.cartCount = async (req, res) => {
   try {
+    
     const id = req.params.id;
+    if(!id){
+     res.status(400).json(error("Failed", res.statusCode));
+    }
     const count = await cartSchema.find({ user_Id: id }).count();
     res.status(200).json(success(res.statusCode, "Success", { count }));
   } catch (err) {

@@ -740,4 +740,15 @@ exports.indemandProducts = async (req, res) => {
     console.log(err);
     res.status(400).json(error("Error in InDemand Product"));
   }
-};
+};exports.recommendedProductList=async (req,res)=>{
+  try{
+ const productlist=await productSchema.find({ Recommended: true })
+ if (productlist.length === 0) {
+  return res.status(404).json({ message: 'No recommended products found' });
+}
+res.status(200).json(success(res.statusCode, "success", { productlist }));
+} catch (err) {
+  
+  res.status(400).json(error("Failed", res.statusCode));
+}
+}

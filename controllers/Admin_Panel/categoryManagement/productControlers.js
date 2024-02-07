@@ -344,7 +344,7 @@ const Recommendedproduct=await productSchema.findById(id)
 if(!Recommendedproduct){
   return res.status(404).json({ message: 'Product not found' });
 }
-Recommendedproduct.Recommended = true;
+Recommendedproduct.Recommended = !Recommendedproduct.Recommended;
 await Recommendedproduct.save();
 res.status(200).json(success(res.statusCode,"success",{Recommendedproduct}))
   }

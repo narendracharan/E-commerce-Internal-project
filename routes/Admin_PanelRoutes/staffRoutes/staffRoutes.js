@@ -7,12 +7,14 @@ const {
   staffSearch,
   updateStaff,
   stafstatus,
+  assignmodules,
 } = require("../../../controllers/Admin_Panel/staffControllers/staffControllers");
 
 router.post("/createStaff", tokenAuthorisationUser, createStaff);
 router.post("/list", tokenAuthorisationUser, staffList);
 router.post("/staffSearch", tokenAuthorisationUser, staffSearch);
 router.patch("/updateStaff/:id", tokenAuthorisationUser, updateStaff);
-router.post('/stafstatus/:id',tokenAuthorisationUser,stafstatus)
+router.post('/stafstatus/:id',tokenAuthorisationUser,stafstatus);
+router.post("/assignmodules/:id",tokenAuthorisationUser,assignmodules)
 
 module.exports = router;
