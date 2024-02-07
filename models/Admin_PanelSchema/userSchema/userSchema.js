@@ -73,13 +73,6 @@ const schema = new mongoose.Schema({
       ],
     },
   ],
-
-
-
-
-
-
-
 });
 schema.set("timestamps", true);
 schema.methods.generateUserAuthToken = function () {
