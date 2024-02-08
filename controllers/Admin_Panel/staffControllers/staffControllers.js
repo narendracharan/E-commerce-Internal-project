@@ -55,7 +55,7 @@ exports.staffList = async (req, res) => {
     const { from, to, staffName } = req.body;
     let query = {};
 
-    if (from) {
+    if (from) {sort({ createdAt: -1 })
       query.createdAt = { $gte: new Date(from) };
     }
     if (to) {
@@ -65,7 +65,7 @@ exports.staffList = async (req, res) => {
       query.staffName = { $regex: staffName, $options: "i" };
     }
 
-    const list = await staffSchema.find(query);
+    const list = await staffSchema.find(query).sort({ createdAt: -1 });
 
     if (list.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { list }));
