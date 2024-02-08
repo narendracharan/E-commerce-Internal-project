@@ -150,6 +150,9 @@ exports.userLogin = async (req, res) => {
     if (userEmail && password) {
       const login = await userSchema.findOne({ userEmail: userEmail });
       if (login != null) {
+        if (!login.status) {
+          return res.status(403).json(error("User account is inactive", res.statusCode));
+        }
         const match = await bcrypt.compare(password, login.password);
         if (match) {
           const token = await login.generateUserAuthToken();
@@ -161,10 +164,10 @@ exports.userLogin = async (req, res) => {
         } else {
           res
             .status(403)
-            .json(error("User Password Are Incorrect", res.statusCode));
+            .json(error("User Password Is Incorrect", res.statusCode));
         }
       } else {
-        res.status(403).json(error("User Email Are Incorrect", res.statusCode));
+        res.status(403).json(error("User Email Is Incorrect", res.statusCode));
       }
     } else {
       res
