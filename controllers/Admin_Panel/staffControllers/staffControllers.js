@@ -65,9 +65,10 @@ exports.staffList = async (req, res) => {
       query.staffName = { $regex: staffName, $options: "i" };
     }
 
-    const list = await staffSchema.find(query).sort({ createdAt: -1 });
+    const list = await staffSchema.find(query);
 
     if (list.length > 0) {
+      list = list.reverse()
       res.status(200).json(success(res.statusCode, "Success", { list }));
     } else {
       res.status(200).json(error("Data not found", res.statusCode));
