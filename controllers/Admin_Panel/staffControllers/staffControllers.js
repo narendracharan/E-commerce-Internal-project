@@ -70,7 +70,7 @@ exports.staffList = async (req, res) => {
       query.staffName = { $regex: staffName, $options: "i" };
     }
 
-    const list = await staffSchema.find(query);
+    let list = await staffSchema.find(query);
 
     if (list.length > 0) {
       list = list.reverse()
