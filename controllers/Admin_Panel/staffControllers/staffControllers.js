@@ -4,6 +4,11 @@ const { success, error } = require("../../response");
 
 exports.createStaff = async (req, res) => {
   try {
+    const {userEmail}=req.body
+    const existingstaff=await staffSchema.findOne({userEmail})
+    if(existingstaff){
+       return res.status(400).json(error("Staff with this email already exists", res.statusCode));
+    }
     const staff = new staffSchema(req.body);
     const salt = await bcrypt.genSalt(10);
     staff.password = await bcrypt.hash(staff.password, salt);
