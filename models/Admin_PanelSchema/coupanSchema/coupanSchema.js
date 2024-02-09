@@ -29,6 +29,10 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  coupanEnble:{
+    type:Boolean,
+    default:false,
+  },
   product_Id: {
     type: mongoose.Schema.Types.ObjectId,
     require: true,

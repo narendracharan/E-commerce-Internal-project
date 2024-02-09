@@ -7,6 +7,7 @@ exports.generalCoupan = async (req, res) => {
     const coupanData = await Coupan.save();
     res.status(200).json(success(res.statusCode, "Success", { coupanData }));
   } catch (err) {
+    console.log(err)
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -85,3 +86,17 @@ exports.coupanSearch = async (req, res) => {
     res.status(400).json("Failed", res.statusCode);
   }
 };
+  
+
+exports.coupanEnable=async (req,res)=>{
+  try{
+    const id=req.params.id
+    const coupanEnble=req.body;
+    const enable=await coupanSchema.findByIdAndUpdate(id,coupanEnble,{new:true})
+    res.status(200).json(success(res.statusCode,"success",{enable}))
+  }
+  catch(err){
+    res.status(400).json("Failed", res.statusCode);
+  }
+
+}
