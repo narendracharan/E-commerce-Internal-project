@@ -27,8 +27,12 @@ exports.createProduct = async (req, res) => {
 
 exports.productList = async (req, res) => {
   try {
+    const productName_en = req.body.productName_en;
+    const query = productName_en
+    ? { productName_en: { $regex: productName_en, $options: "i" } }
+    : {};
     const list = await productSchema
-      .find()
+      .find(query)
       .populate("Subcategory_Id")
       .populate("category_Id")
       .populate("brand_Id")
@@ -43,23 +47,23 @@ exports.productList = async (req, res) => {
   }
 };
 
-exports.productSearch = async (req, res) => {
-  try {
-    const productName_en = req.body.productName_en;
-    const productData = await productSchema.find({
-      productName_en: { $regex: productName_en, $options: "i" },
-    });
-    if (productData.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { productData }));
-    } else {
-      res.status(200).json(error("Product Not found", res.statusCode));
-    }
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+// exports.productSearch = async (req, res) => {
+//   try {
+//     const productName_en = req.body.productName_en;
+//     const productData = await productSchema.find({
+//       productName_en: { $regex: productName_en, $options: "i" },
+//     });
+//     if (productData.length > 0) {
+//       return res
+//         .status(200)
+//         .json(success(res.statusCode, "Success", { productData }));
+//     } else {
+//       res.status(200).json(error("Product Not found", res.statusCode));
+//     }
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 exports.productDetails = async (req, res) => {
   try {
     const id = req.params.id;

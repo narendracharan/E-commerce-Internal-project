@@ -77,6 +77,10 @@ const schema = new mongoose.Schema({
   },
   totalAfterDiscount:{
     type:[]
+  },
+  profileedited:{
+    type:Boolean,
+    default:false
   }
 });
 schema.set("timestamps", true);

@@ -30,7 +30,7 @@ router.post(
 );
 router.post("/productList",  productList);
 router.post("/product-details/:id",productDetails)
-router.post("/productSearch",  productSearch);
+//router.post("/productSearch",  productSearch);
 router.patch("/updateProduct/:id", tokenAuthorisationUser,s3upload.any(), updateProduct);
 router.delete("/delete-product/:id",tokenAuthorisationUser,productDelete)
 router.post("/addBrand",tokenAuthorisationUser,s3upload.single("brandPic"),addBrand)

@@ -178,6 +178,7 @@ exports.updateProfile = async (req, res) => {
       city: req.body.city,
       pinCode: req.body.pinCode,
       status: req.body.status,
+      profileedited: true
     };
     const profile = await userSchema.findByIdAndUpdate(id, data, {
       new: true,
