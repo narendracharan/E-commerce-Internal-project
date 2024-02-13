@@ -199,8 +199,32 @@ exports.homeDashBoards = async (req, res) => {
     // console.log(totalAfterDiscount);
     // var discountedProduct = parseInt(cartsTotal)+totalAfterDiscount
     // console.log(discountedProduct)
+    const undeliveredOrders = await orderSchema.aggregate([
+      {
+        $match: {
+          orderStatus: { $ne: "Delivered" },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$cartsTotal" },
+          orders: { $push: "$$ROOT" },
+        },
+      },
+    ]);
+    let undeliveredOrderData = [];
+    if (undeliveredOrders.length > 0) {
+      undeliveredOrderData = undeliveredOrders[0].orders;
+    }
+    let expectedEarnings = 0;
+    if (undeliveredOrders.length > 0) {
+      expectedEarnings = undeliveredOrders[0].total;
+    }
     res.status(200).json(
       success(res.statusCode, "Succcess", {
+        expectedEarnings,
+        undeliveredOrderData,
         orderMonth,
         customerMonth,
         deliverOrderMonth,

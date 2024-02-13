@@ -6,46 +6,92 @@ const jwt = require("jsonwebtoken");
 const User = require("../../../models/User_PanelSchema/userSchema/userSchema");
 const { validationResult } = require("express-validator");
 
-exports.userSignup = async (req, res) => {
-  try {
-    const {
-      userEmail,
-      userName,
-      userName_ar,
-      password,
-      mobileNumber,
-      longitude,
-      latitude,
-    } = req.body;
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.status(200).json({ errors: error.array() });
-    }
-    const userExist = await userSchema.findOne({ userEmail: userEmail });
-    if (userExist) {
-      return res.status(403).json({
-        status: "Failed",
-        message: "userEmail Already Exited",
-      });
-    }
-    const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = await new userSchema({
-      userEmail: userEmail,
-      userName: userName,
-      password: passwordHash,
-      mobileNumber: mobileNumber,
-      userName_ar: userName_ar,
-      longitude: longitude,
-      latitude: latitude,
-    }).save();
-    res
-      .status(201)
-      .json(success(res.statusCode, "userSignup Successfully", { newUser }));
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
-  }
+// exports.userSignup = async (req, res) => {
+//   try {
+//     const {
+//       userEmail,
+//       userName,
+//       userName_ar,
+//       password,
+//       mobileNumber,
+//       longitude,
+//       latitude,
+//     } = req.body;
+//     const error = validationResult(req);
+//     if (!error.isEmpty()) {
+//       res.status(200).json({ errors: error.array() });
+//     }
+//     const userExist = await userSchema.findOne({ userEmail: userEmail });
+//     if (userExist) {
+//       return res.status(403).json({
+//         status: "Failed",
+//         message: "userEmail Already Exited",
+//       });
+//     }
+//     const passwordHash = await bcrypt.hash(password, 10);
+//     const newUser = await new userSchema({
+//       userEmail: userEmail,
+//       userName: userName,
+//       password: passwordHash,
+//       mobileNumber: mobileNumber,
+//       userName_ar: userName_ar,
+//       longitude: longitude,
+//       latitude: latitude,
+//     }).save();
+//     res
+//       .status(201)
+//       .json(success(res.statusCode, "userSignup Successfully", { newUser }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
+const validateMobileNumber = (mobileNumber) => {
+  const phoneno = /^\d{10}$/;
+  return phoneno.test(mobileNumber);
 };
+
+exports.userSignup=async(req,res)=>{
+  try{
+    const{mobileNumber}=req.body;
+    
+    if (!mobileNumber) {
+      return res
+        .status(200)
+        .json(error("Please provide Mobile Number", res.statusCode));
+    }
+    if (!validateMobileNumber(mobileNumber)) {
+      return res.status(400).json({ error: 'Invalid mobile number. Please enter a 10-digit mobile number.' });
+  }
+    const user=await userSchema.findOne({mobileNumber})
+    if(user){
+      if (user && user.status === true) {
+        const token = await user.generateUserAuthToken();
+        return res
+          .header("x-auth-token-user", token)
+          .header("access-control-expose-headers", "x-auth-token-user")
+          .status(201)
+          .json(
+            success(res.statusCode, "Login successful", {
+              user,
+              token,
+            })
+          )
+        }
+
+    }
+else{
+    const newuser=await new userSchema({
+      mobileNumber: mobileNumber
+    }).save()
+    res.status(201).json(success(res.statusCode, "userSignup Successfully", { newuser }));
+  }
+}
+  catch(err){
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode))
+  }
+}
 
 exports.userLogin = async (req, res) => {
   try {
