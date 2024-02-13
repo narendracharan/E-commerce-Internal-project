@@ -22,7 +22,7 @@ const { s3upload } = require("../../../middleware/multer");
 const { userReports, orderReports, userReportsList, orderReportsList } = require("../../../controllers/User_PanelControllers/reportsControllers");
 
 router.post("/signup", signupValidation, userSignup);
-router.post("/login", userLogin);
+//router.post("/login", userLogin);
 router.post("/send-mail", sendMailResetPassword);
 router.post("/verify-otp", verifyOtp);
 router.post(

@@ -56,9 +56,7 @@ exports.userSignup=async(req,res)=>{
     const{mobileNumber}=req.body;
     
     if (!mobileNumber) {
-      return res
-        .status(200)
-        .json(error("Please provide Mobile Number", res.statusCode));
+      return res.status(200).json(error("Please provide Mobile Number", res.statusCode));
     }
     if (!validateMobileNumber(mobileNumber)) {
       return res.status(400).json({ error: 'Invalid mobile number. Please enter a 10-digit mobile number.' });
@@ -84,7 +82,11 @@ else{
     const newuser=await new userSchema({
       mobileNumber: mobileNumber
     }).save()
-    res.status(201).json(success(res.statusCode, "userSignup Successfully", { newuser }));
+    const token = await newuser.generateUserAuthToken();
+    return res
+      .header("x-auth-token-user", token)
+      .header("access-control-expose-headers", "x-auth-token-user")
+     .status(201).json(success(res.statusCode, "userSignup Successfully", { newuser ,token}));
   }
 }
   catch(err){
@@ -93,50 +95,50 @@ else{
   }
 }
 
-exports.userLogin = async (req, res) => {
-  try {
-    const { userEmail, password } = req.body;
-    const user = await userSchema.findOne({ userEmail: userEmail });
-    if (user.status == true) {
-      if (userEmail && password) {
-        const verifyUser = await userSchema.findOne({ userEmail: userEmail });
-        if (verifyUser != null) {
-          const isMatch = await bcrypt.compare(password, verifyUser.password);
-          if (isMatch) {
-            const token = await verifyUser.generateUserAuthToken();
-            return res
-              .header("x-auth-token-user", token)
-              .header("access-control-expose-headers", "x-auth-token-admin")
-              .status(201)
-              .json(
-                success(res.statusCode, "login SuccessFully", {
-                  verifyUser,
-                  token,
-                })
-              );
-          } else {
-            res
-              .status(403)
-              .json(error("User Password Are Incorrect", res.statusCode));
-          }
-        } else {
-          res
-            .status(403)
-            .json(error("User Email Are Incorrect", res.statusCode));
-        }
-      } else {
-        res
-          .status(403)
-          .json(error("User Email and Password Are empty", res.statusCode));
-      }
-    } else {
-      res.status(400).json(error("Block By Admin"));
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+// exports.userLogin = async (req, res) => {
+//   try {
+//     const { userEmail, password } = req.body;
+//     const user = await userSchema.findOne({ userEmail: userEmail });
+//     if (user.status == true) {
+//       if (userEmail && password) {
+//         const verifyUser = await userSchema.findOne({ userEmail: userEmail });
+//         if (verifyUser != null) {
+//           const isMatch = await bcrypt.compare(password, verifyUser.password);
+//           if (isMatch) {
+//             const token = await verifyUser.generateUserAuthToken();
+//             return res
+//               .header("x-auth-token-user", token)
+//               .header("access-control-expose-headers", "x-auth-token-admin")
+//               .status(201)
+//               .json(
+//                 success(res.statusCode, "login SuccessFully", {
+//                   verifyUser,
+//                   token,
+//                 })
+//               );
+//           } else {
+//             res
+//               .status(403)
+//               .json(error("User Password Are Incorrect", res.statusCode));
+//           }
+//         } else {
+//           res
+//             .status(403)
+//             .json(error("User Email Are Incorrect", res.statusCode));
+//         }
+//       } else {
+//         res
+//           .status(403)
+//           .json(error("User Email and Password Are empty", res.statusCode));
+//       }
+//     } else {
+//       res.status(400).json(error("Block By Admin"));
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 
 exports.sendMailResetPassword = async (req, res) => {
   try {
