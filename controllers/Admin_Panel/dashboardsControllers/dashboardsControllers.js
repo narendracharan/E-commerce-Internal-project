@@ -206,25 +206,36 @@ exports.homeDashBoards = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
         $group: {
-          _id: null,
+          _id: "$product.category_Id",
           total: { $sum: "$cartsTotal" },
           orders: { $push: "$$ROOT" },
         },
       },
     ]);
-    let undeliveredOrderData = [];
-    if (undeliveredOrders.length > 0) {
-      undeliveredOrderData = undeliveredOrders[0].orders;
-    }
-    let expectedEarnings = 0;
-    if (undeliveredOrders.length > 0) {
-      expectedEarnings = undeliveredOrders[0].total;
-    }
+    let expectedEarningsByCategory = [];
+if (undeliveredOrders.length > 0) {
+  expectedEarningsByCategory = undeliveredOrders.map((category) => ({
+    category: category._id,
+    total: category.total,
+    orders: category.orders,
+  }));
+}
+
     res.status(200).json(
       success(res.statusCode, "Succcess", {
-        expectedEarnings,
-        undeliveredOrderData,
+        expectedEarningsByCategory,
         orderMonth,
         customerMonth,
         deliverOrderMonth,
