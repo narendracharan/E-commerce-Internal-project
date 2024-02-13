@@ -34,7 +34,7 @@ router.post(
   s3upload.single("profile_Pic"),
   editProfile
 );
-router.post("/user-search",tokenAuthorisationUser,userSerach)
+//router.post("/user-search",tokenAuthorisationUser,userSerach)
 router.post("/checkStatus/:id", tokenAuthorisationUser, checkStatus);
 router.post("/download",tokenAuthorisationUser,downlaod)
 router.post("/block-user/:id/:status",tokenAuthorisationUser,blockUser)

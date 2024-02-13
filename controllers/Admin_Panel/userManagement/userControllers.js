@@ -126,23 +126,51 @@ exports.editProfile = async (req, res) => {
   }
 };
 
+// exports.userList = async (req, res) => {
+//   try {
+    
+//     const { from, to } = req.body;
+//     const createData = await Userschema.find({
+//       $and: [
+//         from ? { createdAt: { $gte: new Date(from) } } : {},
+//         to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+//       ],
+//     })
+//       .sort({ createdAt: -1 })
+//       .populate("address_Id");
+//     res.status(200).json(success(res.statusCode, "Success", { createData }));
+//   } catch (err) {
+//     console.log(err);
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 exports.userList = async (req, res) => {
   try {
-    const { from, to } = req.body;
-    const createData = await Userschema.find({
-      $and: [
-        from ? { createdAt: { $gte: new Date(from) } } : {},
-        to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
-      ],
-    })
+    const { from, to, userName } = req.body;
+    let query = {};
+    
+    
+    if (from) {
+      query.createdAt = { $gte: new Date(from) };
+    }
+    if (to) {
+      query.createdAt = { ...query.createdAt, $lte: new Date(`${to}T23:59:59`) };
+    }
+    if (userName) {
+      query.userName = { $regex: userName, $options: "i" };
+    }
+
+    const createData = await Userschema.find(query)
       .sort({ createdAt: -1 })
       .populate("address_Id");
+
     res.status(200).json(success(res.statusCode, "Success", { createData }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
 
 exports.userLogin = async (req, res) => {
   try {
@@ -246,21 +274,21 @@ exports.sendUserResetPassword = async (req, res) => {
   }
 };
 
-exports.userSerach = async (req, res) => {
-  const userName = req.body.userName;
-  try {
-    const userData = await Userschema.find({
-      userName: { $regex: userName, $options: "i" },
-    });
-    if (userData.length > 0) {
-      res.status(200).json(success(res.statusCode, "Success", { userData }));
-    } else {
-      res.status(200).json(error("Data are Not Found", res.statusCode));
-    }
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+// exports.userSerach = async (req, res) => {
+//   const userName = req.body.userName;
+//   try {
+//     const userData = await Userschema.find({
+//       userName: { $regex: userName, $options: "i" },
+//     });
+//     if (userData.length > 0) {
+//       res.status(200).json(success(res.statusCode, "Success", { userData }));
+//     } else {
+//       res.status(200).json(error("Data are Not Found", res.statusCode));
+//     }
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };
 
 exports.resetPassword = async (req, res) => {
   const { password, confirmPassword, userEmail } = req.body;

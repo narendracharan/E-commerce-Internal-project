@@ -217,8 +217,20 @@ exports.homeDashBoards = async (req, res) => {
         $unwind: "$product",
       },
       {
+        $lookup: {
+          from: "categories",
+          localField: "product.category_Id",
+          foreignField: "_id",
+          as: "category"
+        }
+      },
+      {
+        $unwind: "$category"
+      },
+      {
         $group: {
           _id: "$product.category_Id",
+          categoryName_en: { $first: "$category.categoryName_en" },
           total: { $sum: "$cartsTotal" },
           orders: { $push: "$$ROOT" },
         },
@@ -228,6 +240,7 @@ exports.homeDashBoards = async (req, res) => {
 if (undeliveredOrders.length > 0) {
   expectedEarningsByCategory = undeliveredOrders.map((category) => ({
     category: category._id,
+    categoryName_en:category.categoryName_en,
     total: category.total,
     orders: category.orders,
   }));
